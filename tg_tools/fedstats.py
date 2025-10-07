@@ -67,6 +67,8 @@ async def query_single_bot(bot: BOT, bot_id: int, user_to_check: User) -> tuple[
             
             if file_message:
                 result_text = f"<b>• {bot_info.first_name}:</b> Bot sent a file with the full ban list. Sending..."
+            elif response.text == "You can only use fed commands once every 5 minutes":
+                result_text = f"<b>• {bot_info.first_name}:</b> You can only use fed commands once every 5 minutes."
             else:
                 result_text = f"<b>• {bot_info.first_name}:</b> Bot was supposed to send a file, but it wasn't received (timeout)."
             return result_text, file_message
