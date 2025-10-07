@@ -39,11 +39,11 @@ async def block_unblock_handler(bot: BOT, message: Message):
         if message.cmd == "block":
             action = bot.block_user
             log_tag = "#BLOCK"
-            action_str = "blocked"
+            action_str = "has been blocked."
         else:
             action = bot.unblock_user
             log_tag = "#UNBLOCK"
-            action_str = "unblocked"
+            action_str = "has been unblocked."
 
         await action(user_to_act_on.id)
         
