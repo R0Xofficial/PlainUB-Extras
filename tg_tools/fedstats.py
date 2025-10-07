@@ -62,12 +62,10 @@ async def query_single_bot(bot: BOT, bot_id: int, user_to_check: User) -> tuple[
                 await response.click(0)
             except Exception:
                 pass
-            
+                
             file_message = await find_latest_file_in_history(bot, bot_id)
 
-            if response.text and "once every 5 minutes" in response.text.lower():
-                result_text = f"<b>• {bot_info.first_name}:</b> <blockquote expandable>You can only use fed commands once every 5 minutes.</blockquote>"
-            elif file_message:
+            if file_message:
                 result_text = f"<b>• {bot_info.first_name}:</b> Bot sent a file with the full ban list. Sending..."
             else:
                 result_text = f"<b>• {bot_info.first_name}:</b> Bot was supposed to send a file, but it wasn't received (timeout)."
@@ -84,7 +82,7 @@ async def query_single_bot(bot: BOT, bot_id: int, user_to_check: User) -> tuple[
     except asyncio.TimeoutError:
         return f"<b>• {bot_info.first_name}:</b> <i>No response (timeout).</i>", None
     except Exception:
-        return f"<b>• {bot_info.first_name}:</b> <i>An unknown error occurred.</i>", None
+        return f"<b>• {bot_info.first_name}:</b> <i>An unknown rror occurred.</i>", None
 
 
 @bot.add_cmd(cmd=["fstat", "fedstat"])
