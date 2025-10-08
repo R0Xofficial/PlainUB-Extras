@@ -57,7 +57,10 @@ async def query_single_bot(bot: BOT, bot_id: int, user_to_check: User) -> tuple[
         if response.text and "checking" in response.text.lower():
             response = await sent_cmd.get_response(filters=filters.user(bot_id), timeout=20)
 
-        if response.reply_markup and "Make the fedban file" in str(response.reply_markup):
+        if response.text:
+            return parse_text_response(response), None
+        
+        elif response.reply_markup and "Make the fedban file" in str(response.reply_markup):
             try:
                 await response.click(0)
             except Exception:
@@ -70,9 +73,6 @@ async def query_single_bot(bot: BOT, bot_id: int, user_to_check: User) -> tuple[
             else:
                 result_text = f"<b>• {bot_info.first_name}:</b> Bot was supposed to send a file, but it wasn't received (timeout)."
             return result_text, file_message
-        
-        elif response.text:
-            return parse_text_response(response), None
         
         else:
             return f"<b>• {bot_info.first_name}:</b> <i>Received an unsupported response type.</i>", None
