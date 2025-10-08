@@ -62,17 +62,15 @@ async def query_single_bot(bot: BOT, bot_id: int, user_to_check: User) -> tuple[
                 await response.click(0)
             except Exception:
                 pass
-
-            if response.text:
-                return parse_text_response(response), None
                 
             file_message = await find_latest_file_in_history(bot, bot_id)
 
             if file_message:
                 result_text = f"<b>• {bot_info.first_name}:</b> Bot sent a file with the full ban list. Sending..."
-            else:
-                result_text = f"<b>• {bot_info.first_name}:</b> Bot was supposed to send a file, but it wasn't received (timeout)."
-            return result_text, file_message
+                return result_text, file_message
+
+        elif response.text:
+            return parse_text_response(response), None
         
         else:
             return f"<b>• {bot_info.first_name}:</b> <i>Received an unsupported response type.</i>", None
