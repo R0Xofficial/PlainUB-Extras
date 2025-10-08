@@ -40,7 +40,7 @@ async def forward_info_handler(bot: BOT, message: Message):
             info_lines.append(f"• <b>Name:</b> {html.escape(name)}")
             if user.username:
                 info_lines.append(f"• <b>Username:</b> @{user.username}")
-            info_lines.append(f"• <b>Profile Link:</b> {user.mention('Click Here')}")
+            info_lines.append(f"• <b>Permalink:</b> {user.mention('Click Here')}")
 
     elif replied_msg.forward_from_chat:
         chat: Chat = replied_msg.forward_from_chat
