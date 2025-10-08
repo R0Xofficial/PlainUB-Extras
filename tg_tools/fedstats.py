@@ -56,15 +56,15 @@ async def query_single_bot(bot: BOT, bot_id: int, user_to_check: User) -> tuple[
 
         if response.text and "checking" in response.text.lower():
             response = await sent_cmd.get_response(filters=filters.user(bot_id), timeout=20)
-
-        if response.text:
-            return parse_text_response(response), None
         
-        elif response.reply_markup and "Make the fedban file" in str(response.reply_markup):
+        if response.reply_markup and "Make the fedban file" in str(response.reply_markup):
             try:
                 await response.click(0)
             except Exception:
                 pass
+
+            if response.text:
+                return parse_text_response(response), None
                 
             file_message = await find_latest_file_in_history(bot, bot_id)
 
