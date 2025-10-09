@@ -77,7 +77,7 @@ async def resize_handler(bot: BOT, message: Message):
     original_path, resized_path, thumb_path = "", "", None
     temp_files = []
     try:
-        original_path = await bot.download_media(replied_msg)
+        original_path = await bot.download_media(replied_msg, file_name=TEMP_DIR)
         temp_files.append(original_path)
         
         await progress_message.edit(f"<code>Resizing to {width}x{height}...</code>")
