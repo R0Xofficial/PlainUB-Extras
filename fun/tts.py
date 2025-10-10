@@ -28,6 +28,9 @@ async def tts_handler(bot: BOT, message: Message):
     """
     CMD: TTS
     INFO: Converts text to speech.
+    USAGE:
+        .tts [text] - Generates speech (in English)
+        .tts -[lang] [text] - Generates speech in the language what you choose (e.g. .tts -pl Cześć) 
     """
     
     text_to_speak, lang = "", "en"
@@ -37,7 +40,7 @@ async def tts_handler(bot: BOT, message: Message):
         if message.input: lang = message.input.lower()
     elif message.input:
         parts = message.input.split(maxsplit=1)
-        if len(parts) > 1 and len(parts[0]) == 2 and parts[0].isalpha():
+        if len(parts) > 1 and parts[0].startswith('-') and len(parts[0]) == 3 and parts[0].isalpha():
             lang, text_to_speak = parts[0].lower(), parts[1]
         else:
             text_to_speak = message.input
