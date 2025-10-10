@@ -37,11 +37,14 @@ async def tts_handler(bot: BOT, message: Message):
 
     if message.replied and message.replied.text:
         text_to_speak = message.replied.text
-        if message.input: lang = message.input.lower()
+        if message.input and message.input.startswith('-') and len(message.input) == 3 and message.input[1:].isalpha():
+            lang = message.input[1:].lower()
+            
     elif message.input:
         parts = message.input.split(maxsplit=1)
-        if len(parts) > 1 and parts[0].startswith('-') and len(parts[0]) == 3 and parts[1:].isalpha():
-            lang, text_to_speak = parts[1:].lower(), parts[1]
+        if len(parts) > 1 and parts[0].startswith('-') and len(parts[0]) == 3 and parts[0][1:].isalpha():
+            lang = parts[0][1:].lower()
+            text_to_speak = parts[1]
         else:
             text_to_speak = message.input
     else:
