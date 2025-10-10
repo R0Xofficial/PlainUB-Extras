@@ -40,8 +40,8 @@ async def tts_handler(bot: BOT, message: Message):
         if message.input: lang = message.input.lower()
     elif message.input:
         parts = message.input.split(maxsplit=1)
-        if len(parts) > 1 and parts[0].startswith('-') and len(parts[0]) == 3 and parts[0].isalpha():
-            lang, text_to_speak = parts[0].lower(), parts[1]
+        if len(parts) > 1 and parts[0].startswith('-') and len(parts[0]) == 3 and parts[1:].isalpha():
+            lang, text_to_speak = parts[1:].lower(), parts[1]
         else:
             text_to_speak = message.input
     else:
