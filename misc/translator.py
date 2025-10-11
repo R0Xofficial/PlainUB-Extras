@@ -70,8 +70,8 @@ async def translate_handler(bot: BOT, message: Message):
         )
         
         final_text = (
-            f"<b>🌍 Translation | {detected_source} → {target_lang}</b>\n\n"
-            f"<b>Input:</b>\n<blockquote expandable>{safe_escape(text_to_translate)}</blockquote>\n"
+            f"<b>🌍 Translation to: {target_lang}</b>\n\n"
+            f"<b>Input:</b>\n<blockquote expandable>{safe_escape(text_to_translate)}</blockquote>\n\n"
             f"<b>Output:</b>\n<blockquote expandable>{safe_escape(translated_text)}</blockquote>"
         )
         
