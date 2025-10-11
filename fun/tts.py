@@ -29,8 +29,9 @@ async def tts_handler(bot: BOT, message: Message):
     CMD: TTS
     INFO: Converts text to speech.
     USAGE:
-        .tts [text] - Generates speech (in English)
-        .tts -[lang] [text] - Generates speech in the language what you choose (e.g. .tts -pl Cześć) 
+        .tts -[lang] [text] - Generates speech in the language what you choose (e.g. .tts -pl Cześć)
+        .tts [text] - Generates speech
+    NOTE: Text-to-speech generation is in English by default.
     """
     
     text_to_speak, lang = "", "en"
