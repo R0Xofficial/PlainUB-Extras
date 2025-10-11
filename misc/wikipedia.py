@@ -48,7 +48,7 @@ async def wiki_handler(bot: BOT, message: Message):
         if result:
             title, summary, url = result
             final_text = (
-                f"<b>📖 <a href='{url}'>{safe_escape(title)}</a></b>\n\n"
+                f"<b>📖 Wikipedia of: <a href='{url}'>{safe_escape(title)}</a></b>\n\n"
                 f"{safe_escape(summary)}"
             )
             await progress_message.edit(final_text, link_preview_options=LinkPreviewOptions(is_disabled=True))
