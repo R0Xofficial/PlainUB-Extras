@@ -28,8 +28,8 @@ async def translate_handler(bot: BOT, message: Message):
     CMD: TR | TRANSLATE
     INFO: Translates text to a specified language.
     USAGE:
-        .tr [to_lang] [text] (e.g., .tr pl Hello)
-        .tr [to_lang] (reply to a message)
+        .tr -[lang] [text] (e.g., .tr -pl Hello)
+        .tr -[lang] (reply to a message)
     NOTE: Default target language is English (en).
     """
     
@@ -38,13 +38,13 @@ async def translate_handler(bot: BOT, message: Message):
 
     if message.replied and (message.replied.text or message.replied.caption):
         text_to_translate = message.replied.text or message.replied.caption
-        if message.input:
-            target_lang = message.input.lower()
+        if message.input and message.input.startswith('-'):
+            target_lang = message.input[1:].lower()
     
     elif message.input:
         parts = message.input.split(maxsplit=1)
-        if len(parts) == 2:
-            target_lang = parts[0].lower()
+        if len(parts) > 1 and parts[0].startswith('-'):
+            target_lang = parts[0][1:].lower()
             text_to_translate = parts[1]
         else:
             text_to_translate = message.input
