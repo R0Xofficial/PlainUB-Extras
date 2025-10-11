@@ -51,7 +51,7 @@ async def urban_dictionary_handler(bot: BOT, message: Message):
             permalink = result.get("permalink", "#")
             
             final_text = (
-                f"<b>📖 Urban Definition for <a href='{permalink}'>{safe_escape(word)}</a>:</b>\n\n"
+                f"<b>📖 Urban Definition for: <a href='{permalink}'>{safe_escape(word)}</a></b>\n\n"
                 f"<b>Meaning:</b>\n<blockquote expandable>{safe_escape(definition)}</blockquote>\n\n"
                 f"<b>Example:</b>\n<blockquote expandable>{safe_escape(example)}</blockquote>"
             )
