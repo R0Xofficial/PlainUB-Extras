@@ -32,7 +32,7 @@ async def speedtest_handler(bot: BOT, message: Message):
     
     progress_message = await message.reply("<code>Running speedtest...</code>")
     
-    command = "speedtest-cli --simple"
+    command = "speedtest --simple"
     
     try:
         stdout, stderr, returncode = await run_command(command)
