@@ -31,7 +31,7 @@ async def decide_handler(bot: BOT, message: Message):
     
     final_text = (
         f"**Question:** `{question}`\n\n"
-        f"**My decision is:**\n» _{decision}_"
+        f"**My decision is:**\n» *{decision}*"
     )
 
     await message.reply(final_text)
