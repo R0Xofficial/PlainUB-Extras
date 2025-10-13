@@ -13,10 +13,25 @@ DECIDE_RESPONSES = [
 async def decide_handler(bot: BOT, message: Message):
     """
     CMD: DECIDE
-    INFO: Helps you make a decision.
-    USAGE: .decide
+    INFO: Helps you make a decision by answering your question.
+    USAGE:
+        .decide [question]
     """
+    question = message.input
+    
+    if not question:
+        await message.reply(
+            "**What should I decide on?**\n"
+            "Usage: `.decide [your question]`",
+            del_in=8
+        )
+        return
+
     decision = random.choice(DECIDE_RESPONSES)
-    final_text = f"<b>My decision is:</b>\n\n» <i>{decision}</i>"
+    
+    final_text = (
+        f"**Question:** `{question}`\n\n"
+        f"**My decision is:**\n» _{decision}_"
+    )
 
     await message.reply(final_text)
