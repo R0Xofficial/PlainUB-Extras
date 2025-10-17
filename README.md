@@ -107,6 +107,6 @@ I am **not responsible** for:
 
 ## 💬 Support
 
-Need help, suggestions, or want to report a bug? Contact: [@ItsMeR0X](https://t.me/ItsMeR0X) on Telegram.
+Need help, suggestions, or want to report a bug? Contact: [@ItsR0Xx](https://t.me/ItsR0Xx) on Telegram.
 
 ---
