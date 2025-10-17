@@ -88,12 +88,13 @@ async def imagine_handler(bot: BOT, message: Message):
                 f.write(response.content)
             temp_files.append(generated_path)
             
-            watermarked_path = await asyncio.to_thread(sync_add_watermark, generated_path)
-            temp_files.append(watermarked_path)
+            # watermarked_path = await asyncio.to_thread(sync_add_watermark, generated_path)
+            # temp_files.append(watermarked_path)
             
             await bot.send_photo(
                 chat_id=message.chat.id,
-                photo=watermarked_path,
+                # photo=watermarked_path,
+                photo=generated_path,
                 caption=f"<b>Prompt:</b> <code>{html.escape(prompt)}</code>",
                 reply_parameters=ReplyParameters(message_id=message.id)
             )
