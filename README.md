@@ -7,7 +7,7 @@ Repository **"PlainUB-Extras"** is a collection of additional modules and featur
 ### ✅ Automatic Method (Recommended) (Need Docker)
 
 1. Fork or clone this repository.
-2. In your `config.env` file, add or modify the following line to point to your fork or this repository directly:
+2. In your docker `config.env` file, add or modify the following line to point to your fork or this repository directly:
 
    ```env
    EXTRA_MODULES_REPO=https://github.com/R0Xofficial/PlainUB-Extras
@@ -80,6 +80,19 @@ pip install -r requirements.txt
 ```
 
 Make sure you're in the correct directory where the `requirements.txt` file is located, or provide the full path.
+
+📄 **Note:**  
+Some modules may require additional libraries that are not available via **pip**.  
+In such cases, you need to install them using **pkg** (for example, in Termux):  
+
+```bash
+pkg install <package_name>
+```
+Example:
+
+```bash
+pkg install speedtest zbar pyzbar -y
+```
 
 ---
 
