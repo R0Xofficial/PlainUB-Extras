@@ -114,7 +114,7 @@ async def fed_stat_handler(bot: BOT, message: Message):
 
     final_report = (
         f"<b>Federation Status for:</b> {user_to_check.mention}\n"
-        f"<b>ID:</b> <code>{user_to_check.id}</code>\n\n"
+        f"<b>User ID:</b> <code>{user_to_check.id}</code>\n\n"
         f"{'\n'.join(result_texts)}"
     )
 
