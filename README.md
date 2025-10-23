@@ -88,11 +88,6 @@ In such cases, you need to install them using **pkg** (for example, in Termux):
 ```bash
 pkg install <package_name>
 ```
-Example:
-
-```bash
-pkg install speedtest zbar pyzbar -y
-```
 
 ---
 
