@@ -26,7 +26,7 @@ def parse_text_response(response: Message) -> str:
     lower_text = text.lower()
     not_banned_phrases = ["no bans", "not banned", "hasn't been banned", "0 federation(s)!", "isn’t fbanned", "fbanned anywhere!"]
     if any(phrase in lower_text for phrase in not_banned_phrases):
-        return f"<b>• {bot_name}:</b> Not Banned"
+        return f"<b>• {bot_name}:</b> <i>Not Banned</i>"
     else:
         return f"<b>• {bot_name}:</b> <blockquote expandable>{safe_escape(text)}</blockquote>"
 
@@ -62,7 +62,7 @@ async def query_single_bot(bot: BOT, bot_id: int, user_to_check: User) -> tuple[
             file_message = await find_latest_file_in_history(bot, bot_id, after_message_id=last_message_id)
 
             if file_message:
-                result_text = f"<b>• {bot_info.first_name}:</b> The bot sent a file with the full ban list. Forwarding..."
+                result_text = f"<b>• {bot_info.first_name}:</b> <i>The bot sent a file with the full ban list. Forwarding...</i>"
             else:
                 result_text = f"<b>• {bot_info.first_name}:</b> <blockquote expandable>You can only use fed commands once every 5 minutes.</blockquote>"
             return result_text, file_message
