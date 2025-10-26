@@ -12,8 +12,8 @@ from app import BOT, bot
 FED_BOTS_TO_QUERY = [
     609517172,  # Rose
     1376954911,  # AstrakoBot
-    885745757,  #Sophie
-    2059887769, #Odin
+    885745757,  # Sophie
+    2059887769, # Odin
 ]
 
 def safe_escape(text: str) -> str:
@@ -30,16 +30,12 @@ def parse_text_response(response: Message) -> str:
     else:
         return f"<b>• {bot_name}:</b> <blockquote expandable>{safe_escape(text)}</blockquote>"
 
-async def find_latest_file_in_history(bot: BOT, chat_id: int, timeout: int = 15) -> Message | None:
-    """
-    Actively polls message history to find the newest file message.
-    This is a robust alternative to event handlers for race conditions.
-    """
+async def find_latest_file_in_history(bot: BOT, chat_id: int, after_message_id: int, timeout: int = 15) -> Message | None:
     start_time = datetime.now(timezone.utc)
     while (datetime.now(timezone.utc) - start_time).total_seconds() < timeout:
         try:
             async for message in bot.get_chat_history(chat_id, limit=1):
-                if message.document and message.date > start_time:
+                if message.document and message.id > after_message_id:
                     return message
         except Exception:
             pass
@@ -48,7 +44,6 @@ async def find_latest_file_in_history(bot: BOT, chat_id: int, timeout: int = 15)
 
 
 async def query_single_bot(bot: BOT, bot_id: int, user_to_check: User) -> tuple[str, Message | None]:
-    """Queries a single bot using a robust method."""
     bot_info = await bot.get_users(bot_id)
     try:
         sent_cmd = await bot.send_message(chat_id=bot_id, text=f"/fbanstat {user_to_check.id}")
@@ -58,17 +53,18 @@ async def query_single_bot(bot: BOT, bot_id: int, user_to_check: User) -> tuple[
             response = await sent_cmd.get_response(filters=filters.user(bot_id), timeout=20)
         
         if response.reply_markup and "Make the fedban file" in str(response.reply_markup):
+            last_message_id = response.id
             try:
                 await response.click(0)
             except Exception:
                 pass
-                
-            file_message = await find_latest_file_in_history(bot, bot_id)
+            
+            file_message = await find_latest_file_in_history(bot, bot_id, after_message_id=last_message_id)
 
             if file_message:
-                result_text = f"<b>• {bot_info.first_name}:</b> Bot sent a file with the full ban list. Sending..."
+                result_text = f"<b>• {bot_info.first_name}:</b> The bot sent a file with the full ban list. Forwarding..."
             else:
-                result_text = f"<b>• {bot_info.first_name}:</b> Bot was supposed to send a file, but it wasn't received (timeout)."
+                result_text = f"<b>• {bot_info.first_name}:</b> <blockquote expandable>You can only use fed commands once every 5 minutes.</blockquote>"
             return result_text, file_message
 
         elif response.text:
@@ -78,16 +74,22 @@ async def query_single_bot(bot: BOT, bot_id: int, user_to_check: User) -> tuple[
             return f"<b>• {bot_info.first_name}:</b> <i>Received an unsupported response type.</i>", None
 
     except (UserIsBlocked, PeerIdInvalid):
-        return f"<b>• {bot_info.first_name}:</b> <i>Bot blocked or unreachable.</i>", None
+        return f"<b>• {bot_info.first_name}:</b> <i>The bot is blocked or unreachable.</i>", None
     except asyncio.TimeoutError:
         return f"<b>• {bot_info.first_name}:</b> <i>No response (timeout).</i>", None
-    except Exception:
-        return f"<b>• {bot_info.first_name}:</b> <i>An unknown rror occurred.</i>", None
+    except Exception as e:
+        print(f"An unknown error occurred with bot {bot_info.first_name}: {e}")
+        return f"<b>• {bot_info.first_name}:</b> <i>An unknown error occurred.</i>", None
 
 
 @bot.add_cmd(cmd=["fstat", "fedstat"])
 async def fed_stat_handler(bot: BOT, message: Message):
-    """Checks a user's federation ban status using a robust concurrent method."""
+    """
+    CMD: FSTAT / FEDSTAT
+    INFO: Checks a user's federation ban status across multiple bots.
+    USAGE:
+        .fstat [user_id/@username/reply]
+    """
     progress: Message = await message.reply("<code>Checking fedstat...</code>")
 
     target_identifier = "me"
