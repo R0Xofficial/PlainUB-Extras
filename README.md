@@ -6,16 +6,14 @@ Repository **"PlainUB-Extras"** is a collection of additional modules and featur
 
 ### ✅ Automatic Method (Recommended) (Need Docker)
 
-1. Fork or clone this repository.
-2. In your docker `config.env` file, add or modify the following line to point to your fork or this repository directly:
+1. In your docker `config.env` file, add or modify the following line to point to your fork or this repository directly:
 
    ```env
    EXTRA_MODULES_REPO=https://github.com/R0Xofficial/PlainUB-Extras
    ```
 
-3. Deploy or restart your bot. The modules will be automatically loaded from the external repository.
-
-4. To **update the modules** from the external repository (your fork), simply use the following command in the chat:
+2. Deploy or restart your bot. The modules will be automatically loaded from the external rerepository.
+3. To **update the modules** from the external repository (your fork), simply use the following command in the chat:
 
    ```
    .extupdate
