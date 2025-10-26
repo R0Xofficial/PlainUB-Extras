@@ -21,16 +21,15 @@ def parse_text_response(response: Message) -> str:
         return f"<b>• {bot_name}:</b> Not Banned"
     return f"<b>• {bot_name}:</b> <blockquote expandable>{safe_escape(text)}</blockquote>"
 
-async def wait_for_file_message(bot: BOT, chat_id: int, timeout: int = 15) -> Message | None:
-    """Waits for a new document message to appear in a chat's history."""
-    start_time = datetime.now(timezone.utc)
+async def await_bot_response(bot: BOT, chat_id: int, start_time: datetime, timeout: int = 15) -> Message | None:
+    """Actively polls message history to find the newest message from the bot."""
     try:
         async def check_history():
             while True:
-                async for message in bot.get_chat_history(chat_id, limit=1):
-                    if message.document and message.date > start_time:
+                async for message in bot.get_chat_history(chat_id, limit=5):
+                    if message.from_user and message.from_user.id == chat_id and message.date > start_time:
                         return message
-                await asyncio.sleep(0.5)
+                await asyncio.sleep(1)
         return await asyncio.wait_for(check_history(), timeout=timeout)
     except asyncio.TimeoutError:
         return None
@@ -39,22 +38,30 @@ async def query_single_bot(bot: BOT, bot_id: int, user_to_check: User) -> tuple[
     bot_info = await bot.get_users(bot_id)
     bot_name = bot_info.first_name
     try:
-        sent_cmd = await bot.send_message(chat_id=bot_id, text=f"/fbanstat {user_to_check.id}")
-        response = await sent_cmd.get_response(filters=filters.user(bot_id), timeout=20)
+        start_time = datetime.now(timezone.utc)
+        await bot.send_message(chat_id=bot_id, text=f"/fbanstat {user_to_check.id}")
+        
+        response = await await_bot_response(bot, bot_id, start_time)
+
+        if not response:
+            raise asyncio.TimeoutError
 
         if response.text and "checking" in response.text.lower():
-            response = await sent_cmd.get_response(filters=filters.user(bot_id), timeout=20)
+            start_time = datetime.now(timezone.utc)
+            response = await await_bot_response(bot, bot_id, start_time)
+            if not response: raise asyncio.TimeoutError
         
         if response.reply_markup and "Make the fedban file" in str(response.reply_markup):
             try:
                 await response.click(0)
-            except Exception:
-                pass
-                
-            file_message = await wait_for_file_message(bot, bot_id)
-            if file_message:
-                return f"<b>• {bot_name}:</b> Bot sent a file with the full ban list. Sending...", file_message
-            return f"<b>• {bot_name}:</b> Bot was supposed to send a file, but it wasn't received (timeout).", None
+            except Exception: pass
+            
+            start_time = datetime.now(timezone.utc)
+            file_message = await await_bot_response(bot, bot_id, start_time)
+
+            if file_message and file_message.document:
+                return f"<b>• {bot_name}:</b> Bot sent a file with the full ban list.", file_message
+            return f"<b>• {bot_name}:</b> Bot was supposed to send a file, but it wasn't received.", None
 
         if response.text:
             return parse_text_response(response), None
@@ -71,6 +78,7 @@ async def query_single_bot(bot: BOT, bot_id: int, user_to_check: User) -> tuple[
 @bot.add_cmd(cmd=["dfstat", "dfedstat"])
 async def fed_stat_handler(bot: BOT, message: Message):
     """
+    WARNING: Its a dev version of this module. Its can not work!!!
     CMD: DFSTAT / DFEDSTAT
     INFO: Checks a user's federation ban status across multiple federations.
     USAGE:
