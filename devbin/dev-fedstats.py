@@ -32,78 +32,76 @@ def parse_text_response(response: Message) -> str:
     else:
         return f"<b>• {bot_name}:</b> <blockquote expandable>{safe_escape(text)}</blockquote>"
 
-# The find_latest_file_in_history function has been removed as it was unreliable.
-# The query_single_bot function below now uses a much more robust method.
+async def find_latest_file_in_history(bot: BOT, chat_id: int, after_message_id: int, timeout: int = 15) -> Message | None:
+    """
+    Actively polls message history to find the newest file message that appeared
+    after a specific message ID. This is a robust alternative to time-based checks.
+    """
+    start_time = datetime.now(timezone.utc)
+    while (datetime.now(timezone.utc) - start_time).total_seconds() < timeout:
+        try:
+            # Get the most recent message in the chat history
+            async for message in bot.get_chat_history(chat_id, limit=1):
+                # Check if it's a document and if its ID is greater than the ID of our last message
+                if message.document and message.id > after_message_id:
+                    return message
+        except Exception:
+            # Ignore potential errors during polling and try again
+            pass
+        await asyncio.sleep(0.5)  # Wait briefly to avoid API spam
+    return None
+
 
 async def query_single_bot(bot: BOT, bot_id: int, user_to_check: User) -> tuple[str, Message | None]:
-    """
-    Queries a single bot using the reliable bot.listen() method.
-    This resolves the issue with files sent by bots like Rose being missed.
-    """
+    """Queries a single bot using the original, framework-compatible get_response() method."""
     bot_info = await bot.get_users(bot_id)
     try:
-        # Step 1: Send the command to the bot
-        await bot.send_message(chat_id=bot_id, text=f"/fbanstat {user_to_check.id}")
+        # Use the get_response() method, which is known to work in your environment
+        sent_cmd = await bot.send_message(chat_id=bot_id, text=f"/fbanstat {user_to_check.id}")
+        response = await sent_cmd.get_response(filters=filters.user(bot_id), timeout=20)
 
-        # Step 2: Wait for the first response from the bot (could be "checking..." or the result)
-        response = await bot.listen(chat_id=bot_id, filters=filters.user(bot_id), timeout=20)
-
-        # Step 3: If the bot first sends "checking...", wait for the second, actual response
+        # Handle the "checking..." intermediate message
         if response.text and "checking" in response.text.lower():
-            response = await bot.listen(chat_id=bot_id, filters=filters.user(bot_id), timeout=20)
+            response = await sent_cmd.get_response(filters=filters.user(bot_id), timeout=20)
         
-        # Step 4: Check if the response contains a button to generate a file
+        # Handle responses with the "Make the fedban file" button
         if response.reply_markup and "Make the fedban file" in str(response.reply_markup):
+            # Store the ID of the message with the button
+            last_message_id = response.id
             try:
-                # Click the button to request the file
                 await response.click(0)
-                
-                # STEP 5 (THE KEY FIX):
-                # Use bot.listen with a document filter to wait for the file message.
-                # This is much more reliable than polling the message history.
-                file_message = await bot.listen(
-                    chat_id=bot_id,
-                    filters=filters.user(bot_id) & filters.document,
-                    timeout=25  # Give the bot a bit more time to generate and send the file
-                )
-
-                result_text = f"<b>• {bot_info.first_name}:</b> The bot sent a file with the full ban list. Forwarding..."
-                return result_text, file_message
-
-            except asyncio.TimeoutError:
-                # This error will occur if the bot doesn't send the file within the timeout after the click
-                result_text = f"<b>• {bot_info.first_name}:</b> The bot was supposed to send a file, but it wasn't received (timeout)."
-                return result_text, None
             except Exception:
-                # Other potential errors during file retrieval
-                return f"<b>• {bot_info.first_name}:</b> <i>An error occurred while trying to retrieve the file.</i>", None
+                pass
+            
+            # Use the new, reliable polling function to find the file
+            file_message = await find_latest_file_in_history(bot, bot_id, after_message_id=last_message_id)
 
-        # Step 6: If the response is plain text, parse it
+            if file_message:
+                result_text = f"<b>• {bot_info.first_name}:</b> The bot sent a file with the full ban list. Forwarding..."
+            else:
+                result_text = f"<b>• {bot_info.first_name}:</b> The bot was supposed to send a file, but it wasn't received (timeout)."
+            return result_text, file_message
+
+        # Handle standard text responses
         elif response.text:
             return parse_text_response(response), None
         
-        # Step 7: Handle any other unexpected response type
         else:
             return f"<b>• {bot_info.first_name}:</b> <i>Received an unsupported response type.</i>", None
 
     except (UserIsBlocked, PeerIdInvalid):
         return f"<b>• {bot_info.first_name}:</b> <i>The bot is blocked or unreachable.</i>", None
     except asyncio.TimeoutError:
-        # This error will occur if the bot doesn't respond to the initial command at all
         return f"<b>• {bot_info.first_name}:</b> <i>No response (timeout).</i>", None
-    except Exception:
+    except Exception as e:
+        # Added a print statement to help debug future unknown errors
+        print(f"An unknown error occurred with bot {bot_info.first_name}: {e}")
         return f"<b>• {bot_info.first_name}:</b> <i>An unknown error occurred.</i>", None
 
 
-@bot.add_cmd(cmd=["dfstat", "dfedstat"])
+@bot.add_cmd(cmd=["fstat", "fedstat"])
 async def fed_stat_handler(bot: BOT, message: Message):
-    """
-    WARNING: Its a dev version of this module. Its can not work!!!
-    CMD: DFSTAT / DFEDSTAT
-    INFO: Checks a user's federation ban status across multiple federations.
-    USAGE:
-        .dfstat [user_id/@username/reply]
-    """
+    """Checks a user's federation ban status using a concurrent and robust method."""
     progress: Message = await message.reply("<code>Checking fedstat...</code>")
 
     target_identifier = "me"
