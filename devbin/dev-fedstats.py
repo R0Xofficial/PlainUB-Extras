@@ -40,15 +40,12 @@ async def find_latest_file_in_history(bot: BOT, chat_id: int, after_message_id: 
     start_time = datetime.now(timezone.utc)
     while (datetime.now(timezone.utc) - start_time).total_seconds() < timeout:
         try:
-            # Get the most recent message in the chat history
             async for message in bot.get_chat_history(chat_id, limit=1):
-                # Check if it's a document and if its ID is greater than the ID of our last message
                 if message.document and message.id > after_message_id:
                     return message
         except Exception:
-            # Ignore potential errors during polling and try again
             pass
-        await asyncio.sleep(0.5)  # Wait briefly to avoid API spam
+        await asyncio.sleep(0.5)
     return None
 
 
@@ -56,33 +53,27 @@ async def query_single_bot(bot: BOT, bot_id: int, user_to_check: User) -> tuple[
     """Queries a single bot using the original, framework-compatible get_response() method."""
     bot_info = await bot.get_users(bot_id)
     try:
-        # Use the get_response() method, which is known to work in your environment
         sent_cmd = await bot.send_message(chat_id=bot_id, text=f"/fbanstat {user_to_check.id}")
         response = await sent_cmd.get_response(filters=filters.user(bot_id), timeout=20)
 
-        # Handle the "checking..." intermediate message
         if response.text and "checking" in response.text.lower():
             response = await sent_cmd.get_response(filters=filters.user(bot_id), timeout=20)
         
-        # Handle responses with the "Make the fedban file" button
         if response.reply_markup and "Make the fedban file" in str(response.reply_markup):
-            # Store the ID of the message with the button
             last_message_id = response.id
             try:
                 await response.click(0)
             except Exception:
                 pass
             
-            # Use the new, reliable polling function to find the file
             file_message = await find_latest_file_in_history(bot, bot_id, after_message_id=last_message_id)
 
             if file_message:
                 result_text = f"<b>• {bot_info.first_name}:</b> The bot sent a file with the full ban list. Forwarding..."
             else:
-                result_text = f"<b>• {bot_info.first_name}:</b> The bot was supposed to send a file, but it wasn't received (timeout)."
+                result_text = f"<b>• {bot_info.first_name}:</b> <blockquote expandable>You can only use fed commands once every 5 minutes.</blockquote>"
             return result_text, file_message
 
-        # Handle standard text responses
         elif response.text:
             return parse_text_response(response), None
         
@@ -94,7 +85,6 @@ async def query_single_bot(bot: BOT, bot_id: int, user_to_check: User) -> tuple[
     except asyncio.TimeoutError:
         return f"<b>• {bot_info.first_name}:</b> <i>No response (timeout).</i>", None
     except Exception as e:
-        # Added a print statement to help debug future unknown errors
         print(f"An unknown error occurred with bot {bot_info.first_name}: {e}")
         return f"<b>• {bot_info.first_name}:</b> <i>An unknown error occurred.</i>", None
 
@@ -121,7 +111,6 @@ async def fed_stat_handler(bot: BOT, message: Message):
     except Exception as e:
         return await progress.edit(f"<b>Error:</b> Could not find the specified user.\n<code>{e}</code>", del_in=8)
 
-    # Run queries for all bots concurrently
     tasks = [query_single_bot(bot, bot_id, user_to_check) for bot_id in FED_BOTS_TO_QUERY]
     all_results = await asyncio.gather(*tasks)
 
@@ -144,6 +133,5 @@ async def fed_stat_handler(bot: BOT, message: Message):
         link_preview_options=LinkPreviewOptions(is_disabled=True)
     )
 
-    # Forward all collected files
     for file in files_to_forward:
         await file.forward(message.chat.id)
