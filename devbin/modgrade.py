@@ -5,13 +5,20 @@ import os
 import aiohttp
 import git
 from pyrogram.types import Message
+from dotenv import load_dotenv
 
 from app import BOT, bot
 
+# Load environment variables from config.env
+load_dotenv('config.env')
+
 # --- CONFIGURATION ---
-# IMPORTANT: Change these values to match your project!
-UPSTREAM_REPO_URL = "https://github.com/R0Xofficial/PlainUB-Extras"  # <-- Paste your repository URL here
-BRANCH = "main"  # Change to "master" if that is your main branch
+MOD_UPSTREAM_REPO_URL = "https://github.com/R0Xofficial/PlainUB-Extras"
+BRANCH = "main"  # Or "master", depending on the repository's default branch
+
+# Get the command trigger from your config.env file
+# This now assumes the variable is ALWAYS present, as you specified.
+CMD_TRIGGER = os.getenv("CMD_TRIGGER")
 
 # --- Helper Functions ---
 
@@ -69,7 +76,7 @@ async def check_update_handler(bot: BOT, message: Message):
         return await progress_msg.edit(f"`ERROR checking local version: {e}`")
 
     async with aiohttp.ClientSession() as session:
-        remote_commit = await get_latest_commit_info(session, UPSTREAM_REPO_URL, BRANCH)
+        remote_commit = await get_latest_commit_info(session, MOD_UPSTREAM_REPO_URL, BRANCH)
 
     if not remote_commit:
         return await progress_msg.edit("`Could not fetch update info from GitHub. Please try again later.`")
@@ -94,9 +101,11 @@ async def check_update_handler(bot: BOT, message: Message):
     )
 
     async with aiohttp.ClientSession() as session:
-        changelog = await get_changelog(session, local_commit_hash, remote_commit_hash)
+        changelog = await get_changelog(session, MOD_UPSTREAM_REPO_URL, local_commit_hash, remote_commit_hash)
     
     response_text += changelog
-    response_text += "\n\nTo update, please use your bot's designated update command."
+    
+    update_command = f"{CMD_TRIGGER}extupdate"
+    response_text += f"\n\nTo update, run: `{update_command}`"
     
     await progress_msg.edit(response_text)
