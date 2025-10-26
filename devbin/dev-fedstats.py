@@ -99,9 +99,15 @@ async def query_single_bot(bot: BOT, bot_id: int, user_to_check: User) -> tuple[
         return f"<b>• {bot_info.first_name}:</b> <i>An unknown error occurred.</i>", None
 
 
-@bot.add_cmd(cmd=["fstat", "fedstat"])
+@bot.add_cmd(cmd=["dfstat", "dfedstat"])
 async def fed_stat_handler(bot: BOT, message: Message):
-    """Checks a user's federation ban status using a concurrent and robust method."""
+    """
+    WARNING: Its a dev version of this module. Its can not work!!!
+    CMD: DFSTAT / DFEDSTAT
+    INFO: Checks a user's federation ban status across multiple federations.
+    USAGE:
+        .dfstat [user_id/@username/reply]
+    """
     progress: Message = await message.reply("<code>Checking fedstat...</code>")
 
     target_identifier = "me"
