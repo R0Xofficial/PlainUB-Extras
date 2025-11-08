@@ -27,7 +27,6 @@ async def format_chat_info(chat: Chat, is_full: bool) -> tuple[str, str | None]:
 
         if chat.username:
             info_lines.append(f"• <b>Username:</b> @{chat.username}")
-            info_lines.append(f"• <b>Permalink:</b> <a href='https://t.me/{chat.username}'>Click Here</a>")
         
         if chat.description:
             desc = chat.description
@@ -49,6 +48,8 @@ async def format_chat_info(chat: Chat, is_full: bool) -> tuple[str, str | None]:
             
         if chat.linked_chat:
             info_lines.append(f"• <b>Linked Chat ID:</b> <code>{chat.linked_chat.id}</code>")
+        if chat.username:
+            info_lines.append(f"\n<b>Permalink:</b> <a href='https://t.me/{chat.username}'>Click Here</a>")
     else:
         info_lines = [
             "<b>Chat info:</b>",
@@ -57,9 +58,10 @@ async def format_chat_info(chat: Chat, is_full: bool) -> tuple[str, str | None]:
         ]
         if chat.username:
             info_lines.append(f"• <b>Username:</b> @{chat.username}")
-            info_lines.append(f"• <b>Permalink:</b> <a href='https://t.me/{chat.username}'>Click Here</a>")
         if chat.members_count:
             info_lines.append(f"• <b>Members:</b> {chat.members_count}")
+        if chat.username:
+            info_lines.append(f"\n<b>Permalink:</b> <a href='https://t.me/{chat.username}'>Click Here</a>")
 
     photo_id = chat.photo.big_file_id if is_full and chat.photo else None
     return "\n".join(info_lines), photo_id
