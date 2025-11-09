@@ -55,24 +55,32 @@ async def check_permissions_handler(bot: BOT, message: Message):
         await message.reply(f"An error occurred: `{e}`")
         return
 
-    response_lines = [
-        f"<b>Permissions for {user.mention}</b>",
-        f"<b>in Chat:</b> {safe_escape(chat.title)}\n"
-    ]
+    response_lines = [f"<b>Permissions for:</b> {user.mention}"]
+
+    if chat.username:
+        # Create a link only if the chat is public
+        chat_link = f"https://t.me/{chat.username}"
+        response_lines.append(f"<b>in Chat:</b> <a href='{chat_link}'>{safe_escape(chat.title)}</a>\n")
+    else:
+        # For private chats, show only the title without any link
+        response_lines.append(f"<b>in Chat:</b> {safe_escape(chat.title)}\n")
 
     status_map = {
-        ChatMemberStatus.OWNER: "Creator (Owner)",
-        ChatMemberStatus.ADMINISTRATOR: "Administrator",
+        ChatMemberStatus.OWNER: "Owner",
+        ChatMemberStatus.ADMINISTRATOR: "Admin",
         ChatMemberStatus.MEMBER: "Member",
         ChatMemberStatus.RESTRICTED: "Restricted",
-        ChatMemberStatus.LEFT: "Left",
+        ChatMemberStatus.LEFT: "Not in chat",
         ChatMemberStatus.BANNED: "Banned"
     }
     status_str = status_map.get(member.status, "Unknown Status")
     
-    response_lines.append(f"• <b>Status:</b> {status_str}")
+    response_lines.append(f"<b>Status:</b> {status_str}")
     if member.custom_title:
-        response_lines.append(f"• <b>Custom Title:</b> {safe_escape(member.custom_title)}")
+        response_lines.append(f"<b>Custom Title:</b> {safe_escape(member.custom_title)}")
+    
+    if member.promoted_by:
+        response_lines.append(f"<b>Promoted By:</b> {member.promoted_by.mention}")
 
     if member.status == ChatMemberStatus.ADMINISTRATOR and member.privileges:
         perms = member.privileges
@@ -94,13 +102,15 @@ async def check_permissions_handler(bot: BOT, message: Message):
         granted_perms = [text for text, has_perm in perm_list if has_perm]
         
         if granted_perms:
-            perm_details = "\n".join([f"  – {perm}" for perm in granted_perms])
-            response_lines.append(f"• <b>Permissions:</b>\n<blockquote expandable>{perm_details}</blockquote>")
+            perm_details = "\n".join([f"- {perm}" for perm in granted_perms])
+            response_lines.append("<b>Permissions:</b>")
+            response_lines.append(f"<blockquote expandable>{perm_details}</blockquote>")
         else:
-            response_lines.append("• <b>Permissions:</b> None")
+            response_lines.append("<b>Permissions:</b> None")
 
     elif member.status == ChatMemberStatus.OWNER:
-        response_lines.append("• <b>Permissions:</b>\n<blockquote expandable>  – All Permissions (Creator)</blockquote>")
+        response_lines.append("<b>Permissions:</b>")
+        response_lines.append("<blockquote expandable>– All Permissions</blockquote>")
 
     elif member.status == ChatMemberStatus.RESTRICTED and member.permissions:
         perms = member.permissions
@@ -118,12 +128,16 @@ async def check_permissions_handler(bot: BOT, message: Message):
         denied_perms = [text for text, has_perm in perm_list.items() if not has_perm]
         
         if denied_perms:
-            perm_details = "\n".join([f"  – {perm}" for perm in denied_perms])
-            response_lines.append(f"• <b>Restrictions (Cannot):</b>\n<blockquote expandable>{perm_details}</blockquote>")
+            perm_details = "\n".join([f"- {perm}" for perm in denied_perms])
+            response_lines.append("<b>Restrictions (Cannot):</b>")
+            response_lines.append(f"<blockquote expandable>{perm_details}</blockquote>")
         
         if member.until_date:
-            response_lines.append(f"• <b>Restricted Until:</b> {member.until_date.strftime('%d %b %Y, %H:%M UTC')}")
+            response_lines.append(f"<b>Restricted Until:</b> {member.until_date.strftime('%d %b %Y, %H:%M UTC')}")
         else:
-            response_lines.append("• <b>Restricted Until:</b> Forever")
+            response_lines.append("<b>Restricted Until:</b> Forever")
 
-    await message.reply("\n".join(response_lines), link_preview_options=LinkPreviewOptions(is_disabled=True))
+    await message.reply(
+        "\n".join(response_lines),
+        link_preview_options=LinkPreviewOptions(is_disabled=True)
+    )
