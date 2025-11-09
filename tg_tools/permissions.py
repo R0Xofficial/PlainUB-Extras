@@ -56,13 +56,12 @@ async def check_permissions_handler(bot: BOT, message: Message):
         return
 
     response_lines = [f"<b>Permissions for:</b> {user.mention}"]
-
+    
+    chat_link = None
     if chat.username:
-        # Create a link only if the chat is public
         chat_link = f"https://t.me/{chat.username}"
         response_lines.append(f"<b>in Chat:</b> <a href='{chat_link}'>{safe_escape(chat.title)}</a>\n")
     else:
-        # For private chats, show only the title without any link
         response_lines.append(f"<b>in Chat:</b> {safe_escape(chat.title)}\n")
 
     status_map = {
@@ -110,7 +109,7 @@ async def check_permissions_handler(bot: BOT, message: Message):
 
     elif member.status == ChatMemberStatus.OWNER:
         response_lines.append("<b>Permissions:</b>")
-        response_lines.append("<blockquote expandable>– All Permissions</blockquote>")
+        response_lines.append("<blockquote expandable>– All Permissions (Creator)</blockquote>")
 
     elif member.status == ChatMemberStatus.RESTRICTED and member.permissions:
         perms = member.permissions
@@ -137,7 +136,11 @@ async def check_permissions_handler(bot: BOT, message: Message):
         else:
             response_lines.append("<b>Restricted Until:</b> Forever")
 
+    link_preview = LinkPreviewOptions(is_disabled=True)
+    if chat_link:
+        link_preview = LinkPreviewOptions(url=chat_link, is_disabled=True)
+    
     await message.reply(
         "\n".join(response_lines),
-        link_preview_options=LinkPreviewOptions(is_disabled=True)
+        link_preview_options=link_preview
     )
