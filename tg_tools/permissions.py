@@ -14,55 +14,40 @@ def safe_escape(text: str) -> str:
 @bot.add_cmd(cmd=["perms", "permissions"])
 async def check_permissions_handler(bot: BOT, message: Message):
     """
-    CMD: PERMS / PERMISSION
+    CMD: PERMS / PERMISSIONS
     INFO: Checks a user's permissions in a group.
     USAGE:
           .perms (Check your permissions in this group)
-          .perms [user] (Check a user's permissions in this group)
-          .perms [chat] [user] (Check a user's permissions in another group)
+          .perms [ID/username/reply] (Check a user's permissions in this group)
     """
-    target_chat_id = message.chat.id
-    target_user_id = None
-    
-    args = message.input.split()
+    if message.chat.type not in [ChatType.GROUP, ChatType.SUPERGROUP]:
+        await message.reply("This command can only be used in group chats.")
+        return
 
-    if len(args) >= 2:
-        target_chat_id = args[0]
-        target_user_id = args[1]
-    elif len(args) == 1:
-        if message.replied:
-            target_chat_id = args[0]
-            target_user_id = message.replied.from_user.id
-        else:
-            target_user_id = args[0]
+    target_user = None
+    if message.replied:
+        target_user = message.replied.from_user
+    elif message.input:
+        try:
+            target_user = await bot.get_users(message.input)
+        except Exception:
+            await message.reply("Could not find the specified user.")
+            return
     else:
-        if message.replied:
-            target_user_id = message.replied.from_user.id
-        else:
-            target_user_id = message.from_user.id
+        target_user = message.from_user
 
     try:
-        chat = await bot.get_chat(target_chat_id)
-        user = await bot.get_users(target_user_id)
-        member = await bot.get_chat_member(chat.id, user.id)
-    except PeerIdInvalid:
-        await message.reply("Could not find the specified chat or user. Please check the ID/username.")
-        return
+        member = await bot.get_chat_member(message.chat.id, target_user.id)
     except UserNotParticipant:
-        await message.reply(f"User {user.mention} is not a member of the chat {chat.title}.")
+        await message.reply(f"User {target_user.mention} is not a member of this chat.")
         return
     except Exception as e:
         await message.reply(f"An error occurred: `{e}`")
         return
 
-    response_lines = [f"<b>Permissions for:</b> {user.mention}"]
-    
-    chat_link = None
-    if chat.username:
-        chat_link = f"https://t.me/{chat.username}"
-        response_lines.append(f"<b>in Chat:</b> <a href='{chat_link}'>{safe_escape(chat.title)}</a>\n")
-    else:
-        response_lines.append(f"<b>in Chat:</b> {safe_escape(chat.title)}\n")
+    response_lines = [
+        f"<b>Permissions for:</b> {target_user.mention}\n"
+    ]
 
     status_map = {
         ChatMemberStatus.OWNER: "Owner",
@@ -136,11 +121,7 @@ async def check_permissions_handler(bot: BOT, message: Message):
         else:
             response_lines.append("<b>Restricted Until:</b> Forever")
 
-    link_preview = LinkPreviewOptions(is_disabled=True)
-    if chat_link:
-        link_preview = LinkPreviewOptions(url=chat_link, is_disabled=True)
-    
     await message.reply(
         "\n".join(response_lines),
-        link_preview_options=link_preview
+        link_preview_options=LinkPreviewOptions(is_disabled=True)
     )
