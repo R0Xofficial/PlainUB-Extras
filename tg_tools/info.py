@@ -1,6 +1,7 @@
 import os
 import html
 import shutil
+from pyrogram.errors import UserNotParticipant
 from pyrogram.enums import ChatType, UserStatus, ChatMemberStatus
 from pyrogram.types import Message, User, LinkPreviewOptions, ReplyParameters
 
@@ -64,6 +65,10 @@ async def format_user_info(user: User, is_full: bool, message: Message) -> tuple
                         granted_perms = [text for text, has_perm in perm_list if has_perm]
                         if granted_perms: group_details.append("• <b>Permissions:</b>\n" + "\n".join(granted_perms))
                     info_lines.append(f"<blockquote expandable>{'\n'.join(group_details)}</blockquote>")
+            except UserNotParticipant:
+                info_lines.append("\n<b>Group Info:</b>")
+                group_details = [f"• <b>Status:</b> Not in chat"]
+                info_lines.append(f"<blockquote expandable>{'\n'.join(group_details)}</blockquote>")
             except Exception: pass
             
         info_lines.append(f"\n<b>Permalink:</b> <a href='tg://user?id={user.id}'>Click Here</a>")
@@ -79,6 +84,8 @@ async def format_user_info(user: User, is_full: bool, message: Message) -> tuple
                 if member.status in status_map:
                     status_str = status_map.get(member.status)
                     info_lines.append(f"• <b>Status:</b> {status_str}")
+        except UserNotParticipant:
+            info_lines.append(f"• <b>Status:</b> Not in chat")
         except Exception: pass
         info_lines.append(f"\n<b>Permalink:</b> {user.mention('Click Here')}")
 
