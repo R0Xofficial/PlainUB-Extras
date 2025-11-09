@@ -51,7 +51,7 @@ async def format_user_info(user: User, is_full: bool, message: Message) -> tuple
             try:
                 member = await bot.get_chat_member(message.chat.id, user.id)
                 if member:
-                    info_lines.append("\n<b>Group Info:</b>")
+                    info_lines.append("\n<b>Group Status:</b>")
                     group_details = []
                     status_map = {ChatMemberStatus.OWNER: "Owner", ChatMemberStatus.ADMINISTRATOR: "Administrator", ChatMemberStatus.MEMBER: "Member", ChatMemberStatus.RESTRICTED: "Restricted", ChatMemberStatus.LEFT: "Not in chat", ChatMemberStatus.BANNED: "Banned"}
                     status_str = status_map.get(member.status, "Unknown")
