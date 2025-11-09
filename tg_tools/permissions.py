@@ -1,5 +1,5 @@
 import html
-from pyrogram.types import Message
+from pyrogram.types import Message, LinkPreviewOptions
 from pyrogram.enums import ChatType, ChatMemberStatus
 from pyrogram.errors import PeerIdInvalid, UserNotParticipant
 
@@ -126,4 +126,4 @@ async def check_permissions_handler(bot: BOT, message: Message):
         else:
             response_lines.append("• <b>Restricted Until:</b> Forever")
 
-    await message.reply("\n".join(response_lines), disable_web_page_preview=True)
+    await message.reply("\n".join(response_lines), link_preview_options=LinkPreviewOptions(is_disabled=True)
