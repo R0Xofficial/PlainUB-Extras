@@ -126,4 +126,4 @@ async def check_permissions_handler(bot: BOT, message: Message):
         else:
             response_lines.append("• <b>Restricted Until:</b> Forever")
 
-    await message.reply("\n".join(response_lines), link_preview_options=LinkPreviewOptions(is_disabled=True)
+    await message.reply("\n".join(response_lines), link_preview_options=LinkPreviewOptions(is_disabled=True))
