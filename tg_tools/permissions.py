@@ -58,7 +58,7 @@ async def check_permissions_handler(bot: BOT, message: Message):
         ChatMemberStatus.BANNED: "Banned"
     }
     status_str = status_map.get(member.status, "Unknown Status")
-    if member.custom_title: status_str += f"<i>({safe_escape(member.custom_title)})</i>"
+    if member.custom_title: status_str += f" <i>({safe_escape(member.custom_title)})</i>"
     response_lines.append(f"• <b>Status:</b> {status_str}")
     
     if member.promoted_by:
