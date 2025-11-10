@@ -19,8 +19,8 @@ async def check_permissions_handler(bot: BOT, message: Message):
     CMD: PERMS / PERMISSIONS
     INFO: Checks a user's permissions in a group.
     USAGE:
-          .perms (Check your permissions in this group)
-          .perms [ID/username/reply] (Check a user's permissions in this group)
+        .perms (Check your permissions in this group)
+        .perms [ID/username/reply] (Check a user's permissions in this group)
     """
     if message.chat.type not in [ChatType.GROUP, ChatType.SUPERGROUP]:
         await message.reply("This command can only be used in group chats.", del_in=ERROR_VISIBLE_DURATION)
