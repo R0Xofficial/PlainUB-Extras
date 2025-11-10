@@ -91,8 +91,8 @@ async def check_permissions_handler(bot: BOT, message: Message):
             response_lines.append("• <b>Permissions:</b> None")
 
     elif member.status == ChatMemberStatus.OWNER:
-        response_lines.append("<b>Permissions:</b>")
-        response_lines.append("<blockquote expandable>– All Permissions (Creator)</blockquote>")
+        response_lines.append("• <b>Permissions:</b>")
+        response_lines.append("<blockquote expandable>– All Permissions</blockquote>")
 
     elif member.status == ChatMemberStatus.RESTRICTED and member.permissions:
         perms = member.permissions
