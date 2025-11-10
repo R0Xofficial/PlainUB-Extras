@@ -49,4 +49,4 @@ async def slap_handler(bot: BOT, message: Message):
         text=final_text,
         reply_to_message_id=message.replied_id if message.replied else None
     )
-    await message.delete()```
+    await message.delete()
