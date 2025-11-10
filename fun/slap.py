@@ -38,9 +38,13 @@ SLAP_TEXTS = [
 
 @bot.add_cmd(cmd="slap")
 async def slap_handler(bot: BOT, message: Message):
+    if not message.replied and not message.input:
+        await message.reply("Who should I slap? Reply to a user or specify one.", del_in=5)
+        return
+
     slapper = message.from_user.mention
-    slappee = slapper
     target_user = None
+    target_text = ""
 
     if message.replied:
         target_user = message.replied.from_user
@@ -48,10 +52,17 @@ async def slap_handler(bot: BOT, message: Message):
         try:
             target_user = await bot.get_users(message.input)
         except Exception:
-            slappee = message.input
+            target_text = message.input
     
-    if isinstance(target_user, User):
+    if target_user and target_user.id == message.from_user.id:
+        await message.reply("Why would you want to slap yourself?", del_in=5)
+        await message.delete()
+        return
+
+    if target_user:
         slappee = target_user.mention
+    else:
+        slappee = target_text
 
     try:
         slap_text = random.choice(SLAP_TEXTS)
