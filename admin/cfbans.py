@@ -39,6 +39,10 @@ def parse_selection(text: str, total_feds: int) -> list[int] | None:
 
 async def get_user_reason(message: Message, progress: Message) -> tuple[int, str, str] | None:
     user, reason = await message.extract_user_n_reason()
+    
+    if not reason:
+        reason = "None"
+
     if isinstance(user, str):
         await progress.edit(user)
         return None
@@ -62,7 +66,10 @@ async def _choose_and_perform_fed_action(bot: BOT, message: Message, with_proof:
     if with_proof:
         if not message.replied: await progress.edit("Reply to a message to use it as proof."); return
         proof = await message.replied.forward(extra_config.FBAN_LOG_CHANNEL)
-        reason += f"\n{ {proof.link} }"
+        if reason == "None":
+             reason = f"Proof Attached.\n{ {proof.link} }"
+        else:
+             reason += f"\n{ {proof.link} }"
 
     feds = []
     output = "<b>List Of Connected Feds:</b>\n"
@@ -72,7 +79,7 @@ async def _choose_and_perform_fed_action(bot: BOT, message: Message, with_proof:
 
     if not feds: await progress.edit("You don't have any Feds Connected."); return
 
-    output += f"\nReply with number, range, or list to {action}.\nType `cancel` to abort."
+    output += f"\nReply to this message with number, range (7-12), or list (1,2,8) to {action}.\nType `cancel` to abort."
     await progress.edit(output)
 
     try:
