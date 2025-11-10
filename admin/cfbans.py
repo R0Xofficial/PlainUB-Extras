@@ -147,7 +147,7 @@ async def _choose_and_perform_fed_ban(bot: BOT, message: Message, with_proof: bo
     total_selected = len(selected_feds)
     failed_str = ""
     if failed_feds:
-        status_line = f"<b>Failed in:</b> {len(failed_feds)}/{total_selected} chosen feds"
+        status_line = f"<b>Failed in:</b> {len(failed_feds)}/{total_selected} chosen feds."
         failed_str = "\n• " + "\n• ".join(failed_feds)
     else:
         status_line = f"<b>Status:</b> Fbanned in <b>{total_selected}</b> chosen fed(s)."
