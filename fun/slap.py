@@ -1,5 +1,5 @@
 import random
-from pyrogram.types import Message, User
+from pyrogram.types import Message, User, ReplyParameters
 
 from app import BOT, Config, Message, bot
 
@@ -70,9 +70,13 @@ async def slap_handler(bot: BOT, message: Message):
     except Exception as e:
         final_text = f"{slapper} tried to slap {slappee}, but something went wrong: {e}"
 
+    reply_params = None
+    if message.replied:
+        reply_params = ReplyParameters(message_id=message.replied.id)
+
     await bot.send_message(
         chat_id=message.chat.id,
         text=final_text,
-        reply_to_message_id=message.replied.id if message.replied else None
+        reply_parameters=reply_params
     )
     await message.delete()
