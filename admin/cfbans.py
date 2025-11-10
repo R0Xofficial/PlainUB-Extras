@@ -86,7 +86,7 @@ async def _choose_and_perform_fed_action(bot: BOT, message: Message, with_proof:
         response_filter = filters.user(message.from_user.id) & filters.create(
             lambda _, __, msg: msg.reply_to_message_id == progress.id
         )
-        choice_msg = await bot.listen(chat_id=message.chat.id, filters=response_filter, timeout=90)
+        choice_msg = await progress.get_response(filters=response_filter, timeout=90)
     except TimeoutError:
         await progress.edit("Timeout.", del_in=5)
         return
