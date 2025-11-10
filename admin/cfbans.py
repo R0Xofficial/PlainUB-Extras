@@ -146,8 +146,9 @@ async def choose_fed_ban(bot: BOT, message: Message):
     CMD: CFBAN / CFBANP
     INFO:
         Initiates a selective fed-ban.
-        Instead of banning in all connected feds, this command will present a
-        numbered list of federations for you to choose from.
+        Instead of banning in all connected feds,
+        this command will present a numbered list
+        of federations for you to choose from.
 
     USAGE:
         .cfban(p) [uid | @ | reply to message] [reason]
@@ -160,8 +161,9 @@ async def choose_fed_ban_proof(bot: BOT, message: Message):
     CMD: CFBAN / CFBANP
     INFO:
         Initiates a selective fed-ban.
-        Instead of banning in all connected feds, this command will present a
-        numbered list of federations for you to choose from.
+        Instead of banning in all connected feds,
+        this command will present a numbered list
+        of federations for you to choose from.
 
     USAGE:
         .cfban(p) [uid | @ | reply to message] [reason]
@@ -174,8 +176,9 @@ async def choose_fed_unban(bot: BOT, message: Message):
     CMD: CUNFBAN
     INFO:
         Initiates a selective un-fedban.
-        This command works exactly like `cfban`, presenting a list of
-        federations to choose from for the unban action.
+        This command works exactly like `cfban`,
+        presenting a list of federations to choose 
+        from for the unban action.
 
     USAGE:
         .cunfban [uid | @ | reply to message] [reason]
