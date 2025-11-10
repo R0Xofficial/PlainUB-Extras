@@ -117,13 +117,13 @@ async def _choose_and_perform_fed_action(bot: BOT, message: Message, with_proof:
     failed_str = ""
 
     if failed_feds:
-        status_line = f"<b>Failed in:</b> {len(failed_feds)}/{total_selected} chosen feds."
+        status_line = f"<b>Failed</b> in: {len(failed_feds)}/{total_selected} chosen feds."
         failed_str = "\n• " + "\n• ".join(failed_feds)
     else:
         status_line = f"<b>Status:</b> {action_past_tense} in <b>{total_selected}</b> chosen fed(s)."
 
     summary_text = (f"❯❯❯ <b>{action_past_tense}</b> {user_mention}\n"
-                    f"<b>ID:</b> <code>{user_id}</code>\n"
+                    f"<b>ID:</b> {user_id}\n"
                     f"<b>Reason:</b> {reason}\n"
                     f"<b>Initiated in:</b> {message.chat.title or 'PM'}\n"
                     f"{status_line}")
