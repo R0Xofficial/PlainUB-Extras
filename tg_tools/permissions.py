@@ -98,8 +98,7 @@ async def check_permissions_handler(bot: BOT, message: Message):
         perms = member.permissions
         perm_list = {
             "Send Messages": perms.can_send_messages,
-            "Send Media": perms.can_send_media_messages,
-            "Send Stickers/GIFs": perms.can_send_stickers and perms.can_send_animations,
+            "Send Stickers, GIFs, etc.": perms.can_send_other_messages,
             "Send Polls": perms.can_send_polls,
             "Embed Links": perms.can_add_web_page_previews,
             "Add Members": perms.can_invite_users,
