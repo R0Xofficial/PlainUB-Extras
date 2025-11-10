@@ -16,6 +16,38 @@ FBAN_REGEX = BASIC_FILTER & filters.regex(
     re.IGNORECASE,
 )
 
+def parse_selection(text: str, total_feds: int) -> list[int] | None:
+    text = text.replace(" ", "")
+    selected_indices = set()
+
+    if "-" in text:
+        parts = text.split("-")
+        if len(parts) != 2 or not parts[0].isdigit() or not parts[1].isdigit():
+            return None
+        start, end = int(parts[0]), int(parts[1])
+        if not (0 < start <= end <= total_feds):
+            return None
+        return list(range(start - 1, end))
+    
+    if "," in text:
+        parts = text.split(",")
+        for part in parts:
+            if not part.isdigit():
+                return None
+            num = int(part)
+            if not (0 < num <= total_feds):
+                return None
+            selected_indices.add(num - 1)
+        return sorted(list(selected_indices))
+
+    if text.isdigit():
+        num = int(text)
+        if not (0 < num <= total_feds):
+            return None
+        return [num - 1]
+
+    return None
+
 async def get_user_reason(message: Message, progress: Message) -> tuple[int, str, str] | None:
     user, reason = await message.extract_user_n_reason()
     if isinstance(user, str):
@@ -61,12 +93,12 @@ async def _choose_and_perform_fed_ban(bot: BOT, message: Message, with_proof: bo
         await progress.edit("You don't have any Feds Connected.")
         return
 
-    output += "\nReply with the number of the fed or `cancel` to abort."
+    output += "\nReply with number, range (e.g. 1-5), or list (e.g. 1,3,5).\nType `cancel` to abort."
     await progress.edit(output)
 
     try:
         choice_msg = await progress.get_response(
-            filters=filters.user(message.from_user.id), timeout=60
+            filters=filters.user(message.from_user.id), timeout=90
         )
     except TimeoutError:
         await progress.edit("Timeout. No choice was made.", del_in=5)
@@ -81,49 +113,56 @@ async def _choose_and_perform_fed_ban(bot: BOT, message: Message, with_proof: bo
         await progress.edit("`Cancelled.`", del_in=5)
         return
 
-    if not choice_msg.text or not choice_msg.text.isdigit():
-        await progress.edit("Invalid choice. Please provide a number.", del_in=5)
-        return
-    
-    choice = int(choice_msg.text)
-    if not 0 < choice <= len(feds):
-        await progress.edit("Invalid number. Please choose from the list.", del_in=5)
-        return
+    selected_indices = parse_selection(choice_msg.text, len(feds))
 
-    chosen_fed = feds[choice - 1]
+    if selected_indices is None:
+        await progress.edit("Invalid selection format.", del_in=5)
+        return
+        
+    selected_feds = [feds[i] for i in selected_indices]
+    
     await progress.edit("❯❯")
 
     fban_cmd = f"/fban <a href='tg://user?id={user_id}'>{user_id}</a> {reason}"
-    failed = False
+    failed_feds = []
 
-    try:
-        cmd_msg = await bot.send_message(
-            chat_id=chosen_fed["_id"], text=fban_cmd, disable_preview=True
-        )
-        response = await cmd_msg.get_response(filters=FBAN_REGEX, timeout=8)
-        if not response:
-            failed = True
-        elif "Would you like to update this reason" in response.text:
-            await response.click("Update reason")
-    except Exception as e:
-        await bot.log_text(
-            text=f"An Error occurred while fbanning in chosen fed: {chosen_fed['name']} [{chosen_fed['_id']}]\nError: {e}",
-            type="CFBAN_ERROR",
-        )
-        failed = True
+    for fed in selected_feds:
+        try:
+            cmd_msg = await bot.send_message(
+                chat_id=fed["_id"], text=fban_cmd, disable_preview=True
+            )
+            response = await cmd_msg.get_response(filters=FBAN_REGEX, timeout=8)
+            if not response:
+                failed_feds.append(fed["name"])
+            elif "Would you like to update this reason" in response.text:
+                await response.click("Update reason")
+        except Exception as e:
+            await bot.log_text(
+                text=f"An Error occurred while fbanning in chosen fed: {fed['name']} [{fed['_id']}]\nError: {e}",
+                type="CFBAN_ERROR",
+            )
+            failed_feds.append(fed["name"])
+        await asyncio.sleep(1)
     
-    if failed:
-        status_line = f"<b>Failed:</b> {chosen_fed['name']}"
+    total_selected = len(selected_feds)
+    failed_str = ""
+    if failed_feds:
+        status_line = f"<b>Failed in:</b> {len(failed_feds)}/{total_selected} chosen feds"
+        failed_str = "\n• " + "\n• ".join(failed_feds)
     else:
-        status_line = f"<b>Status:</b> Fbanned in {chosen_fed['name']}"
+        status_line = f"<b>Status:</b> Fbanned in <b>{total_selected}</b> chosen fed(s)."
 
-    log_text = (
+    summary_text = (
         f"❯❯❯ <b>Fbanned</b> {user_mention}\n"
         f"<b>ID:</b> <code>{user_id}</code>\n"
         f"<b>Reason:</b> {reason}\n"
         f"<b>Initiated in:</b> {message.chat.title or 'PM'}\n"
         f"{status_line}"
     )
+
+    log_text = summary_text
+    if failed_str:
+        log_text += failed_str
 
     if not message.is_from_owner:
         log_text += f"\n\n<b>By</b>: {get_name(message.from_user)}"
@@ -132,7 +171,7 @@ async def _choose_and_perform_fed_ban(bot: BOT, message: Message, with_proof: bo
         chat_id=extra_config.FBAN_LOG_CHANNEL, text=log_text, disable_preview=True
     )
     
-    await progress.edit(log_text, del_in=5, disable_preview=True)
+    await progress.edit(summary_text, del_in=8, disable_preview=True)
 
 @bot.add_cmd(cmd="cfban")
 async def choose_fed_ban(bot: BOT, message: Message):
