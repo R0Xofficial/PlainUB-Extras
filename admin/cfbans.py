@@ -142,12 +142,42 @@ async def _choose_and_perform_fed_action(bot: BOT, message: Message, with_proof:
 
 @bot.add_cmd(cmd="cfban")
 async def choose_fed_ban(bot: BOT, message: Message):
+    """
+    CMD: CFBAN / CFBANP
+    INFO:
+        Initiates a selective fed-ban.
+        Instead of banning in all connected feds, this command will present a
+        numbered list of federations for you to choose from.
+
+    USAGE:
+        .cfban(p) [uid | @ | reply to message] [reason]
+    """
     await _choose_and_perform_fed_action(bot, message, with_proof=False, action="fban")
 
 @bot.add_cmd(cmd="cfbanp")
 async def choose_fed_ban_proof(bot: BOT, message: Message):
+    """
+    CMD: CFBAN / CFBANP
+    INFO:
+        Initiates a selective fed-ban.
+        Instead of banning in all connected feds, this command will present a
+        numbered list of federations for you to choose from.
+
+    USAGE:
+        .cfban(p) [uid | @ | reply to message] [reason]
+    """
     await _choose_and_perform_fed_action(bot, message, with_proof=True, action="fban")
 
 @bot.add_cmd(cmd="uncfban")
 async def choose_fed_unban(bot: BOT, message: Message):
+    """
+    CMD: CUNFBAN
+    INFO:
+        Initiates a selective un-fedban.
+        This command works exactly like `cfban`, presenting a list of
+        federations to choose from for the unban action.
+
+    USAGE:
+        .cunfban [uid | @ | reply to message] [reason]
+    """
     await _choose_and_perform_fed_action(bot, message, with_proof=False, action="unfban")
