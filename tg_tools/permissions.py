@@ -119,3 +119,6 @@ async def check_permissions_handler(bot: BOT, message: Message):
         "\n".join(response_lines),
         link_preview_options=LinkPreviewOptions(is_disabled=True)
     )
+    try:
+        await message.delete()
+    except Exception: pass
