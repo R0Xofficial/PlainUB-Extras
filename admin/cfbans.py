@@ -1,8 +1,8 @@
 import asyncio
+from asyncio import TimeoutError
 import re
 
 from pyrogram import filters
-from pyrogram.errors import TimeoutError
 from pyrogram.types import Message, User
 from ub_core.utils.helpers import get_name
 
@@ -61,7 +61,7 @@ async def _choose_and_perform_fed_ban(bot: BOT, message: Message, with_proof: bo
         await progress.edit("You don't have any Feds Connected.")
         return
 
-    output += "\nReply with the number of the fed you want to ban in."
+    output += "\nReply with the number of the fed or `cancel` to abort."
     await progress.edit(output)
 
     try:
@@ -70,6 +70,10 @@ async def _choose_and_perform_fed_ban(bot: BOT, message: Message, with_proof: bo
         )
     except TimeoutError:
         await progress.edit("Timeout. No choice was made.", del_in=5)
+        return
+
+    if choice_msg.text and choice_msg.text.lower() == "cancel":
+        await progress.edit("`Cancelled.`", del_in=5)
         return
 
     if not choice_msg.text or not choice_msg.text.isdigit():
@@ -82,7 +86,7 @@ async def _choose_and_perform_fed_ban(bot: BOT, message: Message, with_proof: bo
         return
 
     chosen_fed = feds[choice - 1]
-    await progress.edit(f"❯❯")
+    await progress.edit("❯❯")
 
     fban_cmd = f"/fban <a href='tg://user?id={user_id}'>{user_id}</a> {reason}"
     failed = False
