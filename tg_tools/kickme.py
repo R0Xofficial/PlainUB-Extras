@@ -8,14 +8,14 @@ async def _delayed_leave(chat_id: int | str):
     await asyncio.sleep(1)
     await bot.leave_chat(chat_id)
 
-@bot.add_cmd(cmd=["leave", "kickme"])
+@bot.add_cmd(cmd="leave")
 async def leave_chat_handler(bot: BOT, message: Message):
     """
-    CMD: LEAVE / KICKME
+    CMD: LEAVE
     INFO: Leaves a chat or channel.
     USAGE:
         .leave (leaves the current chat)
-        .leave [ID/@username/link] (leaves a specific chat)
+        .leave [ID/@chatname/link] (leaves a specific chat)
     """
     
     try:
