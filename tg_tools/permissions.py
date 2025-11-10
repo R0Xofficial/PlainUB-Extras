@@ -59,12 +59,12 @@ async def check_permissions_handler(bot: BOT, message: Message):
     }
     status_str = status_map.get(member.status, "Unknown Status")
     
-    response_lines.append(f"<b>Status:</b> {status_str}")
+    response_lines.append(f"• <b>Status:</b> {status_str}")
     if member.custom_title:
-        response_lines.append(f"<b>Custom Title:</b> {safe_escape(member.custom_title)}")
+        response_lines.append(f"  <i>Title: {safe_escape(member.custom_title)}</i>")
     
     if member.promoted_by:
-        response_lines.append(f"<b>Promoted By:</b> {member.promoted_by.mention}")
+        response_lines.append(f"• <b>Promoted By:</b> {member.promoted_by.mention}")
 
     if member.status == ChatMemberStatus.ADMINISTRATOR and member.privileges:
         perms = member.privileges
@@ -87,10 +87,10 @@ async def check_permissions_handler(bot: BOT, message: Message):
         
         if granted_perms:
             perm_details = "\n".join([f"- {perm}" for perm in granted_perms])
-            response_lines.append("<b>Permissions:</b>")
+            response_lines.append("• <b>Permissions:</b>")
             response_lines.append(f"<blockquote expandable>{perm_details}</blockquote>")
         else:
-            response_lines.append("<b>Permissions:</b> None")
+            response_lines.append("• <b>Permissions:</b> None")
 
     elif member.status == ChatMemberStatus.OWNER:
         response_lines.append("<b>Permissions:</b>")
@@ -113,13 +113,13 @@ async def check_permissions_handler(bot: BOT, message: Message):
         
         if denied_perms:
             perm_details = "\n".join([f"- {perm}" for perm in denied_perms])
-            response_lines.append("<b>Restrictions (Cannot):</b>")
+            response_lines.append("• <b>Restrictions:</b>")
             response_lines.append(f"<blockquote expandable>{perm_details}</blockquote>")
         
         if member.until_date:
-            response_lines.append(f"<b>Restricted Until:</b> {member.until_date.strftime('%d %b %Y, %H:%M UTC')}")
+            response_lines.append(f"<i>Restricted Until: {member.until_date.strftime('%d %b %Y, %H:%M UTC')}</i>")
         else:
-            response_lines.append("<b>Restricted Until:</b> Forever")
+            response_lines.append("<i>Restricted Until: Forever</i>")
 
     await message.reply(
         "\n".join(response_lines),
