@@ -86,7 +86,7 @@ async def check_permissions_handler(bot: BOT, message: Message):
         granted_perms = [text for text, has_perm in perm_list if has_perm]
         
         if granted_perms:
-            perm_details = "\n".join([f"- {perm}" for perm in granted_perms])
+            perm_details = "\n".join([f"– {perm}" for perm in granted_perms])
             response_lines.append("• <b>Permissions:</b>")
             response_lines.append(f"<blockquote expandable>{perm_details}</blockquote>")
         else:
@@ -111,7 +111,7 @@ async def check_permissions_handler(bot: BOT, message: Message):
         denied_perms = [text for text, has_perm in perm_list.items() if not has_perm]
         
         if denied_perms:
-            perm_details = "\n".join([f"- {perm}" for perm in denied_perms])
+            perm_details = "\n".join([f"– {perm}" for perm in denied_perms])
             response_lines.append("• <b>Restrictions:</b>")
             response_lines.append(f"<blockquote expandable>{perm_details}</blockquote>")
 
