@@ -72,6 +72,11 @@ async def _choose_and_perform_fed_ban(bot: BOT, message: Message, with_proof: bo
         await progress.edit("Timeout. No choice was made.", del_in=5)
         return
 
+    try:
+        await choice_msg.delete()
+    except Exception:
+        pass
+
     if choice_msg.text and choice_msg.text.lower() == "cancel":
         await progress.edit("`Cancelled.`", del_in=5)
         return
@@ -108,7 +113,7 @@ async def _choose_and_perform_fed_ban(bot: BOT, message: Message, with_proof: bo
         failed = True
     
     if failed:
-        status_line = f"<b>Failed in:</b> {chosen_fed['name']}"
+        status_line = f"<b>Failed:</b> {chosen_fed['name']}"
     else:
         status_line = f"<b>Status:</b> Fbanned in {chosen_fed['name']}"
 
