@@ -8,7 +8,7 @@ async def silent_ban_handler(bot: BOT, message: Message) -> None:
     CMD: SBAN
     INFO: Silently bans a user without sending a confirmation message.
     USAGE:
-        .sban [user_id/@username/reply]
+        .sban [ID/username/reply]
     """
     if not message.chat._raw.admin_rights:
         return
