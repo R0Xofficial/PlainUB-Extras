@@ -8,7 +8,7 @@ async def silent_mute_handler(bot: BOT, message: Message):
     CMD: SMUTE
     INFO: Silently mutes a user without sending a confirmation message.
     USAGE:
-        .smute [user_id/@username/reply]
+        .smute [ID/username/reply]
     """
     if not message.chat._raw.admin_rights:
         return
