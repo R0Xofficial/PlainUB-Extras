@@ -6,6 +6,12 @@ from app import BOT, bot
 
 @bot.add_cmd(cmd="rkick")
 async def remote_kick_handler(bot: BOT, message: Message):
+    """
+    CMD: RKICK
+    INFO: Kick user remotely.
+    USAGE:
+        .rkick [ID/username/reply] [ID/chatname/link] [reason]
+    """
     if not message.input or len(message.input.split()) < 2:
         await message.reply("<b>Usage:</b> <code>.rkick [user] [chat] [reason]</code>", del_in=10)
         return
