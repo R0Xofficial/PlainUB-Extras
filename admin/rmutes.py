@@ -5,6 +5,13 @@ from app import BOT, bot
 
 @bot.add_cmd(cmd=["rmute", "runmute"])
 async def remote_mute_handler(bot: BOT, message: Message):
+    """
+    CMD:
+    INFO: Mute user remotely.
+    USAGE:
+        .rmute [ID/username/reply] [ID/chatname/link] [reason]
+        .runmute [ID/username/reply] [ID/chatname/link] [reason]
+    """
     if not message.input or len(message.input.split()) < 2:
         await message.reply(f"<b>Usage:</b> <code>.{message.cmd} [user] [chat] [reason]</code>", del_in=10)
         return
