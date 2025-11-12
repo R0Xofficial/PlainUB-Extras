@@ -5,6 +5,13 @@ from app import BOT, bot
 
 @bot.add_cmd(cmd=["rban", "runban"])
 async def remote_ban_handler(bot: BOT, message: Message):
+    """
+    CMD: RBAN / RUNBAN
+    INFO: Ban user remotely.
+    USAGE:
+        .rban [ID/username/reply] [ID/chatname/link] [reason]
+        .runban [ID/username/reply] [ID/chatname/link] [reason]
+    """
     if not message.input or len(message.input.split()) < 2:
         await message.reply(f"<b>Usage:</b> <code>.{message.cmd} [user] [chat] [reason]</code>", del_in=10)
         return
