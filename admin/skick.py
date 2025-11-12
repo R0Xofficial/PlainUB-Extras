@@ -9,7 +9,7 @@ async def silent_kick_handler(bot: BOT, message: Message):
     CMD: SKICK
     INFO: Silently kicks a user without sending a confirmation message.
     USAGE:
-        .skick [user_id/@username/reply]
+        .skick [ID/username/reply]
     """
     if not message.chat._raw.admin_rights:
         return
