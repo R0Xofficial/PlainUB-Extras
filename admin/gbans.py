@@ -88,6 +88,13 @@ async def gban_chat_list(bot: BOT, message: Message):
 
 @bot.add_cmd(cmd=["gban", "gbanp"])
 async def gban_user(bot: BOT, message: Message):
+    """
+    CMD: GBAN / GBANP
+    INFO: Globall ban user in connected bots to your userbot.
+    USAGE:
+        .gban [ID/Username/reply] [reason] (Globall ban user)
+        .gbanp [reply] [reason] (Globall ban user with proof)
+    """
     progress: Message = await message.reply("❯")
     extracted_info = await get_user_reason(message=message, progress=progress)
     if not extracted_info:
