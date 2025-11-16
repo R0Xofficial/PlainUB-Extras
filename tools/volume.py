@@ -27,7 +27,8 @@ async def sync_change_volume(input_path: str, volume_factor: float) -> str:
     
     command = (
         f'ffmpeg -i "{input_path}" '
-        f'-filter:a "volume={volume_factor}" '
+        f'-af "aformat=sample_fmts=s16:sample_rates=44100,volume={volume_factor}" '
+        f'-c:a libmp3lame -b:a 192k '
         f'-c:v copy '
         f'-y "{output_path}"'
     )
@@ -37,7 +38,9 @@ async def sync_change_volume(input_path: str, volume_factor: float) -> str:
         if "does not contain any stream" in stderr or "Invalid argument" in stderr:
             command = (
                 f'ffmpeg -i "{input_path}" '
-                f'-filter:a "volume={volume_factor}" '
+                f'-af "volume={volume_factor}" '
+                f'-c:a libmp3lame -b:a 192k '
+                f'-vn '
                 f'-y "{output_path}"'
             )
             _, stderr_fallback, code_fallback = await run_command(command)
