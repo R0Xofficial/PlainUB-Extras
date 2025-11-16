@@ -23,7 +23,7 @@ async def run_command(command: str) -> tuple[str, str, int]:
 async def sync_change_volume(input_path: str, volume_factor: float) -> str:
     """Synchronously changes the volume of a media file using FFmpeg."""
     base, ext = os.path.splitext(os.path.basename(input_path))
-    output_path = os.path.join(TEMP_DIR, f"{base}_volume_{int(volume_factor*100)}{ext}")
+    output_path = os.path.join(TEMP_DIR, f"{base}_volume_{int(volume_factor*100)}.mp3")
     
     command = (
         f'ffmpeg -i "{input_path}" '
