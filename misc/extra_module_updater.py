@@ -12,7 +12,7 @@ REPO_API_URL = f"https://api.github.com/repos/{REPO_OWNER}/{REPO_NAME}"
 
 APP_DIR = os.path.join(os.getcwd(), "app")
 MODULES_DIR = os.path.join(APP_DIR, "modules")
-UPDATE_FILE_PATH = os.path.join(MODULES_DIR, "update.rdm")
+UPDATE_FILE_PATH = os.path.join(MODULES_DIR, "update.json")
 
 def fetch_latest_commit_date_sync() -> str:
     response = requests.get(REPO_API_URL, timeout=10)
