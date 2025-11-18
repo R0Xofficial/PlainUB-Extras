@@ -1,4 +1,3 @@
-import asyncio
 from pyrogram.types import Message, User
 
 from app import BOT, bot
@@ -21,7 +20,6 @@ async def silent_kick_handler(bot: BOT, message: Message):
 
     try:
         await bot.ban_chat_member(chat_id=message.chat.id, user_id=user.id)
-        await asyncio.sleep(1) 
         await bot.unban_chat_member(chat_id=message.chat.id, user_id=user.id)
     except Exception:
         pass
