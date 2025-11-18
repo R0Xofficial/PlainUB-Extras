@@ -3,17 +3,16 @@ import html
 import asyncio
 import requests
 from datetime import datetime
-from pyrogram.types import Message, LinkPreviewOptions
 
-from app import BOT, bot
-
+from ub_core.utils import run_shell_cmd
+from app import BOT, Message
 from app.modules.repo import REPO_OWNER, REPO_NAME
 
 REPO_API_URL = f"https://api.github.com/repos/{REPO_OWNER}/{REPO_NAME}"
 
-SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
-MODULES_DIR = os.path.dirname(SCRIPT_DIR)
-UPDATE_FILE_PATH = os.path.join(MODULES_DIR, "update.json")
+APP_DIR = os.path.join(os.getcwd(), "app")
+MODULES_DIR = os.path.join(APP_DIR, "modules")
+UPDATE_FILE_PATH = os.path.join(MODULES_DIR, "update.rdm")
 
 def fetch_latest_commit_date_sync() -> str:
     response = requests.get(REPO_API_URL, timeout=10)
@@ -27,19 +26,30 @@ def get_local_version_date() -> str:
         return "Not Found"
     try:
         with open(UPDATE_FILE_PATH, 'r') as f:
-            local_date = f.read().strip()
-            return local_date if local_date else "Empty"
+            return f.read().strip() or "Empty"
     except Exception:
         return "Error Reading File"
 
-@bot.add_cmd(cmd=["checkupdate", "cupdate"])
-async def check_update_handler(bot: BOT, message: Message):
+@BOT.add_cmd(cmd="extupdate", allow_sudo=False)
+async def unified_update_handler(bot: BOT, message: Message):
     """
-    CMD: CHECKUPDATE / CUPDATE
-    INFO: Check avaible update.
+    CMD: EXTUPDATE
+    INFO: Checks for or pulls updates for external modules.
+    FLAGS:
+        -pull: Pulls the latest changes from the repository and restarts if necessary.
+    USAGE:
+        .extupdate (Checks for available updates)
+        .extupdate -pull (Pulls and applies updates)
     """
+
+    if "-pull" in message.flags:
+        output = await run_shell_cmd(cmd=f"cd {MODULES_DIR} && git pull", timeout=10)
+        await message.reply(f"<pre language=shell>{output}</pre>")
+        if output.strip() != "Already up to date.":
+            bot.raise_sigint()
+        return
+
     progress_msg = await message.reply("<code>Checking for updates...</code>")
-    
     try:
         remote_date = await asyncio.to_thread(fetch_latest_commit_date_sync)
         local_date = get_local_version_date()
@@ -52,8 +62,8 @@ async def check_update_handler(bot: BOT, message: Message):
             status_text = f"<b>Could not determine local version.</b>\nReason: <code>{local_date}</code>"
         else:
             status_emoji = "⚠️"
-            status_text = f"<b>A new update is available!</b>\nUse `extupdate` command to update {REPO_NAME}."
-        
+            status_text = f"<b>A new update is available!</b>\nRun <code>extupdate -pull</code> to apply."
+
         response_text = (
             f"{status_emoji} {status_text}\n\n"
             f"<b>Latest Version:</b>\n<code>{remote_date}</code>\n\n"
