@@ -36,7 +36,7 @@ async def unified_update_handler(bot: BOT, message: Message):
     CMD: EXTUPDATE
     INFO: Checks for or pulls updates for external modules.
     FLAGS:
-        -pull: Pulls the latest changes from the repository and restarts if necessary.
+        -pull: Pulls the latest changes from the repository and restarts userbot.
     USAGE:
         .extupdate (Checks for available updates)
         .extupdate -pull (Pulls and applies updates)
