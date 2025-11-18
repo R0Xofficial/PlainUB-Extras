@@ -18,7 +18,7 @@ def fetch_latest_commit_date_sync() -> str:
     response = requests.get(REPO_API_URL, timeout=10)
     response.raise_for_status()
     data = response.json()
-    pushed_at = datetime.strptime(data['pushed_at'], "%Y-%m-%dTH:%M:%SZ").strftime("%Y-%m-%d %H:%M UTC")
+    pushed_at = datetime.strptime(data['pushed_at'], "%Y-%m-%dT%H:%M:%SZ").strftime("%Y-%m-%d %H:%M UTC")
     return pushed_at
 
 @BOT.add_cmd(cmd="extupdate", allow_sudo=False)
@@ -29,17 +29,14 @@ async def extra_modules_updater(bot: BOT, message: Message):
     """
     output = await run_shell_cmd(cmd=f"cd {MODULES_DIR} && git pull", timeout=10)
 
-    update_successful = "Already up to date." not in output.strip() and "error" not in output.lower()
-    
-    if update_successful:
-        try:
-            latest_commit_date = await asyncio.to_thread(fetch_latest_commit_date_sync)
-            with open(UPDATE_FILE_PATH, 'w') as f:
-                f.write(latest_commit_date)
-        except Exception:
-            pass
+    try:
+        latest_commit_date = await asyncio.to_thread(fetch_latest_commit_date_sync)
+        with open(UPDATE_FILE_PATH, 'w') as f:
+            f.write(latest_commit_date)
+    except Exception:
+        pass
 
     await message.reply(f"<pre language=shell>{output}</pre>")
 
-    if update_successful:
+    if output.strip() != "Already up to date.":
         bot.raise_sigint()
