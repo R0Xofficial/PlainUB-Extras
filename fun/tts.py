@@ -69,7 +69,6 @@ async def tts_handler(bot: BOT, message: Message):
             reply_parameters=ReplyParameters(message_id=message.reply_to_message_id or message.id)
         )
         await progress_message.delete()
-        await message.delete()
 
     except Exception as e:
         await progress_message.edit(f"<b>Error:</b> Could not generate speech.\n<code>{safe_escape(str(e))}</code>")
