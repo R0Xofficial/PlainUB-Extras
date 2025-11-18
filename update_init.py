@@ -1,6 +1,10 @@
 import os
+import asyncio
 import requests
 from datetime import datetime
+
+from app import BOT, Message, bot
+from pyrogram import filters
 
 REPO_OWNER = "R0Xofficial"
 REPO_NAME = "PlainUB-Extras"
@@ -17,15 +21,22 @@ def fetch_latest_commit_date_sync() -> str:
     pushed_at = datetime.strptime(data['pushed_at'], "%Y-%m-%dT%H:%M:%SZ").strftime("%Y-%m-%d %H:%M UTC")
     return pushed_at
 
-def initialize_version_file():
+STARTUP_CHECK_COMPLETE = False
+
+@bot.on_message()
+async def startup_check_handler(client: BOT, message: Message):
+    global STARTUP_CHECK_COMPLETE
+    if STARTUP_CHECK_COMPLETE:
+        return
+    
+    STARTUP_CHECK_COMPLETE = True
+    
     if not os.path.exists(UPDATE_FILE_PATH):
-        print(f"INFO: '{UPDATE_FILE_PATH}' not found. Attempting to create it on first run...")
+        print(f"INFO: 'update.json' not found. Creating it on first startup...")
         try:
-            initial_date = fetch_latest_commit_date_sync()
+            initial_date = await asyncio.to_thread(fetch_latest_commit_date_sync)
             with open(UPDATE_FILE_PATH, 'w') as f:
                 f.write(initial_date)
             print(f"INFO: 'update.json' created successfully with date: {initial_date}")
         except Exception as e:
-            print(f"WARNING: Could not create 'update.json' on initial startup. It will be created on the first '.extupdate'. Error: {e}")
-
-initialize_version_file()
+            print(f"WARNING: Could not create 'update.json' on initial startup. Error: {e}")
