@@ -65,5 +65,3 @@ async def forward_info_handler(bot: BOT, message: Message):
         reply_parameters=ReplyParameters(message_id=replied_msg.id),
         link_preview_options=LinkPreviewOptions(is_disabled=True)
     )
-    
-    await message.delete()
