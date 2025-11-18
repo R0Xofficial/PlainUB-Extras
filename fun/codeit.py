@@ -177,7 +177,6 @@ async def codeit_handler(bot: BOT, message: Message):
         )
         
         await progress_message.delete()
-        await message.delete()
 
     except Exception as e:
         error_text = f"<b>Error:</b> Could not generate code.\n<code>{html.escape(str(e))}</code>"
