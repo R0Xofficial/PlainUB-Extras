@@ -1,5 +1,4 @@
 import html
-import asyncio
 from pyrogram.types import Message, User
 
 from app import BOT, bot
@@ -39,7 +38,6 @@ async def remote_kick_handler(bot: BOT, message: Message):
 
     try:
         await bot.ban_chat_member(chat_id=target_chat.id, user_id=target_user.id)
-        await asyncio.sleep(1)
         await bot.unban_chat_member(chat_id=target_chat.id, user_id=target_user.id)
 
         confirmation_text = f"Kicked: {target_user.mention}\nReason: {reason}"
