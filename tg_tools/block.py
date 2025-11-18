@@ -56,8 +56,6 @@ async def block_unblock_handler(bot: BOT, message: Message):
                 await bot.send_message(chat_id=LOG_CHAT, text=log_text, parse_mode=None)
             except Exception:
                 pass
-        
-        await message.delete()
 
     except Exception as e:
         await message.reply(f"<b>Error:</b> <code>{html.escape(str(e))}</code>", del_in=ERROR_VISIBLE_DURATION)
