@@ -55,11 +55,11 @@ async def repo_handler(bot: BOT, message: Message):
         remote_date = repo_data['last_commit_date']
         
         if local_date == remote_date:
-            status_text = "✅ Up to date"
+            status_text = "Up to date!"
         elif local_date in ["Not Found", "Empty", "Error Reading File"]:
-            status_text = f"❓ Unknown ({local_date})"
+            status_text = f"Unknown ({local_date})"
         else:
-            status_text = "⚠️ Update available!"
+            status_text = "Update available!"
 
         status_line = f" › Status : <code>{status_text}</code>"
 
