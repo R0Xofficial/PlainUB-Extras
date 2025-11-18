@@ -41,7 +41,5 @@ async def noformat_handler(bot: BOT, message: Message):
             parse_mode=ParseMode.HTML
         )
         
-        await message.delete()
-        
     except Exception as e:
         await message.reply(f"<b>Error:</b> Could not send raw format.\n<code>{html.escape(str(e))}</code>", del_in=10)
