@@ -71,7 +71,6 @@ async def ask_handler(bot: BOT, message: Message):
                 await progress_message.edit(
                     text=final_output
                 )
-                await message.delete()
             
         else:
             raise Exception(f"API Error: {response_data.get('errors') or 'Unknown error'}")
