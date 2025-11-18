@@ -18,7 +18,6 @@ SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 MODULES_DIR = os.path.dirname(SCRIPT_DIR)
 BOT_ROOT = os.path.dirname(os.path.dirname(MODULES_DIR))
 BACKGROUND_IMAGE_PATH = os.path.join(BOT_ROOT, "assets", "dark.png")
-
 UPDATE_FILE_PATH = os.path.join(MODULES_DIR, "update.rdm")
 
 def fetch_repo_data_sync() -> dict:
@@ -26,7 +25,7 @@ def fetch_repo_data_sync() -> dict:
     response.raise_for_status()
     data = response.json()
     
-    pushed_at = datetime.strptime(data['pushed_at'], "%Y-%m-%dT%H:%M:%SZ").strftime("%Y-%m-%d")
+    pushed_at = datetime.strptime(data['pushed_at'], "%Y-%m-%dT%H:%M:%SZ").strftime("%Y-%m-%d %H:%M UTC")
 
     return {
         "stars": data.get("stargazers_count", 0),
@@ -47,14 +46,13 @@ def get_local_version_date() -> str:
 
 @bot.add_cmd(cmd=["modrepo", "mods"])
 async def repo_handler(bot: BOT, message: Message):
-    progress_msg = await message.reply("<code>Fetching repository information...</code>")
+    progress_msg = await message.reply("<code>Fetching repository information and checking update...</code>")
     
     try:
         repo_data = await asyncio.to_thread(fetch_repo_data_sync)
         local_date = get_local_version_date()
         
         remote_date = repo_data['last_commit_date']
-        status_line = ""
         
         if local_date == remote_date:
             status_emoji = "✅"
@@ -64,7 +62,7 @@ async def repo_handler(bot: BOT, message: Message):
             status_text = f"Unknown ({local_date})"
         else:
             status_emoji = "⚠️"
-            status_text = "Update available! Use `extupdate` command to update"
+            status_text = "Update available!"
 
         status_line = f" › Status : {status_emoji} <b>{status_text}</b>"
 
