@@ -44,7 +44,6 @@ async def google_search_handler(bot: BOT, message: Message):
             output_str,
             link_preview_options=LinkPreviewOptions(is_disabled=True)
         )
-        await message.delete()
 
     except Exception as e:
         error_text = f"<b>An error occurred while searching:</b>\n<code>{html.escape(str(e))}</code>"
