@@ -41,7 +41,6 @@ async def neofetch_handler(bot: BOT, message: Message):
             final_text = f"<b>Host Info:</b>\n<pre>{html.escape(stdout)}</pre>"
             
             await progress_message.edit(final_text)
-            await message.delete()
 
         else:
             error_details = stderr or stdout or "Unknown error."
