@@ -80,4 +80,3 @@ async def slap_handler(bot: BOT, message: Message):
         text=final_text,
         reply_parameters=reply_params
     )
-    await message.delete()
