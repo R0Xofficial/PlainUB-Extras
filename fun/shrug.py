@@ -6,7 +6,7 @@ from app import BOT, bot
 async def codeit_handler(bot: BOT, message: Message):
     replied_msg = message.replied
 
-    shrug = r"¯\_(ツ)_/¯"
+    shrug = r"`¯\_(ツ)_/¯`"
 
     try:
         await bot.send_message(
