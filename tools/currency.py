@@ -73,7 +73,6 @@ async def currency_converter_handler(bot: BOT, message: Message):
         )
         
         await progress_msg.edit(result_text)
-        await message.delete()
 
     except Exception as e:
         await progress_msg.edit(f"<b>Error:</b> <code>{html.escape(str(e))}</code>", del_in=15)
