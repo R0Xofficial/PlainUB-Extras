@@ -66,7 +66,3 @@ async def speedtest_handler(bot: BOT, message: Message):
         await progress_message.edit(error_text)
         await asyncio.sleep(ERROR_VISIBLE_DURATION)
         await progress_message.delete()
-        try:
-            await message.delete()
-        except Exception:
-            pass
