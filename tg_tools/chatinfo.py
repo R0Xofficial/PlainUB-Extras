@@ -106,8 +106,6 @@ async def chat_info_handler(bot: BOT, message: Message):
                 final_text,
                 link_preview_options=LinkPreviewOptions(is_disabled=True)
             )
-        
-        await message.delete()
 
     except Exception as e:
         await progress_msg.edit(f"<b>Error:</b> Could not find the specified chat.\n<code>{safe_escape(str(e))}</code>", del_in=10)
