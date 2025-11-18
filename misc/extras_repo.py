@@ -20,6 +20,17 @@ BOT_ROOT = os.path.dirname(os.path.dirname(MODULES_DIR))
 BACKGROUND_IMAGE_PATH = os.path.join(BOT_ROOT, "assets", "dark.png")
 UPDATE_FILE_PATH = os.path.join(MODULES_DIR, "update.json")
 
+if not os.path.exists(UPDATE_FILE_PATH):
+    print(f"INFO: '{UPDATE_FILE_PATH}' not found. Attempting to create it on first run...")
+    try:
+        initial_data = fetch_repo_data_sync()
+        initial_date = initial_data['last_commit_date']
+        with open(UPDATE_FILE_PATH, 'w') as f:
+            f.write(initial_date)
+        print(f"INFO: 'update.rdm' created successfully with date: {initial_date}")
+    except Exception as e:
+        print(f"WARNING: Could not create 'update.rdm' on initial startup. It will be created on the first '.extupdate'. Error: {e}")
+
 def fetch_repo_data_sync() -> dict:
     response = requests.get(REPO_API_URL, timeout=10)
     response.raise_for_status()
