@@ -100,7 +100,6 @@ async def enhance_handler(bot: BOT, message: Message):
         await bot.send_document(message.chat.id, modified_path, caption=caption, reply_parameters=reply_params)
         
         await progress_message.delete()
-        await message.delete()
 
     except Exception as e:
         error_text = f"<b>Error:</b> Could not enhance media.\n<code>{html.escape(str(e))}</code>"
