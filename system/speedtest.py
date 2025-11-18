@@ -55,7 +55,6 @@ async def speedtest_handler(bot: BOT, message: Message):
             )
             
             await progress_message.edit(final_text)
-            await message.delete()
 
         else:
             error_details = stderr or stdout or "Unknown error."
