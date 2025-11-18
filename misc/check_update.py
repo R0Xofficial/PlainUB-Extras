@@ -48,7 +48,7 @@ async def check_update_handler(bot: BOT, message: Message):
             status_text = f"<b>Could not determine local version.</b>\nReason: <code>{local_date}</code>"
         else:
             status_emoji = "⚠️"
-            status_text = f"<b>A new update is available!</b>\nUse `extupdate` command to update {REPO_NAME}"
+            status_text = f"<b>A new update is available!</b>\nUse `extupdate` command to update {REPO_NAME}."
         
         response_text = (
             f"{status_emoji} {status_text}\n\n"
