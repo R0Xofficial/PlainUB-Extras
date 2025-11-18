@@ -63,7 +63,3 @@ async def shortlink_handler(bot: BOT, message: Message):
 
     await asyncio.sleep(ERROR_VISIBLE_DURATION)
     await progress_message.delete()
-    try:
-        await message.delete()
-    except Exception:
-        pass
