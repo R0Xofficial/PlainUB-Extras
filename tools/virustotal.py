@@ -125,6 +125,5 @@ async def scan_domain_or_ip(api_key: str, message: Message, scan_type: str):
         elif response.status_code == 404: final_report = f"<b>Report:</b>\n<b>  - Status:</b> ⚪ {scan_type.capitalize()} not found."
         else: final_report = f"<b>Report:</b>\n<b>  - Error:</b> API code {response.status_code}."
         await progress.edit(final_report, link_preview_options=LinkPreviewOptions(is_disabled=True))
-        await message.delete()
     except Exception as e:
         await progress.edit(f"<b>Error:</b> <code>{html.escape(str(e))}</code>", del_in=ERROR_VISIBLE_DURATION)
