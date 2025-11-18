@@ -90,7 +90,3 @@ async def quote_sticker_handler(bot: BOT, message: Message):
             await asyncio.sleep(ERROR_VISIBLE_DURATION)
             await progress_message.delete()
         except Exception: pass
-        
-        try:
-            await message.delete()
-        except Exception: pass
