@@ -15,7 +15,6 @@ else:
 UPDATE_FILE_PATH = os.path.join(MODULES_DIR, "update.json")
 
 def fetch_latest_commit_date_sync() -> str:
-    """Pobiera z GitHub i zwraca datę ostatniego commita."""
     response = requests.get(REPO_API_URL, timeout=10)
     response.raise_for_status()
     data = response.json()
