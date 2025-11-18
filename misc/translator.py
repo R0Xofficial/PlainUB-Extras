@@ -51,13 +51,11 @@ async def translate_handler(bot: BOT, message: Message):
     else:
         await message.reply("Please provide text to translate or reply to a message.")
         await asyncio.sleep(ERROR_VISIBLE_DURATION)
-        await message.delete()
         return
 
     if not text_to_translate.strip():
         await message.reply("The message contains no text to translate.")
         await asyncio.sleep(ERROR_VISIBLE_DURATION)
-        await message.delete()
         return
 
     progress_message = await message.reply("<code>Translating...</code>")
@@ -79,7 +77,6 @@ async def translate_handler(bot: BOT, message: Message):
             final_text,
             link_preview_options=LinkPreviewOptions(is_disabled=True)
         )
-        await message.delete()
 
     except Exception as e:
         if "invalid destination language" in str(e).lower():
