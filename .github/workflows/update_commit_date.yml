@@ -7,7 +7,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  update-file:
+  update-commit-date:
     runs-on: ubuntu-latest
 
     permissions:
