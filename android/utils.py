@@ -46,7 +46,6 @@ async def get_android_versions(bot, message: Message, owner: str, repo: str, sho
             "\n".join(final_text),
             link_preview_options=LinkPreviewOptions(is_disabled=True)
         )
-        await message.delete()
 
     except Exception as e:
         error_text = f"<b>An error occurred:</b>\n<code>{html.escape(str(e))}</code>"
