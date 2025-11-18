@@ -55,16 +55,13 @@ async def repo_handler(bot: BOT, message: Message):
         remote_date = repo_data['last_commit_date']
         
         if local_date == remote_date:
-            status_emoji = "✅"
             status_text = "Up to date"
         elif local_date in ["Not Found", "Empty", "Error Reading File"]:
-            status_emoji = "❓"
             status_text = f"Unknown ({local_date})"
         else:
-            status_emoji = "⚠️"
             status_text = "Update available!"
 
-        status_line = f" › Status : {status_emoji} <b>{status_text}</b>"
+        status_line = f" › Status : <code>{status_text}</code>"
 
         caption = (
             f"<a href='{REPO_URL}'><b>PlainUB-Extras</b></a>, additional modules and features designed for use with "
