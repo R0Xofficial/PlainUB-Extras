@@ -70,7 +70,6 @@ async def screenshot_handler(bot: BOT, message: Message):
                 reply_parameters=ReplyParameters(message_id=message.id)
             )
             await progress_msg.delete()
-            await message.delete()
         else:
             raise FileNotFoundError("Screenshot file was not created.")
 
