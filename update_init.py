@@ -11,7 +11,6 @@ MODULES_DIR = os.path.dirname(os.path.dirname(SCRIPT_PATH)) if "modules" in SCRI
 UPDATE_FILE_PATH = os.path.join(MODULES_DIR, "update.json")
 
 def fetch_latest_commit_date_sync() -> str:
-    """Pobiera z GitHub i zwraca datę ostatniego commita."""
     response = requests.get(REPO_API_URL, timeout=10)
     response.raise_for_status()
     data = response.json()
@@ -19,7 +18,6 @@ def fetch_latest_commit_date_sync() -> str:
     return pushed_at
 
 def initialize_version_file():
-    """Sprawdza i tworzy plik update.rdm, jeśli nie istnieje."""
     if not os.path.exists(UPDATE_FILE_PATH):
         print(f"INFO: '{UPDATE_FILE_PATH}' not found. Attempting to create it on first run...")
         try:
