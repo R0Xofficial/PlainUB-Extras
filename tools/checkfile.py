@@ -128,7 +128,7 @@ async def checkfile_handler(bot: BOT, message: Message):
         
         await bot.send_message(message.chat.id, final_report, reply_to_message_id=replied_msg.id)
         
-        await progress_message.delete(); await message.delete()
+        await progress_message.delete()
     except Exception as e:
         await progress_message.edit(f"<b>Error:</b> Could not check file.\n<code>{html.escape(str(e))}</code>", del_in=ERROR_VISIBLE_DURATION)
     finally:
