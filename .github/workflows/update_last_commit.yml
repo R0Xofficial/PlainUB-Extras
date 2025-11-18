@@ -1,4 +1,4 @@
-name: Update Last Commit
+name: Update Commit Date
 
 on:
   push:
@@ -17,12 +17,12 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Update date in update.rdm
+      - name: Update date in update.json
         run: |
           echo "$(date -u +'%Y-%m-%d %H:%M UTC')" > update.json
 
       - name: Commit and push if changed
         uses: stefanzweifel/git-auto-commit-action@v5
         with:
-          commit_message: 'update(bot): Automatically update date in update.json'
+          commit_message: 'update(bot): Updated date in update.json'
           file_pattern: 'update.json'
