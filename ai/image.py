@@ -99,7 +99,6 @@ async def imagine_handler(bot: BOT, message: Message):
                 reply_parameters=ReplyParameters(message_id=message.id)
             )
             await progress_message.delete()
-            await message.delete()
         else:
             error_details = response.json()
             raise Exception(f"API Error: {error_details}")
