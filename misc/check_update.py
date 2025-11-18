@@ -13,7 +13,7 @@ REPO_API_URL = f"https://api.github.com/repos/{REPO_OWNER}/{REPO_NAME}"
 
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 MODULES_DIR = os.path.dirname(SCRIPT_DIR)
-UPDATE_FILE_PATH = os.path.join(MODULES_DIR, "update.rdm")
+UPDATE_FILE_PATH = os.path.join(MODULES_DIR, "update.json")
 
 def fetch_latest_commit_date_sync() -> str:
     response = requests.get(REPO_API_URL, timeout=10)
@@ -48,7 +48,7 @@ async def check_update_handler(bot: BOT, message: Message):
             status_text = f"<b>Could not determine local version.</b>\nReason: <code>{local_date}</code>"
         else:
             status_emoji = "⚠️"
-            status_text = "<b>A new update is available!</b>"
+            status_text = "<b>A new update is available!</b>\nUse `extupdate` command to update {REPO_NAME}"
 
         response_text = (
             f"{status_emoji} {status_text}\n\n"
