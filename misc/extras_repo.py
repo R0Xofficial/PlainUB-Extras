@@ -7,7 +7,7 @@ from pyrogram.types import Message, LinkPreviewOptions, ReplyParameters
 
 from app import BOT, bot
 
-REPO_OWNer = "R0Xofficial"
+REPO_OWNER = "R0Xofficial"
 REPO_NAME = "PlainUB-Extras"
 REPO_API_URL = f"https://api.github.com/repos/{REPO_OWNER}/{REPO_NAME}"
 REPO_URL = f"https://github.com/{REPO_OWNER}/{REPO_NAME}"
