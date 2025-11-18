@@ -95,7 +95,6 @@ async def upscale_handler(bot: BOT, message: Message):
             await bot.send_video(message.chat.id, modified_path, caption=caption, reply_parameters=reply_params)
         
         await progress_message.delete()
-        await message.delete()
 
     except Exception as e:
         error_text = f"<b>Error:</b> Could not upscale media.\n<code>{html.escape(str(e))}</code>"
