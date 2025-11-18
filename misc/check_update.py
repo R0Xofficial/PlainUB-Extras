@@ -34,6 +34,10 @@ def get_local_version_date() -> str:
 
 @bot.add_cmd(cmd=["checkupdate", "cupdate"])
 async def check_update_handler(bot: BOT, message: Message):
+    """
+    CMD: CHECKUPDATE / CUPDATE
+    INFO: Check avaible update.
+    """
     progress_msg = await message.reply("<code>Checking for updates...</code>")
     
     try:
