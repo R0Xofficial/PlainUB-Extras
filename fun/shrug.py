@@ -16,7 +16,6 @@ async def codeit_handler(bot: BOT, message: Message):
                 message_id=replied_msg.id if replied_msg else message.id
             )
         )
-        await message.delete()
 
     except Exception as e:
         error_text = f"Error: `{str(e)}`"
