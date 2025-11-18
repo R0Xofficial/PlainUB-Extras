@@ -34,6 +34,7 @@ SLAP_TEXTS = [
     "{slapper} hacks into the matrix and inserts one legendary slap on {slappee}.",
     "{slapper} launches an orbital slap strike — {slappee} is now a crater.",
     "{slapper} slaps {slappee} so hard their phone autocorrects pain to '{slapper}'.",
+    "{slappee} got a bluescreen because {slapper} initiated wininit slap with admin privileges in PowerShell"
 ]
 
 @bot.add_cmd(cmd="slap")
