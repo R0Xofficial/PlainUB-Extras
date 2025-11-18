@@ -60,15 +60,12 @@ async def urban_dictionary_handler(bot: BOT, message: Message):
                 final_text,
                 link_preview_options=LinkPreviewOptions(is_disabled=True)
             )
-            await message.delete()
 
         else:
             error_text = f"Could not find a definition for <code>{safe_escape(term_to_search)}</code>."
             await progress_message.edit(error_text)
             await asyncio.sleep(ERROR_VISIBLE_DURATION)
             await progress_message.delete()
-            try: await message.delete()
-            except: pass
 
     except Exception as e:
         error_text = f"<b>An error occurred:</b>\n<code>{safe_escape(str(e))}</code>"
