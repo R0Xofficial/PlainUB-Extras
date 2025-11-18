@@ -59,8 +59,6 @@ async def quote_sticker_handler(bot: BOT, message: Message):
     
     if not messages_to_quote:
         await progress_message.edit("Could not find any valid messages to quote.", del_in=ERROR_VISIBLE_DURATION)
-        try: await message.delete()
-        except: pass
         return
 
     await progress_message.edit(f"<code>Forwarding {len(messages_to_quote)} message(s) to @QuotLyBot...</code>")
@@ -78,7 +76,6 @@ async def quote_sticker_handler(bot: BOT, message: Message):
 
         if quotly_response:
             await progress_message.delete()
-            await message.delete()
             await quotly_response.forward(message.chat.id)
         else:
             raise asyncio.TimeoutError("@QuotLyBot did not respond in time.")
