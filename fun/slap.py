@@ -57,7 +57,6 @@ async def slap_handler(bot: BOT, message: Message):
     
     if target_user and target_user.id == message.from_user.id:
         await message.reply("Why would you want to slap yourself?", del_in=5)
-        await message.delete()
         return
 
     if target_user:
