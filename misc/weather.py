@@ -62,7 +62,6 @@ async def weather_handler(bot: BOT, message: Message):
         ]
         
         await progress_msg.edit("\n".join(result_lines))
-        await message.delete()
 
     except Exception as e:
         error_msg = str(e)
