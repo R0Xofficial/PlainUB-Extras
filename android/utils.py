@@ -53,7 +53,3 @@ async def get_android_versions(bot, message: Message, owner: str, repo: str, sho
         await progress_message.edit(error_text)
         await asyncio.sleep(ERROR_VISIBLE_DURATION)
         await progress_message.delete()
-        try:
-            await message.delete()
-        except Exception:
-            pass
