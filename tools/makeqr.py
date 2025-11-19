@@ -6,6 +6,8 @@ from pyrogram.types import Message, ReplyParameters
 
 from app import BOT, bot
 
+from app.modules.settings import TINY_TIMEOUT, SMALL_TIMEOUT, MEDIUM_TIMEOUT, LONG_TIMEOUT, VERY_LONG_TIMEOUT, LARGE_TIMEOUT
+
 TEMP_DIR = "temp_qrcode/"
 os.makedirs(TEMP_DIR, exist_ok=True)
 
@@ -29,7 +31,7 @@ async def make_qr_handler(bot: BOT, message: Message):
     if not data_to_encode:
         await message.reply(
             "<b>Usage:</b> <code>.mkqr [text/link]</code> or reply to a message.",
-            del_in=8
+            del_in=MEDIUM_TIMEOUT
         )
         return
 
@@ -64,7 +66,7 @@ async def make_qr_handler(bot: BOT, message: Message):
         await progress_msg.delete()
 
     except Exception as e:
-        await progress_msg.edit(f"<b>Error:</b> <code>{html.escape(str(e))}</code>", del_in=10)
+        await progress_msg.edit(f"<b>Error:</b> <code>{html.escape(str(e))}</code>", del_in=LONG_TIMEOUT)
     finally:
         if os.path.exists(output_path):
             os.remove(output_path)
