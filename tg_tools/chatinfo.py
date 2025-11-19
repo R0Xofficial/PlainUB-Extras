@@ -6,6 +6,8 @@ from pyrogram.types import Chat, Message, LinkPreviewOptions, ReplyParameters
 
 from app import BOT, bot
 
+from app.modules.settings import TINY_TIMEOUT, SMALL_TIMEOUT, MEDIUM_TIMEOUT, LONG_TIMEOUT, VERY_LONG_TIMEOUT, LARGE_TIMEOUT
+
 TEMP_CINFO_DIR = "temp_cinfo_photos/"
 
 def safe_escape(text: str) -> str:
@@ -81,7 +83,7 @@ async def chat_info_handler(bot: BOT, message: Message):
     try:
         target_chat = await bot.get_chat(target_identifier)
         if target_chat.type == ChatType.PRIVATE:
-            return await progress_msg.edit("This command is for groups and channels. Use <code>.info</code> for users.", del_in=8)
+            return await progress_msg.edit("This command is for groups and channels. Use <code>.info</code> for users.", del_in=MEDIUM_TIMEOUT)
         
         final_text, photo_id = await format_chat_info(target_chat, is_full_mode)
 
@@ -108,4 +110,4 @@ async def chat_info_handler(bot: BOT, message: Message):
             )
 
     except Exception as e:
-        await progress_msg.edit(f"<b>Error:</b> Could not find the specified chat.\n<code>{safe_escape(str(e))}</code>", del_in=10)
+        await progress_msg.edit(f"<b>Error:</b> Could not find the specified chat.\n<code>{safe_escape(str(e))}</code>", del_in=LARGE_TIMEOUT)
