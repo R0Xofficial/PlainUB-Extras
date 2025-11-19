@@ -6,6 +6,8 @@ from ub_core.utils.helpers import get_name
 
 from app import BOT, Config, CustomDB, Message, bot, extra_config
 
+from app.modules.settings import TINY_TIMEOUT, SMALL_TIMEOUT, MEDIUM_TIMEOUT, LONG_TIMEOUT, VERY_LONG_TIMEOUT, LARGE_TIMEOUT
+
 GBAN_TASK_LOCK = asyncio.Lock()
 
 GBAN_DB = CustomDB["GBAN_CHAT_LIST"]
@@ -22,7 +24,7 @@ async def add_gban_chat(bot: BOT, message: Message):
     data = dict(name=message.input or message.chat.title, type=str(message.chat.type))
     await GBAN_DB.add_data({"_id": message.chat.id, **data})
     text = f"#GBANS\n<b>{data['name']}</b>: <code>{message.chat.id}</code> added to the GBAN bot chat list."
-    await message.reply(text=text, del_in=5, block=True)
+    await message.reply(text=text, del_in=SMALL_TIMEOUT, block=True)
     await bot.log_text(text=text, type="info")
 
 
@@ -53,10 +55,10 @@ async def remove_gban_chat(bot: BOT, message: Message):
 
     if deleted:
         text = f"#GBANS\n<b>{name}</b><code>{chat}</code> removed from the GBAN bot chat list."
-        await message.reply(text=text, del_in=8)
+        await message.reply(text=text, del_in=MEDIUM_TIMEOUT)
         await bot.log_text(text=text, type="info")
     else:
-        await message.reply(text=f"<b>{name or chat}</b> is not in the GBAN bot chat list.", del_in=8)
+        await message.reply(text=f"<b>{name or chat}</b> is not in the GBAN bot chat list.", del_in=MEDIUM_TIMEOUT)
 
 
 @bot.add_cmd(cmd="listg")
@@ -83,7 +85,7 @@ async def gban_chat_list(bot: BOT, message: Message):
         return
 
     output: str = f"List of <b>{total}</b> connected GBAN bot chats:\n\n{output}"
-    await message.reply(output, del_in=30, block=True)
+    await message.reply(output, del_in=LARGE_TIMEOUT, block=True)
 
 
 @bot.add_cmd(cmd=["gban", "gbanp"])
@@ -121,7 +123,7 @@ async def gban_user(bot: BOT, message: Message):
         try:
             if message.chat._raw.admin_rights:
                 await message.replied.reply(
-                    text=f"!dban {reason}", disable_preview=True, del_in=3, block=False
+                    text=f"!dban {reason}", disable_preview=True, del_in=TINY_TIMEOUT, block=False
                 )
         except UserNotParticipant:
             pass
@@ -235,4 +237,4 @@ async def perform_gban_task(
             chat_id=extra_config.FBAN_LOG_CHANNEL, text=resp_str, disable_preview=True
         )
 
-        await progress.edit(text=resp_str, del_in=5, block=True, disable_preview=True)
+        await progress.edit(text=resp_str, del_in=SMALL_TIMEOUT, block=True, disable_preview=True)
