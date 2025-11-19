@@ -32,11 +32,7 @@ async def leave_chat_handler(bot: BOT, message: Message):
 
             await bot.leave_chat(chat_identifier_for_api)
             
-            confirmation_msg = await message.reply(
-                f"<code>Successfully left</code>"
-            )
-            await asyncio.sleep(8)
-            await confirmation_msg.delete()
+            confirmation_msg = await message.reply(f"<code>Successfully left</code>", del_in=8)
         else:
             asyncio.create_task(_delayed_leave(message.chat.id))
 
