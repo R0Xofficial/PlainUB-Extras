@@ -41,7 +41,6 @@ async def save_note_handler(bot: BOT, message: Message):
 
     await NOTES_DB.add_data({"_id": note_name, "content": content})
     await message.reply(f"Note `{note_name}` saved successfully.", del_in=5)
-    await message.delete()
 
 @bot.add_cmd(cmd=["delnote", "clear"])
 async def delete_note_handler(bot: BOT, message: Message):
