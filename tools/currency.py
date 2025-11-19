@@ -5,8 +5,9 @@ from pyrogram.types import Message
 
 from app import BOT, bot
 
-API_URL = "https://api.frankfurter.app/latest"
+from app.modules.settings import TINY_TIMEOUT, SMALL_TIMEOUT, MEDIUM_TIMEOUT, LONG_TIMEOUT, VERY_LONG_TIMEOUT, LARGE_TIMEOUT
 
+API_URL = "https://api.frankfurter.app/latest"
 
 @bot.add_cmd(cmd=["cash", "currency"])
 async def currency_converter_handler(bot: BOT, message: Message):
@@ -30,7 +31,7 @@ async def currency_converter_handler(bot: BOT, message: Message):
 
     parts = message.input.split()
     if len(parts) != 3:
-        await message.reply("<b>Invalid format.</b> Please use: `amount FROM TO`.", del_in=8)
+        await message.reply("<b>Invalid format.</b> Please use: `amount FROM TO`.", del_in=MEDIUM_TIMEOUT)
         return
 
     try:
@@ -39,7 +40,7 @@ async def currency_converter_handler(bot: BOT, message: Message):
         from_currency = from_currency.upper()
         to_currency = to_currency.upper()
     except ValueError:
-        await message.reply("<b>Invalid amount.</b> Please provide a valid number.", del_in=8)
+        await message.reply("<b>Invalid amount.</b> Please provide a valid number.", del_in=MEDIUM_TIMOEUT)
         return
 
     progress_msg = await message.reply(
@@ -75,4 +76,4 @@ async def currency_converter_handler(bot: BOT, message: Message):
         await progress_msg.edit(result_text)
 
     except Exception as e:
-        await progress_msg.edit(f"<b>Error:</b> <code>{html.escape(str(e))}</code>", del_in=15)
+        await progress_msg.edit(f"<b>Error:</b> <code>{html.escape(str(e))}</code>", del_in=LONG_TIMEOUT)
