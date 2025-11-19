@@ -9,6 +9,8 @@ from dotenv import load_dotenv
 
 from app import BOT, bot
 
+from app.modules.settings import TINY_TIMEOUT, SMALL_TIMEOUT, MEDIUM_TIMEOUT, LONG_TIMEOUT, VERY_LONG_TIMEOUT, LARGE_TIMEOUT
+
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 MODULES_DIR = os.path.dirname(SCRIPT_DIR)
 ENV_PATH = os.path.join(MODULES_DIR, "extra_config.env")
@@ -25,12 +27,12 @@ async def screenshot_handler(bot: BOT, message: Message):
     if not PAGESPEED_API_KEY:
         await message.reply(
             "<b>PAGESPEED_API_KEY is not configured in extra_config.env.</b>",
-            del_in=15
+            del_in=LONG_TIMEOUT
         )
         return
 
     if not message.input:
-        await message.reply("<b>Usage:</b> .screenshot [url]", del_in=8)
+        await message.reply("<b>Usage:</b> .screenshot [url]", del_in=MEDIUM_TIMEOUT)
         return
 
     url = message.input.strip()
@@ -75,10 +77,10 @@ async def screenshot_handler(bot: BOT, message: Message):
 
     except requests.exceptions.HTTPError as e:
         error_message = f"<b>API Error ({e.response.status_code}):</b>\n<code>{html.escape(e.response.text)}</code>"
-        await progress_msg.edit(error_message, del_in=15)
+        await progress_msg.edit(error_message, del_in=LONG_TIMEOUT)
         
     except Exception as e:
-        await progress_msg.edit(f"<b>Error:</b> <code>{html.escape(str(e))}</code>", del_in=10)
+        await progress_msg.edit(f"<b>Error:</b> <code>{html.escape(str(e))}</code>", del_in=LONG_TIMEOUT)
     finally:
         if os.path.exists(output_path):
             os.remove(output_path)
