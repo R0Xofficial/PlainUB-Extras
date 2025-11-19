@@ -3,7 +3,7 @@ import asyncio
 import html
 from pyrogram.types import LinkPreviewOptions, Message
 
-ERROR_VISIBLE_DURATION = 10
+ERROR_VISIBLE_DURATION = 8
 
 def sync_get_releases(owner: str, repo: str) -> list:
     api_url = f"https://api.github.com/repos/{owner}/{repo}/releases"
