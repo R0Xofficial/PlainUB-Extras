@@ -3,7 +3,7 @@ from pyrogram.types import Message, User, Chat, ReplyParameters
 
 from app import BOT, bot
 
-ERROR_VISIBLE_DURATION = 8
+from app.modules.settings import TINY_TIMEOUT, SMALL_TIMEOUT, MEDIUM_TIMEOUT, LONG_TIMEOUT, VERY_LONG_TIMEOUT, LARGE_TIMEOUT
 
 @bot.add_cmd(cmd="pfp")
 async def pfp_handler(bot: BOT, message: Message):
@@ -49,7 +49,7 @@ async def pfp_handler(bot: BOT, message: Message):
             target_name = "their"
             
     except Exception as e:
-        return await message.reply(f"Could not find the specified user or chat.\n<code>{html.escape(str(e))}</code>", del_in=ERROR_VISIBLE_DURATION)
+        return await message.reply(f"Could not find the specified user or chat.\n<code>{html.escape(str(e))}</code>", del_in=MEDIUM_TIMEOUT)
 
     progress_message = await message.reply(f"<code>Fetching {html.escape(target_name)}'s profile photo...</code>")
 
@@ -73,10 +73,10 @@ async def pfp_handler(bot: BOT, message: Message):
             break
         
         if not media_sent:
-            return await progress_message.edit("This entity has no profile photo.", del_in=ERROR_VISIBLE_DURATION)
+            return await progress_message.edit("This entity has no profile photo.", del_in=SMALL_TIMEOUT)
 
         await progress_message.delete()
 
     except Exception as e:
         error_text = f"<b>Error:</b> Could not fetch profile photo.\n<code>{html.escape(str(e))}</code>"
-        await progress_message.edit(error_text, del_in=ERROR_VISIBLE_DURATION)
+        await progress_message.edit(error_text, del_in=LONG_TIMEOUT)
