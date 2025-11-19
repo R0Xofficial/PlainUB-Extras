@@ -4,6 +4,8 @@ from pyrogram.enums import ChatType
 
 from app import BOT, bot
 
+from app.modules.settings import TINY_TIMEOUT, SMALL_TIMEOUT, MEDIUM_TIMEOUT, LONG_TIMEOUT, VERY_LONG_TIMEOUT, LARGE_TIMEOUT
+
 @bot.add_cmd(cmd=["fetchcreator", "fcreator", "fc"])
 async def forward_info_handler(bot: BOT, message: Message):
     """
@@ -15,11 +17,11 @@ async def forward_info_handler(bot: BOT, message: Message):
     replied_msg = message.replied
     
     if not replied_msg:
-        await message.reply("Please reply to a message.", del_in=8)
+        await message.reply("Please reply to a message.", del_in=MEDIUM_TIMEOUT)
         return
         
     if not replied_msg.forward_date:
-        await message.reply("The replied-to message is not a forward.", del_in=8)
+        await message.reply("The replied-to message is not a forward.", del_in=LARGE_TIMEOUT)
         return
 
     info_lines = ["<b>Forward Origin Info:</b>"]
