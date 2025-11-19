@@ -55,17 +55,17 @@ async def unified_update_handler(bot: BOT, message: Message):
         local_date = get_local_version_date()
         
         if local_date == remote_date:
-            status_emoji = "✅"
+            # status_emoji = "✅"
             status_text = "<b>You are up to date!</b>"
         elif local_date in ["Not Found", "Empty", "Error Reading File"]:
-            status_emoji = "❓"
+            # status_emoji = "❓"
             status_text = f"<b>Could not determine local version.</b>\nReason: <code>{local_date}</code>"
         else:
-            status_emoji = "⚠️"
+            # status_emoji = "⚠️"
             status_text = f"<b>A new update is available!</b>\nRun <code>extupdate -pull</code> to apply."
 
         response_text = (
-            f"{status_emoji} {status_text}\n\n"
+            f"{status_text}\n\n"
             f"<b>Latest Version:</b>\n<code>{remote_date}</code>\n\n"
             f"<b>Your Version:</b>\n<code>{local_date}</code>"
         )
