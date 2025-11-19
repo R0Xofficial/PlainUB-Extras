@@ -1,3 +1,8 @@
-# repository info
+# --- REPOSITORY INFO ---
 REPO_OWNER="R0Xofficial"
 REPO_NAME="PlainUB-Extras"
+
+# --- GLOBALL TIME SETTINGS ---
+SMALL_TIMEOUT=5
+MEDIUM_TIMEOUT=8
+LONG_TIMEOUT=10
