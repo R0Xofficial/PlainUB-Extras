@@ -7,7 +7,7 @@ from pyrogram.types import Message, LinkPreviewOptions, ReplyParameters
 
 from app import BOT, bot
 
-from app.modules.settings import REPO_OWNER, REPO_NAME
+from app.modules.settings import REPO_OWNER, REPO_NAME, TINY_TIMEOUT, SMALL_TIMEOUT, MEDIUM_TIMEOUT, LONG_TIMEOUT, VERY_LONG_TIMEOUT, LARGE_TIMEOUT
 
 REPO_API_URL = f"https://api.github.com/repos/{REPO_OWNER}/{REPO_NAME}"
 REPO_URL = f"https://github.com/{REPO_OWNER}/{REPO_NAME}"
@@ -69,4 +69,4 @@ async def repo_handler(bot: BOT, message: Message):
         await progress_msg.delete()
 
     except Exception as e:
-        await progress_msg.edit(f"<b>Error:</b> <code>{html.escape(str(e))}</code>", del_in=15)
+        await progress_msg.edit(f"<b>Error:</b> <code>{html.escape(str(e))}</code>", del_in=LONG_TIMEOUT)
