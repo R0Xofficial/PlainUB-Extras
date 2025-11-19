@@ -9,7 +9,7 @@ from app import BOT, Message, bot
 async def ascii(bot: BOT, message: Message):
     text = message.input
     if not text:
-        await message.reply("What am I supposed to say?", del_in=8)
+        await message.reply("What am I supposed to say?", del_in=10)
         return
 
     ascii_text = pyfiglet.figlet_format(text)
