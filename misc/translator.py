@@ -5,7 +5,8 @@ from pyrogram.types import LinkPreviewOptions, Message
 
 from app import BOT, bot
 
-ERROR_VISIBLE_DURATION = 8
+from app.modules.settings import TINY_TIMEOUT, SMALL_TIMEOUT, MEDIUM_TIMEOUT, LONG_TIMEOUT, VERY_LONG_TIMEOUT, LARGE_TIMEOUT
+
 DEFAULT_TARGET_LANG = "en"
 
 def safe_escape(text: str) -> str:
@@ -49,11 +50,11 @@ async def translate_handler(bot: BOT, message: Message):
         else:
             text_to_translate = message.input
     else:
-        await message.reply("Please provide text to translate or reply to a message.", del_in=ERROR_VISIBLE_DURATION)
+        await message.reply("Please provide text to translate or reply to a message.", del_in=MEDIUM_TIMEOUT)
         return
 
     if not text_to_translate.strip():
-        await message.reply("The message contains no text to translate.", del_in=ERROR_VISIBLE_DURATION)
+        await message.reply("The message contains no text to translate.", del_in=MEDIUM_TIMEOUT)
         return
 
     progress_message = await message.reply("<code>Translating...</code>")
@@ -82,4 +83,4 @@ async def translate_handler(bot: BOT, message: Message):
         else:
             error_text = f"<b>An error occurred:</b>\n<code>{safe_escape(str(e))}</code>"
             
-        await progress_message.edit(error_text, del_in=ERROR_VISIBLE_DURATION)
+        await progress_message.edit(error_text, del_in=LARGE_TIMEOUT)
