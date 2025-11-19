@@ -12,7 +12,7 @@ async def remote_kick_handler(bot: BOT, message: Message):
         .rkick [ID/username/reply] [ID/chatname/link] [reason]
     """
     if not message.input or len(message.input.split()) < 2:
-        await message.reply("<b>Usage:</b> <code>.rkick [user] [chat] [reason]</code>", del_in=8)
+        await message.reply("<b>Usage:</b> <code>.rkick [user] [chat] [reason]</code>", del_in=10)
         return
 
     parts = message.input.split(maxsplit=2)
@@ -46,4 +46,4 @@ async def remote_kick_handler(bot: BOT, message: Message):
         await message.reply(f"Remote Kicked: {target_user.mention}\nChat: {html.escape(target_chat.title)}\nReason: {reason}")
 
     except Exception as e:
-        await message.reply(f"<b>Error:</b> <code>{html.escape(str(e))}</code>", del_in=10)
+        await message.reply(f"<b>Error:</b> <code>{html.escape(str(e))}</code>", del_in=15)
