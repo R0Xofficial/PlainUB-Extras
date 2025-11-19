@@ -22,7 +22,7 @@ LOGO_PATH = os.path.join(UBOT_DIR, "assets", "light.png")
 
 TEMP_DIR = "temp_imagine/"
 os.makedirs(TEMP_DIR, exist_ok=True)
-ERROR_VISIBLE_DURATION = 10
+ERROR_VISIBLE_DURATION = 8
 
 def sync_add_watermark(image_path: str) -> str:
     """Opens an image from a file, adds a watermark, and saves it to a new file."""

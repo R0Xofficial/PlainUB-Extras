@@ -13,7 +13,7 @@ ENV_PATH = os.path.join(MODULES_DIR, "extra_config.env")
 load_dotenv(dotenv_path=ENV_PATH)
 CF_ACCOUNT_ID = os.getenv("CF_ACCOUNT_ID")
 CF_API_TOKEN = os.getenv("CF_API_TOKEN")
-ERROR_VISIBLE_DURATION = 10
+ERROR_VISIBLE_DURATION = 15
 
 @bot.add_cmd(cmd="ask")
 async def ask_handler(bot: BOT, message: Message):
@@ -38,7 +38,7 @@ async def ask_handler(bot: BOT, message: Message):
             display_prompt = "(Summarizing replied text)"
             prompt = f"Summarize or analyze the following text:\n{replied_text}"
             
-    if not prompt: return await message.reply("<b>Usage:</b> .ask [question]", del_in=8)
+    if not prompt: return await message.reply("<b>Usage:</b> .ask [question]", del_in=ERROR_VISIBLE_DURATION)
 
     progress_message = await message.reply("<code>Thinking...</code>")
     try:
