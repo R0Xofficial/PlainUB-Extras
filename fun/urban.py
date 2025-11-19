@@ -34,9 +34,7 @@ async def urban_dictionary_handler(bot: BOT, message: Message):
     
     term_to_search = message.input
     if not term_to_search:
-        await message.reply("What term should I look up? Usage: `.ud yeet`")
-        await asyncio.sleep(ERROR_VISIBLE_DURATION)
-        await message.delete()
+        await message.reply("What term should I look up? Usage: `.ud yeet`", del_in=ERROR_VISIBLE_DURATION)
         return
 
     progress_message = await message.reply(f"<code>Searching Urban Dictionary for: {safe_escape(term_to_search)}...</code>")
@@ -63,12 +61,8 @@ async def urban_dictionary_handler(bot: BOT, message: Message):
 
         else:
             error_text = f"Could not find a definition for <code>{safe_escape(term_to_search)}</code>."
-            await progress_message.edit(error_text)
-            await asyncio.sleep(ERROR_VISIBLE_DURATION)
-            await progress_message.delete()
+            await progress_message.edit(error_text, del_in=ERROR_VISIBLE_DURATION)
 
     except Exception as e:
         error_text = f"<b>An error occurred:</b>\n<code>{safe_escape(str(e))}</code>"
-        await progress_message.edit(error_text)
-        await asyncio.sleep(ERROR_VISIBLE_DURATION)
-        await progress_message.delete()
+        await progress_message.edit(error_text, del_in=ERROR_VISIBLE_DURATION)
