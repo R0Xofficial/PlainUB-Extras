@@ -5,7 +5,8 @@ from pyrogram.types import LinkPreviewOptions, Message
 
 from app import BOT, bot
 
-ERROR_VISIBLE_DURATION = 8
+from app.modules.settings import TINY_TIMEOUT, SMALL_TIMEOUT, MEDIUM_TIMEOUT, LONG_TIMEOUT, VERY_LONG_TIMEOUT, LARGE_TIMEOUT
+
 WIKI_LANG = "en"
 USER_AGENT = "MyCoolUserBot/1.0 (https://github.com/telegram)"
 wiki_api = wikipediaapi.Wikipedia(language=WIKI_LANG, user_agent=USER_AGENT)
@@ -35,7 +36,7 @@ async def wiki_handler(bot: BOT, message: Message):
     
     query = message.input
     if not query:
-        await message.reply("Please provide a search query. Usage: `.wiki Python (programming language)`", del_in=ERROR_VISIBLE_DURATION)
+        await message.reply("Please provide a search query. Usage: e.g `.wiki Python (programming language)`", del_in=MEDIUM_TIMEOUT)
         return
 
     progress_message = await message.reply(f"<code>Searching Wikipedia for: {safe_escape(query)}...</code>")
@@ -52,7 +53,7 @@ async def wiki_handler(bot: BOT, message: Message):
             await progress_message.edit(final_text, link_preview_options=LinkPreviewOptions(is_disabled=True))
         else:
             error_text = f"Could not find any Wikipedia page for <code>{safe_escape(query)}</code>."
-            await progress_message.edit(error_text, del_in=ERROR_VISIBLE_DURATION)
+            await progress_message.edit(error_text, del_in=LONG_TIMEOUT)
     except Exception as e:
         error_text = f"<b>An error occurred:</b>\n<code>{safe_escape(str(e))}</code>"
-        await progress_message.edit(error_text, del_in=ERROR_VISIBLE_DURATION)
+        await progress_message.edit(error_text, del_in=LONG_TIMEOUT)
