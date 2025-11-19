@@ -9,6 +9,8 @@ from PIL import Image
 
 from app import BOT, bot
 
+from app.modules.settings import TINY_TIMEOUT, SMALL_TIMEOUT, MEDIUM_TIMEOUT, LONG_TIMEOUT, VERY_LONG_TIMEOUT, LARGE_TIMEOUT
+
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 MODULES_DIR = os.path.dirname(SCRIPT_DIR)
 ENV_PATH = os.path.join(MODULES_DIR, "extra_config.env")
@@ -64,10 +66,10 @@ async def imagine_handler(bot: BOT, message: Message):
         .gen [text prompt]
     """
     if not CF_ACCOUNT_ID or not CF_API_TOKEN or "YOUR_KEY" in CF_API_TOKEN:
-        return await message.reply("<b>Cloudflare AI not configured.</b>", del_in=ERROR_VISIBLE_DURATION)
+        return await message.reply("<b>Cloudflare AI not configured.</b>", del_in=LONG_TIMEOUT)
 
     if not message.input:
-        return await message.reply("Please provide a text prompt.", del_in=ERROR_VISIBLE_DURATION)
+        return await message.reply("Please provide a text prompt.", del_in=MEDIUM_TIMEOUT)
 
     prompt = message.input
     progress_message = await message.reply("<code>Generating...</code>")
@@ -105,7 +107,7 @@ async def imagine_handler(bot: BOT, message: Message):
 
     except Exception as e:
         error_text = f"<b>Error:</b> Could not generate image.\n<code>{html.escape(str(e))}</code>"
-        await progress_message.reply(error_text, del_in=ERROR_VISIBLE_DURATION)
+        await progress_message.reply(error_text, del_in=LONG_TIMEOUT)
     finally:
         for f in temp_files:
             if f and os.path.exists(f):
