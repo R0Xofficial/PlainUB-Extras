@@ -49,13 +49,11 @@ async def translate_handler(bot: BOT, message: Message):
         else:
             text_to_translate = message.input
     else:
-        await message.reply("Please provide text to translate or reply to a message.")
-        await asyncio.sleep(ERROR_VISIBLE_DURATION)
+        await message.reply("Please provide text to translate or reply to a message.", del_in=ERROR_VISIBLE_DURATION)
         return
 
     if not text_to_translate.strip():
-        await message.reply("The message contains no text to translate.")
-        await asyncio.sleep(ERROR_VISIBLE_DURATION)
+        await message.reply("The message contains no text to translate.", del_in=ERROR_VISIBLE_DURATION)
         return
 
     progress_message = await message.reply("<code>Translating...</code>")
@@ -84,6 +82,4 @@ async def translate_handler(bot: BOT, message: Message):
         else:
             error_text = f"<b>An error occurred:</b>\n<code>{safe_escape(str(e))}</code>"
             
-        await progress_message.edit(error_text)
-        await asyncio.sleep(ERROR_VISIBLE_DURATION)
-        await progress_message.delete()
+        await progress_message.edit(error_text, del_in=ERROR_VISIBLE_DURATION)
