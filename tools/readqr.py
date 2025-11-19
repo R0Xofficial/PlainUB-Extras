@@ -7,6 +7,8 @@ from pyrogram.types import Message, ReplyParameters
 
 from app import BOT, bot
 
+from app.modules.settings import TINY_TIMEOUT, SMALL_TIMEOUT, MEDIUM_TIMEOUT, LONG_TIMEOUT, VERY_LONG_TIMEOUT, LARGE_TIMEOUT
+
 TEMP_DIR = "temp_readqr/"
 os.makedirs(TEMP_DIR, exist_ok=True)
 
@@ -25,7 +27,7 @@ async def read_qr_handler(bot: BOT, message: Message):
     has_media = replied_msg and (replied_msg.photo or replied_msg.sticker)
     
     if not has_media:
-        await message.reply("Please reply to an image or sticker containing a QR code.", del_in=8)
+        await message.reply("Please reply to an image or sticker containing a QR code.", del_in=MEDIUM_TIMEOUT)
         return
 
     progress_msg = await message.reply("<code>Reading QR code...</code>")
@@ -45,7 +47,7 @@ async def read_qr_handler(bot: BOT, message: Message):
         decoded_objects = await asyncio.to_thread(decode_qr_sync)
         
         if not decoded_objects:
-            await progress_msg.edit("<b>No QR code found in the media.</b>", del_in=10)
+            await progress_msg.edit("<b>No QR code found in the media.</b>", del_in=MEDIUM_TIMEOUT)
             return
 
         qr_data = decoded_objects[0].data.decode("utf-8")
@@ -62,7 +64,7 @@ async def read_qr_handler(bot: BOT, message: Message):
         await progress_msg.delete()
 
     except Exception as e:
-        await progress_msg.edit(f"<b>Error:</b> <code>{html.escape(str(e))}</code>", del_in=10)
+        await progress_msg.edit(f"<b>Error:</b> <code>{html.escape(str(e))}</code>", del_in=LONG_TIMEOUT)
     finally:
         if downloaded_path and os.path.exists(downloaded_path):
             os.remove(downloaded_path)
