@@ -31,8 +31,7 @@ async def shortlink_handler(bot: BOT, message: Message):
         url_to_shorten = message.replied.text or message.replied.caption
     
     if not url_to_shorten:
-        await message.reply("Please provide a URL.")
-        await asyncio.sleep(ERROR_VISIBLE_DURATION)
+        await message.reply("Please provide a URL.", del_in=ERROR_VISIBLE_DURATION)
         return
 
     progress_message = await message.reply("<code>Shortening link...</code>")
@@ -53,11 +52,8 @@ async def shortlink_handler(bot: BOT, message: Message):
         
         else:
             error_text = f"<b>API Error:</b> Received an invalid response from the server."
-            await progress_message.edit(error_text)
+            await progress_message.edit(error_text, del_in=ERROR_VISIBLE_DURATION)
 
     except Exception as e:
         error_text = f"<b>An error occurred:</b>\n<code>{html.escape(str(e))}</code>"
-        await progress_message.edit(error_text)
-
-    await asyncio.sleep(ERROR_VISIBLE_DURATION)
-    await progress_message.delete()
+        await progress_message.edit(error_text, del_in=ERROR_VISIBLE_DURATION)
