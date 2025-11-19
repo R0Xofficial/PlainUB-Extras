@@ -41,10 +41,7 @@ async def joke_handler(bot: BOT, message: Message):
         await progress_message.edit(
             f"<b>{html.escape(setup)}</b>\n\n<i>...{html.escape(punchline)}</i>"
         )
-        await message.delete()
 
     except Exception as e:
         error_text = f"<b>Error:</b> Could not fetch a joke.\n<code>{html.escape(str(e))}</code>"
-        await progress_message.edit(error_text)
-        await asyncio.sleep(ERROR_VISIBLE_DURATION)
-        await progress_message.delete()
+        await progress_message.edit(error_text, del_in=ERROR_VISIBLE_DURATION)
