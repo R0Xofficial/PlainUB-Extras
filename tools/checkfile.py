@@ -10,9 +10,10 @@ from pyrogram.types import Message
 
 from app import BOT, bot
 
+from app.modules.settings import TINY_TIMEOUT, SMALL_TIMEOUT, MEDIUM_TIMEOUT, LONG_TIMEOUT, VERY_LONG_TIMEOUT, LARGE_TIMEOUT
+
 TEMP_DIR = "temp_checkfile/"
 os.makedirs(TEMP_DIR, exist_ok=True)
-ERROR_VISIBLE_DURATION = 8
 
 async def run_command(command: str) -> tuple[str, str, int]:
     process = await asyncio.create_subprocess_shell(command, stdout=asyncio.subprocess.PIPE, stderr=asyncio.subprocess.PIPE)
@@ -52,7 +53,7 @@ def get_exif_data(file_path: str) -> dict:
 async def checkfile_handler(bot: BOT, message: Message):
     replied_msg = message.replied
     if not replied_msg or not replied_msg.media:
-        await message.reply("Please reply to any media file to check it.", del_in=ERROR_VISIBLE_DURATION)
+        await message.reply("Please reply to any media file to check it.", del_in=MEDIUM_TIMEOUT)
         return
 
     progress_message = await message.reply("<code>Downloading for deep analysis...</code>")
@@ -130,7 +131,7 @@ async def checkfile_handler(bot: BOT, message: Message):
         
         await progress_message.delete()
     except Exception as e:
-        await progress_message.edit(f"<b>Error:</b> Could not check file.\n<code>{html.escape(str(e))}</code>", del_in=ERROR_VISIBLE_DURATION)
+        await progress_message.edit(f"<b>Error:</b> Could not check file.\n<code>{html.escape(str(e))}</code>", del_in=LONG_TIMEOUT)
     finally:
         for f in temp_files:
             if f and os.path.exists(f): os.remove(f)
