@@ -88,16 +88,16 @@ async def _choose_and_perform_fed_action(bot: BOT, message: Message, with_proof:
         )
         choice_msg = await progress.get_response(filters=response_filter, timeout=90)
     except TimeoutError:
-        await progress.edit("Timeout.", del_in=5)
+        await progress.edit("Timeout.", del_in=8)
         return
 
     try: await choice_msg.delete()
     except Exception: pass
 
-    if choice_msg.text and choice_msg.text.lower() == "cancel": await progress.edit("`Cancelled.`", del_in=5); return
+    if choice_msg.text and choice_msg.text.lower() == "cancel": await progress.edit("`Cancelled.`", del_in=8); return
 
     selected_indices = parse_selection(choice_msg.text, len(feds))
-    if selected_indices is None: await progress.edit("Invalid selection.", del_in=5); return
+    if selected_indices is None: await progress.edit("Invalid selection.", del_in=8); return
         
     selected_feds = [feds[i] for i in selected_indices]
     await progress.edit("❯❯")
@@ -138,7 +138,7 @@ async def _choose_and_perform_fed_action(bot: BOT, message: Message, with_proof:
     if not message.is_from_owner: log_text += f"\n\n<b>By</b>: {get_name(message.from_user)}"
         
     await bot.send_message(extra_config.FBAN_LOG_CHANNEL, log_text, disable_preview=True)
-    await progress.edit(summary_text, del_in=8, disable_preview=True)
+    await progress.edit(summary_text, del_in=10, disable_preview=True)
 
 @bot.add_cmd(cmd="cfban")
 async def choose_fed_ban(bot: BOT, message: Message):
