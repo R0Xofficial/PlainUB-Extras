@@ -57,7 +57,6 @@ async def repo_handler(bot: BOT, message: Message):
 
         if not os.path.exists(BACKGROUND_IMAGE_PATH):
             await progress_msg.edit(caption, link_preview_options=LinkPreviewOptions(is_disabled=True))
-            await message.delete()
             return
 
         await bot.send_photo(
