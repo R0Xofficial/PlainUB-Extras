@@ -20,7 +20,7 @@ async def dban_handler(bot: BOT, message: Message):
     user, reason = await message.extract_user_n_reason()
 
     if not isinstance(user, User):
-        await message.reply(user, del_in=10)
+        await message.reply(user, del_in=LONG_TIMEOUT)
         return
 
     try:
