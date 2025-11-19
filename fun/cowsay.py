@@ -17,7 +17,7 @@ async def cowsay(bot: BOT, message: Message):
     """
     text = message.input
     if not text:
-        await message.reply("What is the cow supposed to say?", del_in=8)
+        await message.reply("What is the cow supposed to say?", del_in=10)
         return
 
     string_io = io.StringIO()
