@@ -5,8 +5,9 @@ from pyrogram.types import LinkPreviewOptions, Message
 
 from app import BOT, bot
 
+from app.modules.settings import TINY_TIMEOUT, SMALL_TIMEOUT, MEDIUM_TIMEOUT, LONG_TIMEOUT, VERY_LONG_TIMEOUT, LARGE_TIMEOUT
+
 API_URL = "http://api.urbandictionary.com/v0/define"
-ERROR_VISIBLE_DURATION = 8
 
 def safe_escape(text: str) -> str:
     escaped_text = html.escape(str(text))
@@ -34,7 +35,7 @@ async def urban_dictionary_handler(bot: BOT, message: Message):
     
     term_to_search = message.input
     if not term_to_search:
-        await message.reply("What term should I look up? Usage: `.ud yeet`", del_in=ERROR_VISIBLE_DURATION)
+        await message.reply("What term should I look up? Usage: `.ud yeet`", del_in=MEDIUM_TIMEOUT)
         return
 
     progress_message = await message.reply(f"<code>Searching Urban Dictionary for: {safe_escape(term_to_search)}...</code>")
@@ -61,8 +62,8 @@ async def urban_dictionary_handler(bot: BOT, message: Message):
 
         else:
             error_text = f"Could not find a definition for <code>{safe_escape(term_to_search)}</code>."
-            await progress_message.edit(error_text, del_in=ERROR_VISIBLE_DURATION)
+            await progress_message.edit(error_text, del_in=LARGE_TIMEOUT)
 
     except Exception as e:
         error_text = f"<b>An error occurred:</b>\n<code>{safe_escape(str(e))}</code>"
-        await progress_message.edit(error_text, del_in=ERROR_VISIBLE_DURATION)
+        await progress_message.edit(error_text, del_in=LARGE_TIMEOUT)
