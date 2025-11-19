@@ -40,7 +40,7 @@ SLAP_TEXTS = [
 @bot.add_cmd(cmd="slap")
 async def slap_handler(bot: BOT, message: Message):
     if not message.replied and not message.input:
-        await message.reply("Who should I slap? Reply to a user or specify one.", del_in=5)
+        await message.reply("Who should I slap? Reply to a user or specify one.", del_in=8)
         return
 
     slapper = message.from_user.mention
@@ -56,7 +56,7 @@ async def slap_handler(bot: BOT, message: Message):
             target_text = message.input
     
     if target_user and target_user.id == message.from_user.id:
-        await message.reply("Why would you want to slap yourself?", del_in=5)
+        await message.reply("Why would you want to slap yourself?", del_in=8)
         return
 
     if target_user:
