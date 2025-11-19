@@ -5,9 +5,10 @@ from pyrogram.types import Message, ReplyParameters
 
 from app import BOT, bot
 
+from app.modules.settings import TINY_TIMEOUT, SMALL_TIMEOUT, MEDIUM_TIMEOUT, LONG_TIMEOUT, VERY_LONG_TIMEOUT, LARGE_TIMEOUT
+
 TEMP_DIR = "temp_speed/"
 os.makedirs(TEMP_DIR, exist_ok=True)
-ERROR_VISIBLE_DURATION = 8
 
 async def run_command(command: str) -> tuple[str, str, int]:
     process = await asyncio.create_subprocess_shell(
@@ -82,17 +83,17 @@ async def speed_handler(bot: BOT, message: Message):
     replied_msg = message.replied
     is_media = replied_msg and (replied_msg.video or replied_msg.audio or replied_msg.voice or (replied_msg.document and replied_msg.document.mime_type.startswith(("video/", "audio/"))))
     if not is_media:
-        return await message.reply("Please reply to a video or audio file.", del_in=ERROR_VISIBLE_DURATION)
+        return await message.reply("Please reply to a video or audio file.", del_in=MEDIUM_TIMEOUT)
 
     if not message.input:
-        return await message.reply("Please specify a speed factor. Usage: `.speed 2.0`", del_in=ERROR_VISIBLE_DURATION)
+        return await message.reply("Please specify a speed factor. Usage: `.speed 2.0`", del_in=MEDIUM_TIMEOUT)
 
     try:
         speed_factor = float(message.input.strip())
         if speed_factor <= 0:
             raise ValueError("Speed factor must be a positive number.")
     except ValueError:
-        return await message.reply("Invalid speed factor. Please use a number like `5` or `0.5`.", del_in=ERROR_VISIBLE_DURATION)
+        return await message.reply("Invalid speed factor. Please use a number like `5` or `0.5`.", del_in=MEDIUM_TIMEOUT)
 
     progress_message = await message.reply("<code>Downloading media...</code>")
     
@@ -126,7 +127,7 @@ async def speed_handler(bot: BOT, message: Message):
 
     except Exception as e:
         error_text = f"<b>Error:</b> Could not change speed.\n<code>{html.escape(str(e))}</code>"
-        await progress_message.edit(error_text, del_in=ERROR_VISIBLE_DURATION)
+        await progress_message.edit(error_text, del_in=LONG_TIMEOUT)
     finally:
         for f in temp_files:
             if f and os.path.exists(f): os.remove(f)
