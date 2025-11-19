@@ -5,7 +5,7 @@ from pyrogram.errors import PeerIdInvalid, UserNotParticipant
 
 from app import BOT, bot
 
-ERROR_VISIBLE_DURATION = 8
+from app.modules.settings import TINY_TIMEOUT, SMALL_TIMEOUT, MEDIUM_TIMEOUT, LONG_TIMEOUT, VERY_LONG_TIMEOUT, LARGE_TIMEOUT
 
 def safe_escape(text: str) -> str:
     if not isinstance(text, str):
@@ -23,7 +23,7 @@ async def check_permissions_handler(bot: BOT, message: Message):
         .perms [ID/username/reply] (Check a user's permissions in this group)
     """
     if message.chat.type not in [ChatType.GROUP, ChatType.SUPERGROUP]:
-        await message.reply("This command can only be used in group chats.", del_in=ERROR_VISIBLE_DURATION)
+        await message.reply("This command can only be used in group chats.", del_in=MEDIUM_TIMEOUT)
         return
 
     target_user = None
@@ -33,7 +33,7 @@ async def check_permissions_handler(bot: BOT, message: Message):
         try:
             target_user = await bot.get_users(message.input)
         except Exception:
-            await message.reply("Could not find the specified user.", del_in=ERROR_VISIBLE_DURATION)
+            await message.reply("Could not find the specified user.", del_in=MEDIUM_TIMEOUT)
             return
     else:
         target_user = message.from_user
@@ -41,7 +41,7 @@ async def check_permissions_handler(bot: BOT, message: Message):
     try:
         member = await bot.get_chat_member(message.chat.id, target_user.id)
     except UserNotParticipant:
-        await message.reply(f"User {target_user.mention} is not a member of this chat.", del_in=ERROR_VISIBLE_DURATION)
+        await message.reply(f"User {target_user.mention} is not a member of this chat.", del_in=MEDIUM_TIMEOUT)
         return
     except Exception as e:
         await message.reply(f"An error occurred: `{e}`")
