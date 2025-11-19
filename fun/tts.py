@@ -71,9 +71,7 @@ async def tts_handler(bot: BOT, message: Message):
         await progress_message.delete()
 
     except Exception as e:
-        await progress_message.edit(f"<b>Error:</b> Could not generate speech.\n<code>{safe_escape(str(e))}</code>")
-        await asyncio.sleep(ERROR_VISIBLE_DURATION)
-        await progress_message.delete()
+        await progress_message.edit(f"<b>Error:</b> Could not generate speech.\n<code>{safe_escape(str(e))}</code>", del_in=ERROR_VISIBLE_DURATION)
     finally:
         if file_path and os.path.exists(file_path):
             os.remove(file_path)
