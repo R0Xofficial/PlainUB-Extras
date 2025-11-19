@@ -8,7 +8,7 @@ from app import BOT, bot
 
 TEMP_DIR = "temp_audio"
 os.makedirs(TEMP_DIR, exist_ok=True)
-ERROR_VISIBLE_DURATION = 8
+ERROR_VISIBLE_DURATION = 10
 
 def safe_escape(text: str) -> str:
     escaped_text = html.escape(str(text))
@@ -49,7 +49,7 @@ async def tts_handler(bot: BOT, message: Message):
         else:
             text_to_speak = message.input
     else:
-        await message.reply("Please provide text or reply to a message.", del_in=ERROR_VISIBLE_DURATION)
+        await message.reply("Please provide text or reply to a message.", del_in=8)
         return
 
     if not text_to_speak.strip():
