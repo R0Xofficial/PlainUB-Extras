@@ -10,7 +10,6 @@ from app.modules.settings import TINY_TIMEOUT, SMALL_TIMEOUT, MEDIUM_TIMEOUT, LO
 
 TEMP_DIR = "temp_codeit/"
 os.makedirs(TEMP_DIR, exist_ok=True)
-ERROR_VISIBLE_DURATION = 8
 
 LANGUAGES = {
     "python": ("Python", "py"), "py": ("Python", "py"),
