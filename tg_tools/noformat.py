@@ -4,6 +4,8 @@ from pyrogram.enums import ParseMode
 
 from app import BOT, bot
 
+from app.modules.settings import TINY_TIMEOUT, SMALL_TIMEOUT, MEDIUM_TIMEOUT, LONG_TIMEOUT, VERY_LONG_TIMEOUT, LARGE_TIMEOUT
+
 @bot.add_cmd(cmd="noformat")
 async def noformat_handler(bot: BOT, message: Message):
     """
@@ -15,7 +17,7 @@ async def noformat_handler(bot: BOT, message: Message):
     replied_msg = message.replied
     
     if not replied_msg:
-        await message.reply("Please reply to a message to see its raw format.", del_in=8)
+        await message.reply("Please reply to a message to see its raw format.", del_in=MEDIUM_TIMEOUT)
         return
 
     raw_markdown = None
@@ -25,7 +27,7 @@ async def noformat_handler(bot: BOT, message: Message):
         raw_markdown = replied_msg.caption.markdown
         
     if not raw_markdown:
-        await message.reply("The replied-to message does not contain any formattable text.", del_in=8)
+        await message.reply("The replied-to message does not contain any formattable text.", del_in=MEDIUM_TIMEOUT)
         return
 
     escaped_markdown = html.escape(raw_markdown)
@@ -42,4 +44,4 @@ async def noformat_handler(bot: BOT, message: Message):
         )
         
     except Exception as e:
-        await message.reply(f"<b>Error:</b> Could not send raw format.\n<code>{html.escape(str(e))}</code>", del_in=10)
+        await message.reply(f"<b>Error:</b> Could not send raw format.\n<code>{html.escape(str(e))}</code>", del_in=LARGE_TIMEOUT)
