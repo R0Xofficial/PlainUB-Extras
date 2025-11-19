@@ -9,6 +9,8 @@ from pyrogram.types import LinkPreviewOptions, Message, User
 
 from app import BOT, bot
 
+from app.modules.settings import TINY_TIMEOUT, SMALL_TIMEOUT, MEDIUM_TIMEOUT, LONG_TIMEOUT, VERY_LONG_TIMEOUT, LARGE_TIMEOUT
+
 FED_BOTS_TO_QUERY = [
     609517172,  # Rose
     1376954911,  # AstrakoBot
@@ -101,7 +103,7 @@ async def fed_stat_handler(bot: BOT, message: Message):
     try:
         user_to_check: User = await bot.get_users(target_identifier)
     except Exception as e:
-        return await progress.edit(f"<b>Error:</b> Could not find the specified user.\n<code>{e}</code>", del_in=8)
+        return await progress.edit(f"<b>Error:</b> Could not find the specified user.\n<code>{e}</code>", del_in=MEDIUM_TIMEOUT)
 
     tasks = [query_single_bot(bot, bot_id, user_to_check) for bot_id in FED_BOTS_TO_QUERY]
     all_results = await asyncio.gather(*tasks)
