@@ -83,7 +83,5 @@ async def quote_sticker_handler(bot: BOT, message: Message):
     except Exception as e:
         error_text = f"<b>Error:</b> Could not get a quote from @QuotLyBot.\n<code>{html.escape(str(e))}</code>"
         try:
-            await progress_message.edit(error_text)
-            await asyncio.sleep(ERROR_VISIBLE_DURATION)
-            await progress_message.delete()
+            await progress_message.edit(error_text, del_in=ERROR_VISIBLE_DURATION)
         except Exception: pass
