@@ -6,7 +6,7 @@ from pyrogram.types import Message
 from app import BOT, bot
 
 API_URL = "https://official-joke-api.appspot.com/random_joke"
-ERROR_VISIBLE_DURATION = 10
+ERROR_VISIBLE_DURATION = 8
 
 def safe_escape(text: str) -> str:
     escaped_text = html.escape(str(text))

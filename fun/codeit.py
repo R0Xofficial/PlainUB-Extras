@@ -8,7 +8,7 @@ from app import BOT, bot
 
 TEMP_DIR = "temp_codeit/"
 os.makedirs(TEMP_DIR, exist_ok=True)
-ERROR_VISIBLE_DURATION = 10
+ERROR_VISIBLE_DURATION = 8
 
 LANGUAGES = {
     "python": ("Python", "py"), "py": ("Python", "py"),
@@ -131,7 +131,7 @@ async def codeit_handler(bot: BOT, message: Message):
     replied_msg = message.replied
     
     if not message.input:
-        return await message.reply("<b>Usage:</b> .codeit <language> [text]", del_in=8)
+        return await message.reply("<b>Usage:</b> .codeit <language> [text]", del_in=ERROR_VISIBLE_DURATION)
 
     parts = message.input.split(maxsplit=1)
     lang_alias = parts[0].lower()

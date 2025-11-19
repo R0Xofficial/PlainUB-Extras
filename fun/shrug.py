@@ -19,4 +19,4 @@ async def codeit_handler(bot: BOT, message: Message):
 
     except Exception as e:
         error_text = f"Error: `{str(e)}`"
-        await message.reply(error_text, del_in=10)
+        await message.reply(error_text)

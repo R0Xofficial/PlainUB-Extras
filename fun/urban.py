@@ -6,7 +6,7 @@ from pyrogram.types import LinkPreviewOptions, Message
 from app import BOT, bot
 
 API_URL = "http://api.urbandictionary.com/v0/define"
-ERROR_VISIBLE_DURATION = 10
+ERROR_VISIBLE_DURATION = 8
 
 def safe_escape(text: str) -> str:
     escaped_text = html.escape(str(text))
@@ -34,7 +34,9 @@ async def urban_dictionary_handler(bot: BOT, message: Message):
     
     term_to_search = message.input
     if not term_to_search:
-        await message.reply("What term should I look up? Usage: `.ud yeet`", del_in=8)
+        await message.reply("What term should I look up? Usage: `.ud yeet`")
+        await asyncio.sleep(ERROR_VISIBLE_DURATION)
+        await message.delete()
         return
 
     progress_message = await message.reply(f"<code>Searching Urban Dictionary for: {safe_escape(term_to_search)}...</code>")
