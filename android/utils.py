@@ -3,7 +3,7 @@ import asyncio
 import html
 from pyrogram.types import LinkPreviewOptions, Message
 
-ERROR_VISIBLE_DURATION = 8
+from app.modules.settings import TINY_TIMEOUT, SMALL_TIMEOUT, MEDIUM_TIMEOUT, LONG_TIMEOUT, VERY_LONG_TIMEOUT, LARGE_TIMEOUT
 
 def sync_get_releases(owner: str, repo: str) -> list:
     api_url = f"https://api.github.com/repos/{owner}/{repo}/releases"
@@ -49,4 +49,4 @@ async def get_android_versions(bot, message: Message, owner: str, repo: str, sho
 
     except Exception as e:
         error_text = f"<b>An error occurred:</b>\n<code>{html.escape(str(e))}</code>"
-        await progress_message.edit(error_text, del_in=ERROR_VISIBLE_DURATION)
+        await progress_message.edit(error_text, del_in=LARGE_TIMEOUT)
