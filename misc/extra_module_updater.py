@@ -7,8 +7,7 @@ from datetime import datetime
 from ub_core.utils import run_shell_cmd
 from app import BOT, Message
 
-from app.modules.settings import REPO_OWNER, REPO_NAME
-from app.modules.settings import TINY_TIMEOUT, SMALL_TIMEOUT, MEDIUM_TIMEOUT, LONG_TIMEOUT, VERY_LONG_TIMEOUT, LARGE_TIMEOUT
+from app.modules.settings import REPO_OWNER, REPO_NAME, TINY_TIMEOUT, SMALL_TIMEOUT, MEDIUM_TIMEOUT, LONG_TIMEOUT, VERY_LONG_TIMEOUT, LARGE_TIMEOUT
 
 REPO_API_URL = f"https://api.github.com/repos/{REPO_OWNER}/{REPO_NAME}"
 
