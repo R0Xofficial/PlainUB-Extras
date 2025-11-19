@@ -138,7 +138,7 @@ async def _choose_and_perform_fed_action(bot: BOT, message: Message, with_proof:
     if not message.is_from_owner: log_text += f"\n\n<b>By</b>: {get_name(message.from_user)}"
         
     await bot.send_message(extra_config.FBAN_LOG_CHANNEL, log_text, disable_preview=True)
-    await progress.edit(summary_text, del_in=10, disable_preview=True)
+    await progress.edit(summary_text, del_in=5, disable_preview=True)
 
 @bot.add_cmd(cmd="cfban")
 async def choose_fed_ban(bot: BOT, message: Message):
