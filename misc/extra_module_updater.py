@@ -73,4 +73,4 @@ async def unified_update_handler(bot: BOT, message: Message):
         await progress_msg.edit(response_text)
 
     except Exception as e:
-        await progress_msg.edit(f"<b>Error:</b> <code>{html.escape(str(e))}</code>", del_in=15)
+        await progress_msg.edit(f"<b>Error:</b> <code>{html.escape(str(e))}</code>", del_in=10)
