@@ -7,6 +7,8 @@ from pyrogram.types import Message, User, LinkPreviewOptions, ReplyParameters
 
 from app import BOT, bot
 
+from app.modules.settings import TINY_TIMEOUT, SMALL_TIMEOUT, MEDIUM_TIMEOUT, LONG_TIMEOUT, VERY_LONG_TIMEOUT, LARGE_TIMEOUT
+
 TEMP_INFO_DIR = "temp_info_photos/"
 
 def safe_escape(text: str) -> str:
@@ -130,4 +132,4 @@ async def info_handler(bot: BOT, message: Message):
             )
 
     except Exception as e:
-        await progress_msg.edit(f"<b>Error:</b> Could not find the specified user.\n<code>{safe_escape(str(e))}</code>", del_in=10)
+        await progress_msg.edit(f"<b>Error:</b> Could not find the specified user.\n<code>{safe_escape(str(e))}</code>", del_in=LARGE_TIMEOUT)
