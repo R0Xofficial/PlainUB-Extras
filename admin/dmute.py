@@ -3,7 +3,7 @@ from pyrogram.types import Message, ChatPermissions, User
 
 from app import BOT, bot
 
-from app.modules.settings import SMALL_TIMEOUT, MEDIUM_TIMEOUT, LONG_TIMEOUT
+from app.modules.settings import TINY_TIMEOUT, SMALL_TIMEOUT, MEDIUM_TIMEOUT, LONG_TIMEOUT, VERY_LONG_TIMEOUT, LARGE_TIMEOUT
 
 @bot.add_cmd(cmd="dmute")
 async def dmute_handler(bot: BOT, message: Message):
