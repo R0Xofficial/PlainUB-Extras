@@ -7,7 +7,7 @@ from pyrogram.types import Message, LinkPreviewOptions, ReplyParameters
 
 from app import BOT, bot
 
-from app.modules.repo import REPO_OWNER, REPO_NAME
+from app.modules.settings import REPO_OWNER, REPO_NAME
 
 REPO_API_URL = f"https://api.github.com/repos/{REPO_OWNER}/{REPO_NAME}"
 REPO_URL = f"https://github.com/{REPO_OWNER}/{REPO_NAME}"
