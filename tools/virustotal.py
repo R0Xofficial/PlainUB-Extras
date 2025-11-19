@@ -10,6 +10,8 @@ from dotenv import load_dotenv
 
 from app import BOT, bot
 
+from app.modules.settings import TINY_TIMEOUT, SMALL_TIMEOUT, MEDIUM_TIMEOUT, LONG_TIMEOUT, VERY_LONG_TIMEOUT, LARGE_TIMEOUT
+
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 MODULES_DIR = os.path.dirname(SCRIPT_DIR)
 ENV_PATH = os.path.join(MODULES_DIR, "extra_config.env")
@@ -19,7 +21,6 @@ VIRUSTOTAL_API_KEY = os.getenv("VIRUSTOTAL_API_KEY")
 
 TEMP_DIR = "temp_virustotal/"
 os.makedirs(TEMP_DIR, exist_ok=True)
-ERROR_VISIBLE_DURATION = 8
 VT_API_URL = "https://www.virustotal.com/api/v3"
 
 
@@ -62,15 +63,15 @@ def format_vt_report(data: dict, scan_type: str, resource_id: str, original_inpu
 @bot.add_cmd(cmd=["virustotal", "vt"])
 async def virustotal_handler(bot: BOT, message: Message):
     if not VIRUSTOTAL_API_KEY or VIRUSTOTAL_API_KEY == "TUTAJ_WKLEJ_SWOJ_KLUCZ_API":
-        return await message.reply("<b>VirusTotal API Key not configured.</b>", del_in=ERROR_VISIBLE_DURATION)
+        return await message.reply("<b>VirusTotal API Key not configured.</b>", del_in=LONG_TIMEOUT)
     api_key = VIRUSTOTAL_API_KEY
     if message.replied and message.replied.media: await scan_file(api_key, message)
     elif message.input:
         if is_url(message.input): await scan_url(api_key, message)
         elif is_ip(message.input): await scan_domain_or_ip(api_key, message, "ip")
         elif is_domain(message.input): await scan_domain_or_ip(api_key, message, "domain")
-        else: await message.reply("Invalid input.", del_in=ERROR_VISIBLE_DURATION)
-    else: await message.reply("Reply to a file or provide a URL/domain/IP.", del_in=ERROR_VISIBLE_DURATION)
+        else: await message.reply("Invalid input.", del_in=LONG_TIMEOUT)
+    else: await message.reply("Reply to a file or provide a URL/domain/IP.", del_in=MEDIUM_TIMEOUT)
 
 async def scan_file(api_key: str, message: Message):
     progress = await message.reply("<code>Downloading...</code>")
@@ -90,7 +91,7 @@ async def scan_file(api_key: str, message: Message):
         await bot.send_message(message.chat.id, final_report, reply_parameters=ReplyParameters(message_id=message.replied.id), link_preview_options=LinkPreviewOptions(is_disabled=True))
         await progress.delete(); await message.delete()
     except Exception as e:
-        await progress.edit(f"<b>Error:</b> <code>{html.escape(str(e))}</code>", del_in=ERROR_VISIBLE_DURATION)
+        await progress.edit(f"<b>Error:</b> <code>{html.escape(str(e))}</code>", del_in=LONG_TIMEOUT)
     finally:
         for f in temp_files:
             if f and os.path.exists(f): os.remove(f)
@@ -112,7 +113,7 @@ async def scan_url(api_key: str, message: Message):
         await progress.edit(final_report, link_preview_options=LinkPreviewOptions(is_disabled=True))
         await message.delete() # Delete the original command
     except Exception as e:
-        await progress.edit(f"<b>Error:</b> <code>{html.escape(str(e))}</code>", del_in=ERROR_VISIBLE_DURATION)
+        await progress.edit(f"<b>Error:</b> <code>{html.escape(str(e))}</code>", del_in=LONG_TIMEOUT)
 
 async def scan_domain_or_ip(api_key: str, message: Message, scan_type: str):
     progress = await message.reply(f"<code>Querying {scan_type.capitalize()}...</code>")
@@ -126,4 +127,4 @@ async def scan_domain_or_ip(api_key: str, message: Message, scan_type: str):
         else: final_report = f"<b>Report:</b>\n<b>  - Error:</b> API code {response.status_code}."
         await progress.edit(final_report, link_preview_options=LinkPreviewOptions(is_disabled=True))
     except Exception as e:
-        await progress.edit(f"<b>Error:</b> <code>{html.escape(str(e))}</code>", del_in=ERROR_VISIBLE_DURATION)
+        await progress.edit(f"<b>Error:</b> <code>{html.escape(str(e))}</code>", del_in=LONG_TIMEOUT)
