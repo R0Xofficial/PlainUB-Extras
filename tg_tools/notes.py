@@ -21,12 +21,12 @@ async def save_note_handler(bot: BOT, message: Message):
         .save [note_name] (while replying to a message/media to save it)
     """
     if not MEDIA_STORAGE_CHANNEL and message.replied:
-        await message.reply("To save media, you must set `LOG_CHAT` in your config.", del_in=8)
+        await message.reply("To save media, you must set `LOG_CHAT` in your config.", del_in=10)
         return
 
     args = message.input.split(" ", 1)
     if not args or not args[0]:
-        await message.reply("You need to provide a name for the note.", del_in=5); return
+        await message.reply("You need to provide a name for the note.", del_in=8); return
     
     note_name = args[0].lower()
 
@@ -37,10 +37,10 @@ async def save_note_handler(bot: BOT, message: Message):
     elif len(args) > 1:
         content = args[1]
     else:
-        await message.reply("You need to provide content for the note or reply to a message.", del_in=5); return
+        await message.reply("You need to provide content for the note or reply to a message.", del_in=8); return
 
     await NOTES_DB.add_data({"_id": note_name, "content": content})
-    await message.reply(f"Note `{note_name}` saved successfully.", del_in=5)
+    await message.reply(f"Note `{note_name}` saved successfully.", del_in=8)
 
 @bot.add_cmd(cmd=["delnote", "clear"])
 async def delete_note_handler(bot: BOT, message: Message):
@@ -52,14 +52,14 @@ async def delete_note_handler(bot: BOT, message: Message):
     """
     note_name = message.input
     if not note_name:
-        await message.reply("You need to specify which note to delete.", del_in=5); return
+        await message.reply("You need to specify which note to delete.", del_in=8); return
 
     note_name = note_name.lower()
     deleted = await NOTES_DB.delete_data(id=note_name)
     if deleted:
-        await message.reply(f"Note `{note_name}` has been deleted.", del_in=5)
+        await message.reply(f"Note `{note_name}` has been deleted.", del_in=8)
     else:
-        await message.reply(f"Note `{note_name}` not found.", del_in=5)
+        await message.reply(f"Note `{note_name}` not found.", del_in=8)
 
 @bot.add_cmd(cmd="notes")
 async def list_notes_handler(bot: BOT, message: Message):
@@ -89,12 +89,12 @@ async def get_note_by_command(bot: BOT, message: Message):
     """
     note_name = message.input
     if not note_name:
-        await message.reply("You need to specify which note to get.", del_in=5); return
+        await message.reply("You need to specify which note to get.", del_in=8); return
 
     note_name = note_name.lower()
     note = await NOTES_DB.find_one({"_id": note_name})
     if not note:
-        await message.reply(f"Note `{note_name}` not found.", del_in=5); return
+        await message.reply(f"Note `{note_name}` not found.", del_in=8); return
 
     await message.delete()
     content = note["content"]
