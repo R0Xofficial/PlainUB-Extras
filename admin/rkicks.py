@@ -3,6 +3,8 @@ from pyrogram.types import Message, User
 
 from app import BOT, bot
 
+from app.modules.settings import TINY_TIMEOUT, SMALL_TIMEOUT, MEDIUM_TIMEOUT, LONG_TIMEOUT, VERY_LONG_TIMEOUT, LARGE_TIMEOUT
+
 @bot.add_cmd(cmd="rkick")
 async def remote_kick_handler(bot: BOT, message: Message):
     """
@@ -12,7 +14,7 @@ async def remote_kick_handler(bot: BOT, message: Message):
         .rkick [ID/username/reply] [ID/chatname/link] [reason]
     """
     if not message.input or len(message.input.split()) < 2:
-        await message.reply("<b>Usage:</b> <code>.rkick [user] [chat] [reason]</code>", del_in=10)
+        await message.reply("<b>Usage:</b> <code>.rkick [user] [chat] [reason]</code>", del_in=MEDIUM_TIMEOUT)
         return
 
     parts = message.input.split(maxsplit=2)
@@ -29,11 +31,11 @@ async def remote_kick_handler(bot: BOT, message: Message):
         target_user = await bot.get_users(user_identifier)
         target_chat = await bot.get_chat(chat_identifier)
     except Exception as e:
-        await message.reply(f"<b>Error:</b> Could not find user or chat.\n<code>{html.escape(str(e))}</code>", del_in=10)
+        await message.reply(f"<b>Error:</b> Could not find user or chat.\n<code>{html.escape(str(e))}</code>", del_in=LONG_TIMEOUT)
         return
 
     if not isinstance(target_user, User):
-        await message.reply("<b>Error:</b> Invalid user specified.", del_in=10)
+        await message.reply("<b>Error:</b> Invalid user specified.", del_in=LONG_TIMEOUT)
         return
 
     try:
@@ -46,4 +48,4 @@ async def remote_kick_handler(bot: BOT, message: Message):
         await message.reply(f"Remote Kicked: {target_user.mention}\nChat: {html.escape(target_chat.title)}\nReason: {reason}")
 
     except Exception as e:
-        await message.reply(f"<b>Error:</b> <code>{html.escape(str(e))}</code>", del_in=15)
+        await message.reply(f"<b>Error:</b> <code>{html.escape(str(e))}</code>", del_in=LONG_TIMEOUT)
