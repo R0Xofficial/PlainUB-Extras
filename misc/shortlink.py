@@ -5,8 +5,9 @@ from pyrogram.types import LinkPreviewOptions, Message
 
 from app import BOT, bot
 
+from app.modules.settings import TINY_TIMEOUT, SMALL_TIMEOUT, MEDIUM_TIMEOUT, LONG_TIMEOUT, VERY_LONG_TIMEOUT, LARGE_TIMEOUT
+
 API_URL = "https://tinyurl.com/api-create.php"
-ERROR_VISIBLE_DURATION = 8
 
 def sync_shorten(url: str) -> str:
     """
@@ -31,7 +32,7 @@ async def shortlink_handler(bot: BOT, message: Message):
         url_to_shorten = message.replied.text or message.replied.caption
     
     if not url_to_shorten:
-        await message.reply("Please provide a URL.", del_in=ERROR_VISIBLE_DURATION)
+        await message.reply("Please provide a URL.", del_in=MEDIUM_TIMEOUT)
         return
 
     progress_message = await message.reply("<code>Shortening link...</code>")
@@ -52,8 +53,8 @@ async def shortlink_handler(bot: BOT, message: Message):
         
         else:
             error_text = f"<b>API Error:</b> Received an invalid response from the server."
-            await progress_message.edit(error_text, del_in=ERROR_VISIBLE_DURATION)
+            await progress_message.edit(error_text, del_in=LONG_TIMEOUT)
 
     except Exception as e:
         error_text = f"<b>An error occurred:</b>\n<code>{html.escape(str(e))}</code>"
-        await progress_message.edit(error_text, del_in=ERROR_VISIBLE_DURATION)
+        await progress_message.edit(error_text, del_in=LONG_TIMEOUT)
