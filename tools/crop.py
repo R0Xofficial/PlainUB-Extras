@@ -7,9 +7,10 @@ from pyrogram.types import Message, ReplyParameters
 
 from app import BOT, bot
 
+from app.modules.settings import TINY_TIMEOUT, SMALL_TIMEOUT, MEDIUM_TIMEOUT, LONG_TIMEOUT, VERY_LONG_TIMEOUT, LARGE_TIMEOUT
+
 TEMP_DIR = "temp_crop/"
 os.makedirs(TEMP_DIR, exist_ok=True)
-ERROR_VISIBLE_DURATION = 8
 
 async def run_command(command: str) -> tuple[str, str, int]:
     process = await asyncio.create_subprocess_shell(command, stdout=asyncio.subprocess.PIPE, stderr=asyncio.subprocess.PIPE)
@@ -54,16 +55,16 @@ async def crop_handler(bot: BOT, message: Message):
     is_animation = replied_msg and (replied_msg.animation or (replied_msg.document and replied_msg.document.mime_type == 'image/gif'))
     
     if is_animation:
-        return await message.reply("GIFs are not supported by this tool.", del_in=ERROR_VISIBLE_DURATION)
+        return await message.reply("GIFs are not supported by this tool.", del_in=MEDIUM_TIMEOUT)
     if not is_media:
-        return await message.reply("Please reply to an image or video to crop it.", del_in=ERROR_VISIBLE_DURATION)
+        return await message.reply("Please reply to an image or video to crop it.", del_in=MEDIUM_TIMEOUT)
         
     if not message.input:
-        return await message.reply("<b>Usage:</b> .crop [width]x[height]", del_in=ERROR_VISIBLE_DURATION)
+        return await message.reply("<b>Usage:</b> .crop [width]x[height]", del_in=MEDIUM_TIMEOUT)
     
     match = re.match(r"(\d+)[x:](\d+)", message.input)
     if not match:
-        return await message.reply("Invalid format. Use `.crop [width]x[height]`.", del_in=ERROR_VISIBLE_DURATION)
+        return await message.reply("Invalid format. Use `.crop [width]x[height]`.", del_in=MEDIUM_TIMEOUT)
 
     progress_message = await message.reply("<code>Downloading media...</code>")
     
@@ -102,7 +103,7 @@ async def crop_handler(bot: BOT, message: Message):
 
     except Exception as e:
         error_text = f"<b>Error:</b> Could not crop media.\n<code>{html.escape(str(e))}</code>"
-        await progress_message.edit(error_text, del_in=ERROR_VISIBLE_DURATION)
+        await progress_message.edit(error_text, del_in=LONG_TIMEOUT)
     finally:
         for f in temp_files:
             if f and os.path.exists(f):
