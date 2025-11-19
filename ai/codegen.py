@@ -16,7 +16,7 @@ CF_ACCOUNT_ID = os.getenv("CF_ACCOUNT_ID")
 CF_API_TOKEN = os.getenv("CF_API_TOKEN")
 TEMP_DIR = "temp_codegen/"
 os.makedirs(TEMP_DIR, exist_ok=True)
-ERROR_VISIBLE_DURATION = 15
+ERROR_VISIBLE_DURATION = 10
 
 LANGUAGE_EXTENSIONS = {
     "python": "py", "py": "py",
@@ -63,7 +63,7 @@ async def codegen_handler(bot: BOT, message: Message):
     if not CF_ACCOUNT_ID or not CF_API_TOKEN or "YOUR_KEY" in CF_API_TOKEN:
         return await message.reply("<b>Cloudflare AI not configured.</b>", del_in=ERROR_VISIBLE_DURATION)
     if not message.input:
-        return await message.reply("<b>Usage:</b> .codegen [language] (description)", del_in=ERROR_VISIBLE_DURATION)
+        return await message.reply("<b>Usage:</b> .codegen [language] (description)", del_in=8)
     
     parts = message.input.split(maxsplit=1)
     if len(parts) < 2:
