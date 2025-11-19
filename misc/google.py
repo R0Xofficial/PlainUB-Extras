@@ -5,7 +5,7 @@ from pyrogram.types import LinkPreviewOptions, Message
 
 from app import BOT, bot
 
-ERROR_VISIBLE_DURATION = 10
+ERROR_VISIBLE_DURATION = 8
 
 def sync_search(query: str):
     """Synchronous search function to be run in a separate thread."""
@@ -19,7 +19,9 @@ async def google_search_handler(bot: BOT, message: Message):
     """
     query = message.input
     if not query:
-        await message.reply("Please provide a search query.", del_in=8)
+        await message.reply("Please provide a search query.")
+        await asyncio.sleep(ERROR_VISIBLE_DURATION)
+        await message.delete()
         return
 
     progress_message = await message.reply(f"<code>Searching Google for: {query}</code>...")
@@ -28,7 +30,10 @@ async def google_search_handler(bot: BOT, message: Message):
         search_results = await asyncio.to_thread(sync_search, query)
         
         if not search_results:
-            await progress_message.edit(f"No results found for <code>{query}</code>.", del_in=8)
+            await progress_message.edit(f"No results found for <code>{query}</code>.")
+            await asyncio.sleep(ERROR_VISIBLE_DURATION)
+            await progress_message.delete()
+            await message.delete()
             return
 
         output_str = f"<b>🔎 Search results for:</b> <code>{html.escape(query)}</code>\n\n"
@@ -42,4 +47,6 @@ async def google_search_handler(bot: BOT, message: Message):
 
     except Exception as e:
         error_text = f"<b>An error occurred while searching:</b>\n<code>{html.escape(str(e))}</code>"
-        await progress_message.edit(error_text, del_in=ERROR_VISIBLE_DURATION)
+        await progress_message.edit(error_text)
+        await asyncio.sleep(ERROR_VISIBLE_DURATION)
+        await progress_message.delete()

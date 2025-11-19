@@ -6,7 +6,7 @@ from pyrogram.types import LinkPreviewOptions, Message
 from app import BOT, bot
 
 API_URL = "https://tinyurl.com/api-create.php"
-ERROR_VISIBLE_DURATION = 10
+ERROR_VISIBLE_DURATION = 8
 
 def sync_shorten(url: str) -> str:
     """
@@ -31,7 +31,9 @@ async def shortlink_handler(bot: BOT, message: Message):
         url_to_shorten = message.replied.text or message.replied.caption
     
     if not url_to_shorten:
-        await message.reply("Please provide a URL.", del_in=8)
+        await message.reply("Please provide a URL.")
+        await asyncio.sleep(ERROR_VISIBLE_DURATION)
+        return
 
     progress_message = await message.reply("<code>Shortening link...</code>")
     
@@ -55,4 +57,7 @@ async def shortlink_handler(bot: BOT, message: Message):
 
     except Exception as e:
         error_text = f"<b>An error occurred:</b>\n<code>{html.escape(str(e))}</code>"
-        await progress_message.edit(error_text, del_in=ERROR_VISIBLE_DURATION)
+        await progress_message.edit(error_text)
+
+    await asyncio.sleep(ERROR_VISIBLE_DURATION)
+    await progress_message.delete()
