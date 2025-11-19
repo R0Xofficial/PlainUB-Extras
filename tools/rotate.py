@@ -6,9 +6,10 @@ from pyrogram.types import Message, ReplyParameters
 
 from app import BOT, bot
 
+from app.modules.settings import TINY_TIMEOUT, SMALL_TIMEOUT, MEDIUM_TIMEOUT, LONG_TIMEOUT, VERY_LONG_TIMEOUT, LARGE_TIMEOUT
+
 TEMP_DIR = "temp_rotate/"
 os.makedirs(TEMP_DIR, exist_ok=True)
-ERROR_VISIBLE_DURATION = 8
 
 async def run_command(command: str) -> tuple[str, str, int]:
     process = await asyncio.create_subprocess_shell(
@@ -67,7 +68,7 @@ async def rotate_handler(bot: BOT, message: Message):
         (replied_msg.document and replied_msg.document.mime_type.startswith(("image/", "video/")))
     )
     if not is_media:
-        return await message.reply("Please reply to an image, video, or GIF to rotate it.", del_in=ERROR_VISIBLE_DURATION)
+        return await message.reply("Please reply to an image, video, or GIF to rotate it.", del_in=MEDIUM_TIMEOUT)
 
     try:
         rotations = 1
@@ -76,7 +77,7 @@ async def rotate_handler(bot: BOT, message: Message):
         if not (1 <= rotations <= 3):
             raise ValueError("Number of rotations must be 1, 2, or 3.")
     except ValueError:
-        return await message.reply("Invalid input. Please provide a number between 1 and 3.", del_in=ERROR_VISIBLE_DURATION)
+        return await message.reply("Invalid input. Please provide a number between 1 and 3.", del_in=MEDIUM_TIMEOUT)
 
     progress_message = await message.reply("<code>Downloading media...</code>")
     
@@ -114,7 +115,7 @@ async def rotate_handler(bot: BOT, message: Message):
 
     except Exception as e:
         error_text = f"<b>Error:</b> Could not rotate media.\n<code>{html.escape(str(e))}</code>"
-        await progress_message.edit(error_text, del_in=ERROR_VISIBLE_DURATION)
+        await progress_message.edit(error_text, del_in=LONG_TIMEOUT)
     finally:
         for f in temp_files:
             if f and os.path.exists(f):
