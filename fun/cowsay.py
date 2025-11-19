@@ -6,6 +6,7 @@ from pyrogram.enums import ParseMode
 
 from app import BOT, Message, bot
 
+from app.modules.settings import TINY_TIMEOUT, SMALL_TIMEOUT, MEDIUM_TIMEOUT, LONG_TIMEOUT, VERY_LONG_TIMEOUT, LARGE_TIMEOUT
 
 @bot.add_cmd(cmd="cowsay")
 async def cowsay(bot: BOT, message: Message):
@@ -17,7 +18,7 @@ async def cowsay(bot: BOT, message: Message):
     """
     text = message.input
     if not text:
-        await message.reply("What is the cow supposed to say?", del_in=8)
+        await message.reply("What is the cow supposed to say?", del_in=MEDIUM_TIMEOUT)
         return
 
     string_io = io.StringIO()
