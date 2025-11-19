@@ -2,6 +2,8 @@ from pyrogram.types import Message, ReplyParameters
 
 from app import BOT, bot
 
+from app.modules.settings import TINY_TIMEOUT, SMALL_TIMEOUT, MEDIUM_TIMEOUT, LONG_TIMEOUT, VERY_LONG_TIMEOUT, LARGE_TIMEOUT
+
 @bot.add_cmd(cmd="shrug")
 async def codeit_handler(bot: BOT, message: Message):
     replied_msg = message.replied
@@ -19,4 +21,4 @@ async def codeit_handler(bot: BOT, message: Message):
 
     except Exception as e:
         error_text = f"Error: `{str(e)}`"
-        await message.reply(error_text, del_in=8)
+        await message.reply(error_text, del_in=LONG_TIMEOUT)
