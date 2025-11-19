@@ -24,5 +24,5 @@ jobs:
       - name: Commit and push if changed
         uses: stefanzweifel/git-auto-commit-action@v5
         with:
-          commit_message: 'update(bot): Updated date in update.json'
+          commit_message: 'github-actions[bot]: Updated file update.json'
           file_pattern: 'update.json'
