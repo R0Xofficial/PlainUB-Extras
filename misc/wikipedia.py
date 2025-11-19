@@ -35,8 +35,7 @@ async def wiki_handler(bot: BOT, message: Message):
     
     query = message.input
     if not query:
-        await message.reply("Please provide a search query. Usage: `.wiki Python (programming language)`")
-        await asyncio.sleep(ERROR_VISIBLE_DURATION)
+        await message.reply("Please provide a search query. Usage: `.wiki Python (programming language)`", del_in=ERROR_VISIBLE_DURATION)
         return
 
     progress_message = await message.reply(f"<code>Searching Wikipedia for: {safe_escape(query)}...</code>")
@@ -53,11 +52,7 @@ async def wiki_handler(bot: BOT, message: Message):
             await progress_message.edit(final_text, link_preview_options=LinkPreviewOptions(is_disabled=True))
         else:
             error_text = f"Could not find any Wikipedia page for <code>{safe_escape(query)}</code>."
-            await progress_message.edit(error_text)
-            await asyncio.sleep(ERROR_VISIBLE_DURATION)
-            await progress_message.delete()
+            await progress_message.edit(error_text, del_in=ERROR_VISIBLE_DURATION)
     except Exception as e:
         error_text = f"<b>An error occurred:</b>\n<code>{safe_escape(str(e))}</code>"
-        await progress_message.edit(error_text)
-        await asyncio.sleep(ERROR_VISIBLE_DURATION)
-        await progress_message.delete()
+        await progress_message.edit(error_text, del_in=ERROR_VISIBLE_DURATION)
