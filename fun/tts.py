@@ -6,9 +6,10 @@ from pyrogram.types import Message, ReplyParameters
 
 from app import BOT, bot
 
+from app.modules.settings import TINY_TIMEOUT, SMALL_TIMEOUT, MEDIUM_TIMEOUT, LONG_TIMEOUT, VERY_LONG_TIMEOUT, LARGE_TIMEOUT
+
 TEMP_DIR = "temp_audio"
 os.makedirs(TEMP_DIR, exist_ok=True)
-ERROR_VISIBLE_DURATION = 8
 
 def safe_escape(text: str) -> str:
     escaped_text = html.escape(str(text))
@@ -49,11 +50,11 @@ async def tts_handler(bot: BOT, message: Message):
         else:
             text_to_speak = message.input
     else:
-        await message.reply("Please provide text or reply to a message.", del_in=ERROR_VISIBLE_DURATION)
+        await message.reply("Please provide text or reply to a message.", del_in=MEDIUM_TIMEOUT)
         return
 
     if not text_to_speak.strip():
-        await message.reply("The message contains no text to convert.", del_in=ERROR_VISIBLE_DURATION)
+        await message.reply("The message contains no text to convert.", del_in=MEDIUM_TIMEOUT)
         return
 
     progress_message = await message.reply("<code>Converting text to speech...</code>")
@@ -71,7 +72,7 @@ async def tts_handler(bot: BOT, message: Message):
         await progress_message.delete()
 
     except Exception as e:
-        await progress_message.edit(f"<b>Error:</b> Could not generate speech.\n<code>{safe_escape(str(e))}</code>", del_in=ERROR_VISIBLE_DURATION)
+        await progress_message.edit(f"<b>Error:</b> Could not generate speech.\n<code>{safe_escape(str(e))}</code>", del_in=LONG_TIMEOUT)
     finally:
         if file_path and os.path.exists(file_path):
             os.remove(file_path)
