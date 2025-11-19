@@ -6,6 +6,8 @@ from pyrogram.types import Message, ReplyParameters
 
 from app import BOT, bot
 
+from app.modules.settings import TINY_TIMEOUT, SMALL_TIMEOUT, MEDIUM_TIMEOUT, LONG_TIMEOUT, VERY_LONG_TIMEOUT, LARGE_TIMEOUT
+
 TEMP_DIR = "temp_extract_audio/"
 os.makedirs(TEMP_DIR, exist_ok=True)
 
@@ -40,7 +42,7 @@ async def extract_audio_handler(bot: BOT, message: Message):
     )
     
     if not is_video:
-        await message.reply("Please reply to a video to extract its audio.", del_in=8)
+        await message.reply("Please reply to a video to extract its audio.", del_in=MEDIUM_TIMEOUT)
         return
 
     progress_msg = await message.reply("<code>Downloading video...</code>")
@@ -78,7 +80,7 @@ async def extract_audio_handler(bot: BOT, message: Message):
         await progress_msg.delete()
 
     except Exception as e:
-        await progress_msg.edit(f"<b>Error:</b> <code>{html.escape(str(e))}</code>", del_in=10)
+        await progress_msg.edit(f"<b>Error:</b> <code>{html.escape(str(e))}</code>", del_in=LONG_TIMEOUT)
     finally:
         if os.path.exists(TEMP_DIR):
             shutil.rmtree(TEMP_DIR)
