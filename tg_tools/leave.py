@@ -4,6 +4,8 @@ from pyrogram.types import Message
 
 from app import BOT, bot
 
+from app.modules.settings import TINY_TIMEOUT, SMALL_TIMEOUT, MEDIUM_TIMEOUT, LONG_TIMEOUT, VERY_LONG_TIMEOUT, LARGE_TIMEOUT
+
 async def _delayed_leave(chat_id: int | str):
     await asyncio.sleep(1)
     await bot.leave_chat(chat_id)
@@ -32,9 +34,9 @@ async def leave_chat_handler(bot: BOT, message: Message):
 
             await bot.leave_chat(chat_identifier_for_api)
             
-            confirmation_msg = await message.reply(f"<code>Successfully left</code>", del_in=8)
+            confirmation_msg = await message.reply(f"<code>Successfully left</code>", del_in=SMALL_TIMEOUT)
         else:
             asyncio.create_task(_delayed_leave(message.chat.id))
 
     except Exception as e:
-        await message.reply(f"<b>Error:</b> Could not leave chat.\n<code>{html.escape(str(e))}</code>", del_in=10)
+        await message.reply(f"<b>Error:</b> Could not leave chat.\n<code>{html.escape(str(e))}</code>", del_in=LARGE_TIMEOUT)
