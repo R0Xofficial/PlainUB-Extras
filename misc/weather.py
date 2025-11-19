@@ -5,6 +5,8 @@ from pyrogram.types import Message
 
 from app import BOT, bot
 
+from app.modules.settings import TINY_TIMEOUT, SMALL_TIMEOUT, MEDIUM_TIMEOUT, LONG_TIMEOUT, VERY_LONG_TIMEOUT, LARGE_TIMEOUT
+
 API_URL = "https://wttr.in/"
 
 @bot.add_cmd(cmd=["weather", "wttr"])
@@ -16,7 +18,7 @@ async def weather_handler(bot: BOT, message: Message):
         .weather [city/location]
     """
     if not message.input:
-        await message.reply("<b>Usage:</b> <code>.weather [location]</code>", del_in=8)
+        await message.reply("<b>Usage:</b> <code>.weather [location]</code>", del_in=MEDIUM_TIMEOUT)
         return
 
     location = message.input.strip()
@@ -67,4 +69,4 @@ async def weather_handler(bot: BOT, message: Message):
         error_msg = str(e)
         if "404" in error_msg:
             error_msg = f"Location '{location}' not found."
-        await progress_msg.edit(f"<b>Error:</b> <code>{html.escape(error_msg)}</code>", del_in=10)
+        await progress_msg.edit(f"<b>Error:</b> <code>{html.escape(error_msg)}</code>", del_in=LARGE_TIMEOUT)
