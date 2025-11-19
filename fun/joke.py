@@ -5,8 +5,9 @@ from pyrogram.types import Message
 
 from app import BOT, bot
 
+from app.modules.settings import TINY_TIMEOUT, SMALL_TIMEOUT, MEDIUM_TIMEOUT, LONG_TIMEOUT, VERY_LONG_TIMEOUT, LARGE_TIMEOUT
+
 API_URL = "https://official-joke-api.appspot.com/random_joke"
-ERROR_VISIBLE_DURATION = 8
 
 def safe_escape(text: str) -> str:
     escaped_text = html.escape(str(text))
@@ -44,4 +45,4 @@ async def joke_handler(bot: BOT, message: Message):
 
     except Exception as e:
         error_text = f"<b>Error:</b> Could not fetch a joke.\n<code>{html.escape(str(e))}</code>"
-        await progress_message.edit(error_text, del_in=ERROR_VISIBLE_DURATION)
+        await progress_message.edit(error_text, del_in=LONG_TIMEOUT)
