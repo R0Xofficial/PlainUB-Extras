@@ -15,7 +15,7 @@ def safe_escape(text: str) -> str:
 async def save_note_handler(bot: BOT, message: Message):
     """
     CMD: ADDNOTE / SAVE
-    INFO: Saves a new note. Can save text, media, or entire messages.
+    INFO: Saves a new note. Note names are case-insensitive.
     USAGE:
         .save [note_name] [text content]
         .save [note_name] (while replying to a message/media to save it)
@@ -27,7 +27,8 @@ async def save_note_handler(bot: BOT, message: Message):
     args = message.input.split(" ", 1)
     if not args or not args[0]:
         await message.reply("You need to provide a name for the note.", del_in=5); return
-    note_name = args[0]
+    
+    note_name = args[0].lower()
 
     content = None
     if message.replied:
@@ -46,7 +47,7 @@ async def save_note_handler(bot: BOT, message: Message):
 async def delete_note_handler(bot: BOT, message: Message):
     """
     CMD: DELNOTE / CLEAR
-    INFO: Deletes a saved note.
+    INFO: Deletes a saved note. Note names are case-insensitive.
     USAGE:
         .delnote [note_name]
     """
@@ -54,6 +55,7 @@ async def delete_note_handler(bot: BOT, message: Message):
     if not note_name:
         await message.reply("You need to specify which note to delete.", del_in=5); return
 
+    note_name = note_name.lower()
     deleted = await NOTES_DB.delete_data(id=note_name)
     if deleted:
         await message.reply(f"Note `{note_name}` has been deleted.", del_in=5)
@@ -82,7 +84,7 @@ async def list_notes_handler(bot: BOT, message: Message):
 async def get_note_by_command(bot: BOT, message: Message):
     """
     CMD: GET
-    INFO: Retrieves and sends a saved note, including any media.
+    INFO: Retrieves a saved note. Note names are case-insensitive.
     USAGE:
         .get [note_name]
     """
@@ -90,6 +92,7 @@ async def get_note_by_command(bot: BOT, message: Message):
     if not note_name:
         await message.reply("You need to specify which note to get.", del_in=5); return
 
+    note_name = note_name.lower()
     note = await NOTES_DB.find_one({"_id": note_name})
     if not note:
         await message.reply(f"Note `{note_name}` not found.", del_in=5); return
