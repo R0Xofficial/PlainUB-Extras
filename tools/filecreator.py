@@ -5,9 +5,10 @@ from pyrogram.types import Message, ReplyParameters
 
 from app import BOT, bot
 
+from app.modules.settings import TINY_TIMEOUT, SMALL_TIMEOUT, MEDIUM_TIMEOUT, LONG_TIMEOUT, VERY_LONG_TIMEOUT, LARGE_TIMEOUT
+
 TEMP_DIR = "temp_filecreator/"
 os.makedirs(TEMP_DIR, exist_ok=True)
-ERROR_VISIBLE_DURATION = 8
 
 def sync_create_file(filename: str, content: str) -> str:
     """Synchronously creates a file with the given content in the temp directory."""
@@ -36,7 +37,7 @@ async def filecreator_handler(bot: BOT, message: Message):
     if not message.input:
         return await message.reply(
             "<b>Usage:</b> .filecreate [filename.ext] (content)",
-            del_in=ERROR_VISIBLE_DURATION
+            del_in=MEDIUM_TIMEOUT
         )
 
     parts = message.input.split(maxsplit=1)
@@ -51,7 +52,7 @@ async def filecreator_handler(bot: BOT, message: Message):
         content_to_write = replied_msg.text
         reply_target = replied_msg
     else:
-        return await message.reply("Please provide content directly or by replying to a text message.", del_in=ERROR_VISIBLE_DURATION)
+        return await message.reply("Please provide content directly or by replying to a text message.", del_in=MEDIUM_TIMEOUT)
 
     progress_message = await message.reply("<code>Creating file...</code>")
     
@@ -74,7 +75,7 @@ async def filecreator_handler(bot: BOT, message: Message):
 
     except Exception as e:
         error_text = f"<b>Error:</b> Could not create file.\n<code>{html.escape(str(e))}</code>"
-        await progress_message.edit(error_text, del_in=ERROR_VISIBLE_DURATION)
+        await progress_message.edit(error_text, del_in=LONG_TIMEOUT)
     finally:
         for f in temp_files:
             if f and os.path.exists(f):
