@@ -114,7 +114,7 @@ async def get_note_by_command(bot: BOT, message: Message):
                 reply_parameters=reply_params
             )
         except Exception:
-            await bot.send_message(message.chat.id, "<i>Error: The saved media for this note could not be found on the log channel. It might have been deleted.</i>")
+            await bot.send_message(message.chat.id, "<i>Error: The saved media for this note could not be found on the log channel. It might have been deleted or LOG_CHAT has set to pirvate messages.</i>")
     else:
         await bot.send_message(
             chat_id=message.chat.id,
