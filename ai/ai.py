@@ -7,13 +7,14 @@ from dotenv import load_dotenv
 
 from app import BOT, bot
 
+from app.modules.settings import TINY_TIMEOUT, SMALL_TIMEOUT, MEDIUM_TIMEOUT, LONG_TIMEOUT, VERY_LONG_TIMEOUT, LARGE_TIMEOUT
+
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 MODULES_DIR = os.path.dirname(SCRIPT_DIR)
 ENV_PATH = os.path.join(MODULES_DIR, "extra_config.env")
 load_dotenv(dotenv_path=ENV_PATH)
 CF_ACCOUNT_ID = os.getenv("CF_ACCOUNT_ID")
 CF_API_TOKEN = os.getenv("CF_API_TOKEN")
-ERROR_VISIBLE_DURATION = 15
 
 @bot.add_cmd(cmd="ask")
 async def ask_handler(bot: BOT, message: Message):
@@ -25,7 +26,7 @@ async def ask_handler(bot: BOT, message: Message):
         .ask (in reply to a message to use its text as context)
     """
     if not CF_ACCOUNT_ID or not CF_API_TOKEN or "YOUR_KEY" in CF_API_TOKEN:
-        return await message.reply("<b>Cloudflare AI not configured.</b>", del_in=ERROR_VISIBLE_DURATION)
+        return await message.reply("<b>Cloudflare AI not configured.</b>", del_in=LONG_TIMEOUT)
 
     prompt = message.input
     display_prompt = prompt
@@ -38,7 +39,7 @@ async def ask_handler(bot: BOT, message: Message):
             display_prompt = "(Summarizing replied text)"
             prompt = f"Summarize or analyze the following text:\n{replied_text}"
             
-    if not prompt: return await message.reply("<b>Usage:</b> .ask [question]", del_in=ERROR_VISIBLE_DURATION)
+    if not prompt: return await message.reply("<b>Usage:</b> .ask [question]", del_in=MEDIUM_TIMEOUT)
 
     progress_message = await message.reply("<code>Thinking...</code>")
     try:
@@ -76,6 +77,6 @@ async def ask_handler(bot: BOT, message: Message):
             raise Exception(f"API Error: {response_data.get('errors') or 'Unknown error'}")
 
     except requests.exceptions.Timeout:
-         await progress_message.edit("<b>Error:</b> The request to the AI timed out.", del_in=ERROR_VISIBLE_DURATION)
+         await progress_message.edit("<b>Error:</b> The request to the AI timed out.", del_in=LONG_TIMEOUT)
     except Exception as e:
-        await progress_message.edit(f"<b>Error:</b> Could not get a response.\n<code>{html.escape(str(e))}</code>", del_in=ERROR_VISIBLE_DURATION)
+        await progress_message.edit(f"<b>Error:</b> Could not get a response.\n<code>{html.escape(str(e))}</code>", del_in=LONG_TIMEOUT)
