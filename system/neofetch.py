@@ -4,7 +4,7 @@ from pyrogram.types import Message
 
 from app import BOT, bot
 
-ERROR_VISIBLE_DURATION = 8
+from app.modules.settings import TINY_TIMEOUT, SMALL_TIMEOUT, MEDIUM_TIMEOUT, LONG_TIMEOUT, VERY_LONG_TIMEOUT, LARGE_TIMEOUT
 
 async def run_command(command: str) -> tuple[str, str, int]:
     """
@@ -48,4 +48,4 @@ async def neofetch_handler(bot: BOT, message: Message):
 
     except Exception as e:
         error_text = f"<b>Error:</b> Could not run neofetch.\n<code>{html.escape(str(e))}</code>"
-        await progress_message.edit(error_text, del_in=ERROR_VISIBLE_DURATION)
+        await progress_message.edit(error_text, del_in=LONG_TIMEOUT)
