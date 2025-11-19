@@ -6,6 +6,8 @@ from pyrogram.types import Message, ReplyParameters
 
 from app import BOT, bot
 
+from app.modules.settings import TINY_TIMEOUT, SMALL_TIMEOUT, MEDIUM_TIMEOUT, LONG_TIMEOUT, VERY_LONG_TIMEOUT, LARGE_TIMEOUT
+
 TEMP_DIR = "temp_codeit/"
 os.makedirs(TEMP_DIR, exist_ok=True)
 ERROR_VISIBLE_DURATION = 8
@@ -131,13 +133,13 @@ async def codeit_handler(bot: BOT, message: Message):
     replied_msg = message.replied
     
     if not message.input:
-        return await message.reply("<b>Usage:</b> .codeit <language> [text]", del_in=ERROR_VISIBLE_DURATION)
+        return await message.reply("<b>Usage:</b> .codeit <language> [text]", del_in=MEDIUM_TIMEOUT)
 
     parts = message.input.split(maxsplit=1)
     lang_alias = parts[0].lower()
     
     if lang_alias not in LANGUAGES:
-        return await message.reply(f"Unsupported language: <code>{lang_alias}</code>.", del_in=ERROR_VISIBLE_DURATION)
+        return await message.reply(f"Unsupported language: <code>{lang_alias}</code>.", del_in=LONG_TIMEOUT)
 
     lang_name, file_ext = LANGUAGES[lang_alias]
     
@@ -147,7 +149,7 @@ async def codeit_handler(bot: BOT, message: Message):
     elif replied_msg and replied_msg.text:
         text_to_code = replied_msg.text
     else:
-        return await message.reply("Please provide text or reply to a text message.", del_in=ERROR_VISIBLE_DURATION)
+        return await message.reply("Please provide text or reply to a text message.", del_in=LONG_TIMEOUT)
 
     progress_message = await message.reply("<code>Generating code...</code>")
     
@@ -180,7 +182,7 @@ async def codeit_handler(bot: BOT, message: Message):
 
     except Exception as e:
         error_text = f"<b>Error:</b> Could not generate code.\n<code>{html.escape(str(e))}</code>"
-        await progress_message.edit(error_text, del_in=ERROR_VISIBLE_DURATION)
+        await progress_message.edit(error_text, del_in=LONG_TIMEOUT)
     finally:
         for f in temp_files:
             if f and os.path.exists(f):
