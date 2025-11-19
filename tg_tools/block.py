@@ -5,6 +5,8 @@ from pyrogram.types import Message, User
 
 from app import BOT, bot
 
+from app.modules.settings import TINY_TIMEOUT, SMALL_TIMEOUT, MEDIUM_TIMEOUT, LONG_TIMEOUT, VERY_LONG_TIMEOUT, LARGE_TIMEOUT
+
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 APP_DIR = os.path.dirname(os.path.dirname(SCRIPT_DIR))
 BOT_ROOT = os.path.dirname(APP_DIR)
@@ -17,8 +19,6 @@ if os.path.exists(CONFIG_ENV_PATH):
 LOG_CHAT_STR = os.getenv("LOG_CHAT")
 LOG_CHAT = int(LOG_CHAT_STR) if LOG_CHAT_STR and LOG_CHAT_STR.strip() else None
 
-ERROR_VISIBLE_DURATION = 8
-
 @bot.add_cmd(cmd=["block", "unblock"])
 async def block_unblock_handler(bot: BOT, message: Message):
     user_to_act_on: User = None
@@ -30,7 +30,7 @@ async def block_unblock_handler(bot: BOT, message: Message):
         elif message.replied and message.replied.from_user:
             user_to_act_on = message.replied.from_user
         else:
-            await message.reply("<b>Usage:</b> Reply to a user or provide their ID/@username.", del_in=ERROR_VISIBLE_DURATION)
+            await message.reply("<b>Usage:</b> Reply to a user or provide their ID/@username.", del_in=MEDIUM_TIMEOUT)
             return
             
         if not user_to_act_on:
@@ -58,4 +58,4 @@ async def block_unblock_handler(bot: BOT, message: Message):
                 pass
 
     except Exception as e:
-        await message.reply(f"<b>Error:</b> <code>{html.escape(str(e))}</code>", del_in=ERROR_VISIBLE_DURATION)
+        await message.reply(f"<b>Error:</b> <code>{html.escape(str(e))}</code>", del_in=LARGE_TIMEOUT)
