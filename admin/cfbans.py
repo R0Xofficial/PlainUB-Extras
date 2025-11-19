@@ -8,7 +8,7 @@ from ub_core.utils.helpers import get_name
 
 from app import BOT, Config, CustomDB, Message, bot, extra_config
 
-from app.modules.settings import SMALL_TIMEOUT, MEDIUM_TIMEOUT, LONG_TIMEOUT
+from app.modules.settings import TINY_TIMEOUT, SMALL_TIMEOUT, MEDIUM_TIMEOUT, LONG_TIMEOUT, VERY_LONG_TIMEOUT, LARGE_TIMEOUT
 
 FED_DB = CustomDB["FED_LIST"]
 
