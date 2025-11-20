@@ -113,7 +113,7 @@ async def miui_handler(bot: BOT, message: Message):
                 blockquote_content = "\n".join(sorted(formatted_lines))
                 
                 res = (
-                    f"{header}\n<blockquote expandable>{blockquote_content}</blockquote>\n"
+                    f"{header}\n<blockquote>{blockquote_content}</blockquote>\n"
                     "Please try again with a more specific name or use the exact codename."
                 )
                 
