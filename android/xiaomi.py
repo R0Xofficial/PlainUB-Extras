@@ -50,8 +50,6 @@ async def whatis_handler(bot: BOT, message: Message):
     INFO: Finds the marketing name of a Xiaomi device by its codename.
     USAGE:
         .whatis [codename]
-    EXAMPLE:
-        .whatis onyx
     """
     if not message.input:
         await message.reply("Please provide a device codename.", del_in=MEDIUM_TIMEOUT)
@@ -79,8 +77,6 @@ async def codename_handler(bot: BOT, message: Message):
     INFO: Finds the codename of a Xiaomi device by its marketing name.
     USAGE:
         .codename [marketing name]
-    EXAMPLE:
-        .codename poco f6
     """
     if not message.input:
         await message.reply("Please provide a marketing name to search for.", del_in=MEDIUM_TIMEOUT)
@@ -111,12 +107,10 @@ async def codename_handler(bot: BOT, message: Message):
 @bot.add_cmd(cmd="xspecs")
 async def specs_handler(bot: BOT, message: Message):
     """
-    CMD: SPECS
+    CMD: XSPECS
     INFO: Shows detailed specifications of a Xiaomi device.
     USAGE:
-        .specs [codename | marketing name]
-    EXAMPLE:
-        .specs garnet
+        .xspecs [codename | marketing name]
     """
     if not message.input:
         await message.reply("Please provide a device codename or name.", del_in=MEDIUM_TIMEOUT)
