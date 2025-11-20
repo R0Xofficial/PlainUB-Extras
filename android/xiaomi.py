@@ -4,7 +4,7 @@ import yaml
 from pyrogram.types import Message, LinkPreviewOptions, InlineKeyboardMarkup, InlineKeyboardButton
 
 from app import BOT, bot
-from app.modules.settings import MEDIUM_TIMEOUT, LARGE_TIMEOUT
+from app.modules.settings import TINY_TIMEOUT, SMALL_TIMEOUT, MEDIUM_TIMEOUT, LONG_TIMEOUT, VERY_LONG_TIMEOUT, LARGE_TIMEOUT
 
 MIUI_YAML_URL = "https://raw.githubusercontent.com/XiaomiFirmwareUpdater/miui-updates-tracker/master/data/latest.yml"
 HEADERS = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/108.0.0.0 Safari/537.36"}
@@ -34,7 +34,7 @@ async def miui_handler(bot: BOT, message: Message):
         matches = [fw for fw in all_firmware if codename in fw.get("codename", "")]
         
         if not matches:
-            await progress.edit(f"<b>Error:</b> No MIUI/HyperOS firmware found for codename <code>{codename}</code>.", del_in=LARGE_TIMEOUT)
+            await progress.edit(f"<b>Error:</b> No MIUI/HyperOS firmware found for codename <code>{codename}</code>.", del_in=LONG_TIMEOUT)
             return
             
         markup = []
@@ -56,4 +56,4 @@ async def miui_handler(bot: BOT, message: Message):
         )
 
     except Exception as e:
-        await progress.edit(f"<b>An error occurred:</b> <code>{html.escape(str(e))}</code>", del_in=LARGE_TIMEOUT)
+        await progress.edit(f"<b>An error occurred:</b> <code>{html.escape(str(e))}</code>", del_in=LONG_TIMEOUT)
