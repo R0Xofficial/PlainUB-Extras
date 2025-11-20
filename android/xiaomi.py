@@ -72,14 +72,24 @@ async def codename_handler(bot: BOT, message: Message):
     
     if matches:
         header = f"<b>Found {len(matches)} matching devices:</b>"
-        formatted_lines = [f"<b>{safe_escape(name)}</b> is <code>{safe_escape(codename)}</code>" for codename, name in matches.items()]
-        blockquote_content = "\n\n".join(sorted(formatted_lines))
-        res = f"{header}\n<blockquote>{blockquote_content}</blockquote>"
         
-        if len(res) > 4096:
-            res = f"<b>Found {len(matches)} matching devices (showing truncated list):</b>\n\n"
-            res += "\n\n".join(sorted(formatted_lines))
-            res = res[:4000] + "\n\n<b>...and more results. Refine your search.</b>"
+        formatted_lines = [f"<code>{safe_escape(name)}</code> is <b>{safe_escape(codename)}</b>" for codename, name in matches.items()]
+        blockquote_content = "\n\n".join(sorted(formatted_lines))
+        
+        full_res = f"{header}\n<blockquote expandable>{blockquote_content}</blockquote>"
+        
+        if len(full_res) > 4096:
+            available_space = 4096 - len(header) - 50
+            truncated_content = blockquote_content[:available_space]
+            res = (
+                f"{header}\n"
+                f"<blockquote expandable>{truncated_content}\n...</blockquote>\n"
+                "<b>...and more results. Refine your search.</b>"
+            )
+        else:
+            res = full_res
+            
+        await progress.edit(res, link_preview_options=LinkPreviewOptions(is_disabled=True))
             
         await progress.edit(res, link_preview_options=LinkPreviewOptions(is_disabled=True))
     else:
@@ -113,7 +123,7 @@ async def miui_handler(bot: BOT, message: Message):
                 blockquote_content = "\n\n".join(sorted(formatted_lines))
                 
                 res = (
-                    f"{header}\n<blockquote>{blockquote_content}</blockquote>\n"
+                    f"{header}\n<blockquote expandable>{blockquote_content}</blockquote>\n"
                     "Please try again with a more specific name or use the exact codename."
                 )
                 
