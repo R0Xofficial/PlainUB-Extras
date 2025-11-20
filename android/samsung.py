@@ -38,12 +38,12 @@ async def checkfw_handler(bot: BOT, message: Message):
     model, csc = args[0].upper(), args[1].upper()
     if not model.startswith("SM-"): model = f"SM-{model}"
         
-    progress = await message.reply(f"<code>Checking official Samsung servers for {model}/{csc}...</code>")
+    progress = await message.reply(f"<code>Checking Samsung OTA servers...</code>")
     
     try:
         data = await get_samsung_ota_data(model, csc)
         if not data:
-            await progress.edit(f"<b>Error:</b> No firmware found for <code>{model}/{csc}</code>.", del_in=LONG_TIMEOUT); return
+            await progress.edit(f"<b>No firmware</b> found for <code>{model}/{csc}</code>.", del_in=LONG_TIMEOUT); return
         
         res = [f"<b>Latest Firmware for {model} ({csc})</b>\n", f"<b>PDA:</b> <code>{data['pda']}</code>", f"<b>CSC:</b> <code>{data['csc_ver']}</code>"]
         if data['phone']: res.append(f"<b>Phone:</b> <code>{data['phone']}</code>")
@@ -65,12 +65,12 @@ async def getfw_handler(bot: BOT, message: Message):
     model, csc = args[0].upper(), args[1].upper()
     if not model.startswith("SM-"): model = f"SM-{model}"
 
-    progress = await message.reply(f"<code>Fetching info and links for {model}/{csc}...</code>")
+    progress = await message.reply(f"<code>Fetching firmware info...</code>")
     
     try:
         data = await get_samsung_ota_data(model, csc)
         if not data:
-            await progress.edit(f"<b>Error:</b> No firmware found for <code>{model}/{csc}</code> to generate links.", del_in=LONG_TIMEOUT); return
+            await progress.edit(f"<b>No firmware</b> found for <code>{model}/{csc}</code>.", del_in=LONG_TIMEOUT); return
             
         res = [f"<b>Latest Firmware for {model} ({csc})</b>\n", f"<b>PDA:</b> <code>{data['pda']}</code>", f"<b>CSC:</b> <code>{data['csc_ver']}</code>"]
         if data['phone']: res.append(f"<b>Phone:</b> <code>{data['phone']}</code>")
