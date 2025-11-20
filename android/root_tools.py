@@ -3,6 +3,8 @@ import asyncio
 import html
 from pyrogram.types import LinkPreviewOptions, Message
 
+from app import BOT, bot, Message
+
 from app.modules.settings import TINY_TIMEOUT, SMALL_TIMEOUT, MEDIUM_TIMEOUT, LONG_TIMEOUT, VERY_LONG_TIMEOUT, LARGE_TIMEOUT
 
 def sync_get_releases(owner: str, repo: str) -> list:
@@ -50,3 +52,30 @@ async def get_android_versions(bot, message: Message, owner: str, repo: str, sho
     except Exception as e:
         error_text = f"<b>An error occurred:</b>\n<code>{html.escape(str(e))}</code>"
         await progress_message.edit(error_text, del_in=LARGE_TIMEOUT)
+
+
+@bot.add_cmd(cmd="magisk")
+async def magisk_handler(bot: BOT, message: Message):
+    """
+    CMD: MAGISK
+    INFO: Gets latest Magisk stable & pre-release.
+    """
+    await get_android_versions(bot, message, owner="topjohnwu", repo="Magisk", show_both=True)
+
+
+@bot.add_cmd(cmd=["kernelsunext", "ksun"])
+async def kernelsunext_handler(bot: BOT, message: Message):
+    """
+    CMD: KERNELSUNEXT / KSUN
+    INFO: Gets the latest KernelSU-Next release.
+    """
+    await get_android_versions(bot, message, owner="KernelSU-Next", repo="KernelSU-Next", show_both=False)
+
+
+@bot.add_cmd(cmd=["kernelsu", "ksu"])
+async def kernelsu_handler(bot: BOT, message: Message):
+    """
+    CMD: KERNELSU / KSU
+    INFO: Gets latest KernelSU stable & pre-release.
+    """
+    await get_android_versions(bot, message, owner="tiann", repo="KernelSU", show_both=True)
