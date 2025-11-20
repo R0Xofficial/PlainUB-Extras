@@ -40,7 +40,7 @@ async def whatis_handler(bot: BOT, message: Message):
         .whatis [codename]
     """
     if not message.input: await message.reply("Please provide a codename.", del_in=MEDIUM_TIMEOUT); return
-    progress = await message.reply("<code>Searching...</code>")
+    progress = await message.reply("<code>Searching device...</code>")
     
     if not DEVICE_DATA: await load_device_data()
     if DEVICE_DATA is None: await progress.edit("<b>Error:</b> Could not load device database.", del_in=LONG_TIMEOUT); return
@@ -63,7 +63,7 @@ async def codename_handler(bot: BOT, message: Message):
         .codename [marketing name]
     """
     if not message.input: await message.reply("Please provide a name.", del_in=MEDIUM_TIMEOUT); return
-    progress = await message.reply("<code>Searching...</code>")
+    progress = await message.reply("<code>Searching device...</code>")
     if not DEVICE_DATA: await load_device_data()
     if DEVICE_DATA is None: await progress.edit("<b>Error:</b> Could not load device database.", del_in=LONG_TIMEOUT); return
 
@@ -71,10 +71,16 @@ async def codename_handler(bot: BOT, message: Message):
     matches = {codename: name for codename, name in DEVICE_DATA.items() if term in name.lower()}
     
     if matches:
-        res = f"<b>Found {len(matches)} matching devices:</b>\n\n"
-        formatted = [f"<blockquote><code>{safe_escape(name)}</code> is <b>{safe_escape(codename)}</b></blockquote>" for codename, name in matches.items()]
-        res += "\n".join(sorted(formatted))
-        if len(res) > 4096: res = res[:4000] + "\n\n<b>...and more results. Refine your search.</b>"
+        header = f"<b>🔍 Found {len(matches)} matching devices:</b>"
+        formatted_lines = [f"<code>{safe_escape(name)}</code> is <b>{safe_escape(codename)}</b>" for codename, name in matches.items()]
+        blockquote_content = "\n".join(sorted(formatted_lines))
+        res = f"{header}\n<blockquote>{blockquote_content}</blockquote>"
+        
+        if len(res) > 4096:
+            res = f"<b>🔍 Found {len(matches)} matching devices (showing truncated list):</b>\n\n"
+            res += "\n".join(sorted(formatted_lines))
+            res = res[:4000] + "\n\n<b>...and more results. Refine your search.</b>"
+            
         await progress.edit(res, link_preview_options=LinkPreviewOptions(is_disabled=True))
     else:
         await progress.edit(f"No devices found matching '<code>{safe_escape(term)}</code>'.", del_in=LONG_TIMEOUT)
@@ -90,7 +96,7 @@ async def miui_handler(bot: BOT, message: Message):
     if not message.input: await message.reply("<b>Usage:</b> <code>.miui [codename | name]</code>", del_in=MEDIUM_TIMEOUT); return
 
     query = message.input.lower()
-    progress = await message.reply(f"<code>Searching for firmware...</code>")
+    progress = await message.reply(f"<code>Searching firmware...</code>")
     
     try:
         target_codename = query
@@ -102,11 +108,17 @@ async def miui_handler(bot: BOT, message: Message):
             if len(possible_devices) == 1:
                 target_codename = list(possible_devices.keys())[0]
             elif len(possible_devices) > 1:
-                res = f"<b>Query is ambiguous. Found {len(possible_devices)} devices:</b>\n\n"
-                formatted = [f"<code>{safe_escape(name)}</code> is <b>{safe_escape(codename)}</b>" for codename, name in possible_devices.items()]
-                res += "\n".join(sorted(formatted))
-                res += "\n\nPlease try again with a more specific name or use the exact codename."
-                await progress.edit(res, link_preview_options=LinkPreviewOptions(is_disabled=True)); return
+                header = f"<b>Query is ambiguous. Found {len(possible_devices)} devices:</b>"
+                formatted_lines = [f"<code>{safe_escape(name)}</code> is <b>{safe_escape(codename)}</b>" for codename, name in possible_devices.items()]
+                blockquote_content = "\n".join(sorted(formatted_lines))
+                
+                res = (
+                    f"{header}\n<blockquote expandable>{blockquote_content}</blockquote>\n"
+                    "Please try again with a more specific name or use the exact codename."
+                )
+                
+                await progress.edit(res, link_preview_options=LinkPreviewOptions(is_disabled=True))
+                return
         
         if DEVICE_DATA is not None:
             target_device_name = DEVICE_DATA.get(target_codename, query.capitalize())
