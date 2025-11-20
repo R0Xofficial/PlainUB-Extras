@@ -72,7 +72,7 @@ async def codename_handler(bot: BOT, message: Message):
     
     if matches:
         res = f"<b>Found {len(matches)} matching devices:</b>\n\n"
-        formatted = [f"<code>{safe_escape(name)}</code> is <b>{safe_escape(codename)}</b>" for codename, name in matches.items()]
+        formatted = [f"<blockquote><code>{safe_escape(name)}</code> is <b>{safe_escape(codename)}</b></blockquote>" for codename, name in matches.items()]
         res += "\n".join(sorted(formatted))
         if len(res) > 4096: res = res[:4000] + "\n\n<b>...and more results. Refine your search.</b>"
         await progress.edit(res, link_preview_options=LinkPreviewOptions(is_disabled=True))
