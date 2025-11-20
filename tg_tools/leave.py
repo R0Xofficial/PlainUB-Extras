@@ -39,4 +39,4 @@ async def leave_chat_handler(bot: BOT, message: Message):
             asyncio.create_task(_delayed_leave(message.chat.id))
 
     except Exception as e:
-        await message.reply(f"<b>Error:</b> Could not leave chat.\n<code>{html.escape(str(e))}</code>", del_in=LARGE_TIMEOUT)
+        await message.reply(f"<b>Error:</b> Could not leave chat.\n<code>{html.escape(str(e))}</code>", del_in=LONG_TIMEOUT)
