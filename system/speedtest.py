@@ -27,7 +27,8 @@ async def speedtest_handler(bot: BOT, message: Message):
     """
     CMD: SPEEDTEST
     INFO: Runs a speedtest to check internet connection speed.
-    USAGE: .speedtest
+    USAGE:
+        .speedtest
     """
     
     progress_message = await message.reply("<code>Running speedtest...</code>")
