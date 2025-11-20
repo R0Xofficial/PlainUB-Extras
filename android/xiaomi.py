@@ -4,7 +4,7 @@ import aiohttp
 from pyrogram.types import Message, LinkPreviewOptions
 
 from app import BOT, bot
-from app.modules.settings import SMALL_TIMEOUT, LARGE_TIMEOUT
+from app.modules.settings import TINY_TIMEOUT, SMALL_TIMEOUT, MEDIUM_TIMEOUT, LONG_TIMEOUT, VERY_LONG_TIMEOUT, LARGE_TIMEOUT
 
 DEVICES_JSON_URL = "https://raw.githubusercontent.com/XiaomiFirmwareUpdater/mi-firmware-updater/master/data/devices.json"
 SPECS_API_URL = "https://xiaomifirmwareupdater.com/api/v1/specs/"
