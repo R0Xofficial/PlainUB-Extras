@@ -124,4 +124,6 @@ async def specs_handler_samsung(bot: BOT, message: Message):
         if len(final_message) > 4096:
             final_message = final_message[:4000] + "\n\n<b>...and more specifications.</b>"
 
-        await progress.edit(final_mess
+        await progress.edit(final_message)
+    except Exception as e:
+        await progress.edit(f"<b>An error occurred:</b> <code>{html.escape(str(e))}</code>", del_in=LONG_TIMEOUT)
