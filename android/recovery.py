@@ -1,5 +1,5 @@
 import html
-from pyrogram.types import Message, InlineKeyboardMarkup, InlineKeyboardButton
+from pyrogram.types import Message, InlineKeyboardMarkup, InlineKeyboardButton, LinkPreviewOptions
 
 from app import BOT, bot
 from app.modules.settings import MEDIUM_TIMEOUT
@@ -30,7 +30,7 @@ async def orangefox_link_handler(bot: BOT, message: Message):
     await message.reply(
         response_text,
         reply_markup=InlineKeyboardMarkup(buttons),
-        disable_web_page_preview=True
+        link_preview_options=LinkPreviewOptions(is_disabled=True)
     )
 
 @bot.add_cmd(cmd="twrp")
@@ -59,7 +59,7 @@ async def twrp_link_handler(bot: BOT, message: Message):
     await message.reply(
         response_text,
         reply_markup=InlineKeyboardMarkup(buttons),
-        disable_web_page_preview=True
+        link_preview_options=LinkPreviewOptions(is_disabled=True)
     )
 
 @bot.add_cmd(cmd=["pitchblack", "pb", "pbrp"])
@@ -88,5 +88,5 @@ async def pitchblack_link_handler(bot: BOT, message: Message):
     await message.reply(
         response_text,
         reply_markup=InlineKeyboardMarkup(buttons),
-        disable_web_page_preview=True
+        link_preview_options=LinkPreviewOptions(is_disabled=True)
     )
