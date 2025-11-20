@@ -47,7 +47,7 @@ async def miui_handler(bot: BOT, message: Message):
         device_name = matches[0].get('name', codename.capitalize())
         device_name = device_name.replace(f"({codename})", "").strip()
 
-        msg = f"<b>📱 Latest firmware for {html.escape(device_name)}:</b>"
+        msg = f"<b>Latest firmware for {html.escape(device_name)}:</b>"
         
         await progress.edit(
             msg,
