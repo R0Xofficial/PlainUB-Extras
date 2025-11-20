@@ -7,16 +7,19 @@ from app import BOT, bot
 from app.modules.settings import TINY_TIMEOUT, SMALL_TIMEOUT, MEDIUM_TIMEOUT, LONG_TIMEOUT, VERY_LONG_TIMEOUT, LARGE_TIMEOUT
 
 DEVICES_JSON_URL = "https://raw.githubusercontent.com/XiaomiFirmwareUpdater/mi-firmware-updater/master/data/devices.json"
-SPECS_API_URL = "https://xiaomifirmwareupdater.com/api/v1/specs/"
+SPECS_API_URL = "https://api.rev-tech.me/v1/devices/details/"
 
 DEVICE_DATA = []
+HEADERS = {
+    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/107.0.0.0 Safari/537.36"
+}
 
 async def load_device_data():
     global DEVICE_DATA
     if DEVICE_DATA:
         return
     try:
-        async with aiohttp.ClientSession() as session:
+        async with aiohttp.ClientSession(headers=HEADERS) as session:
             async with session.get(DEVICES_JSON_URL) as response:
                 response.raise_for_status()
                 DEVICE_DATA = await response.json()
@@ -29,8 +32,8 @@ def safe_escape(text: str) -> str:
 async def find_device(query: str):
     if not DEVICE_DATA:
         await load_device_data()
-        if DEVICE_DATA is None:
-            return None
+    if DEVICE_DATA is None:
+        return None
     
     query = query.lower()
     for device in DEVICE_DATA:
@@ -45,10 +48,14 @@ async def whatis_handler(bot: BOT, message: Message):
     """
     CMD: WHATIS
     INFO: Finds the marketing name of a Xiaomi device by its codename.
-    USAGE: .whatis [codename]
+    USAGE:
+        .whatis [codename]
+    EXAMPLE:
+        .whatis onyx
     """
     if not message.input:
-        await message.reply("Please provide a device codename.", del_in=MEDIUM_TIMEOUT); return
+        await message.reply("Please provide a device codename.", del_in=MEDIUM_TIMEOUT)
+        return
         
     progress = await message.reply("<code>Searching...</code>")
     
@@ -70,17 +77,22 @@ async def codename_handler(bot: BOT, message: Message):
     """
     CMD: CODENAME
     INFO: Finds the codename of a Xiaomi device by its marketing name.
-    USAGE: .codename [marketing name]
+    USAGE:
+        .codename [marketing name]
+    EXAMPLE:
+        .codename poco f6
     """
     if not message.input:
-        await message.reply("Please provide a marketing name to search for.", del_in=MEDIUM_TIMEOUT); return
+        await message.reply("Please provide a marketing name to search for.", del_in=MEDIUM_TIMEOUT)
+        return
 
     progress = await message.reply("<code>Searching...</code>")
 
     if not DEVICE_DATA:
         await load_device_data()
-        if DEVICE_DATA is None:
-            await progress.edit("<b>Error:</b> Could not load device database.", del_in=LONG_TIMEOUT); return
+    if DEVICE_DATA is None:
+        await progress.edit("<b>Error:</b> Could not load device database.", del_in=LONG_TIMEOUT)
+        return
 
     search_term = message.input.lower()
     matches = [dev for dev in DEVICE_DATA if any(search_term in name.lower() for name in dev.get("name", []))]
@@ -96,41 +108,50 @@ async def codename_handler(bot: BOT, message: Message):
     else:
         await progress.edit(f"<b>Error:</b> No devices found matching '<code>{safe_escape(search_term)}</code>'.", del_in=LONG_TIMEOUT)
 
-@bot.add_cmd(cmd="xspecs")
+@bot.add_cmd(cmd="specs")
 async def specs_handler(bot: BOT, message: Message):
     """
-    CMD: XSPECS
-    INFO: Shows the specifications of a Xiaomi device.
-    USAGE: .xspecs [codename | marketing name]
+    CMD: SPECS
+    INFO: Shows detailed specifications of a Xiaomi device.
+    USAGE:
+        .specs [codename | marketing name]
+    EXAMPLE:
+        .specs garnet
     """
     if not message.input:
-        await message.reply("Please provide a device codename or name.", del_in=MEDIUM_TIMEOUT); return
+        await message.reply("Please provide a device codename or name.", del_in=MEDIUM_TIMEOUT)
+        return
     
     progress = await message.reply("<code>Searching for device...</code>")
     
     device = await find_device(message.input)
     if not device:
-        await progress.edit(f"<b>Error:</b> Device '<code>{safe_escape(message.input)}</code>' not found.", del_in=LONG_TIMEOUT); return
+        await progress.edit(f"<b>Error:</b> Device '<code>{safe_escape(message.input)}</code>' not found.", del_in=LONG_TIMEOUT)
+        return
         
     await progress.edit("<code>Found device, fetching specifications...</code>")
 
     try:
-        async with aiohttp.ClientSession() as session:
+        async with aiohttp.ClientSession(headers=HEADERS) as session:
             async with session.get(f"{SPECS_API_URL}{device['codename']}") as response:
                 response.raise_for_status()
-                specs = await response.json()
+                specs_data = await response.json()
         
-        if not specs:
-            raise ValueError("No specifications found for this device.")
+        if not specs_data or not specs_data.get("success"):
+            raise ValueError("API returned no data or an error.")
+        
+        specs = specs_data["data"]
+        
+        response_text = [f"<b>📱 Specs for {safe_escape(specs['name'])}</b> (<code>{specs['codename']}</code>)\n"]
+        for spec_group in specs.get("specifications", []):
+            response_text.append(f"\n<b>{html.escape(spec_group['name'])}</b>")
+            for detail in spec_group.get("details", []):
+                response_text.append(f"  - <b>{html.escape(detail['name'])}:</b> <code>{html.escape(detail['value'])}</code>")
+        
+        final_message = "\n".join(response_text)
+        if len(final_message) > 4096:
+            final_message = final_message[:4000] + "\n\n<b>...and more specifications.</b>"
 
-        response_text = [
-            f"<b>📱 Specs for {safe_escape(' / '.join(specs['name']))}</b> (<code>{specs['codename']}</code>)\n",
-            f"<b>Chipset:</b> <code>{safe_escape(specs.get('cpu', 'N/A'))}</code>",
-            f"<b>RAM:</b> <code>{safe_escape(specs.get('ram', 'N/A'))}</code>",
-            f"<b>Display:</b> <code>{safe_escape(specs.get('display', 'N/A'))}</code>",
-            f"<b>Camera:</b> <code>{safe_escape(specs.get('camera', 'N/A'))}</code>",
-            f"<b>Battery:</b> <code>{safe_escape(specs.get('battery', 'N/A'))}</code>"
-        ]
-        await progress.edit("\n".join(response_text))
+        await progress.edit(final_message)
     except Exception as e:
         await progress.edit(f"<b>Error:</b> Could not fetch specifications. <code>{e}</code>", del_in=LONG_TIMEOUT)
