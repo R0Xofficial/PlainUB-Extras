@@ -44,4 +44,4 @@ async def noformat_handler(bot: BOT, message: Message):
         )
         
     except Exception as e:
-        await message.reply(f"<b>Error:</b> Could not send raw format.\n<code>{html.escape(str(e))}</code>", del_in=LARGE_TIMEOUT)
+        await message.reply(f"<b>Error:</b> Could not send raw format.\n<code>{html.escape(str(e))}</code>", del_in=LONG_TIMEOUT)
