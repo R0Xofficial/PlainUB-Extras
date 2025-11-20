@@ -91,7 +91,7 @@ async def codename_handler(bot: BOT, message: Message):
             
         await progress.edit(res, link_preview_options=LinkPreviewOptions(is_disabled=True))
     else:
-        await progress.edit(f"No devices found matching '<code>{safe_escape(term)}</code>'.", del_in=LONG_TIMEOUT)
+        await progress.edit(f"<b>No devices</b> found matching '<code>{safe_escape(term)}</code>'.", del_in=LONG_TIMEOUT)
 
 @bot.add_cmd(cmd="miui")
 async def miui_handler(bot: BOT, message: Message):
@@ -157,7 +157,7 @@ async def miui_handler(bot: BOT, message: Message):
                 if target_codename == codename_field.lower(): matches.append(fw)
         
         if not matches:
-            await progress.edit(f"No firmware found for <code>{query}</code>.", del_in=LONG_TIMEOUT); return
+            await progress.edit(f"<b>No firmware</b> found for <code>{query}</code>.", del_in=LONG_TIMEOUT); return
             
         response_text = [f"<b>Latest firmware for {html.escape(target_device_name)} (<code>{target_codename}</code>):</b>"]
         
