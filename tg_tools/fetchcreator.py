@@ -21,7 +21,7 @@ async def forward_info_handler(bot: BOT, message: Message):
         return
         
     if not replied_msg.forward_date:
-        await message.reply("The replied-to message is not a forward.", del_in=LARGE_TIMEOUT)
+        await message.reply("The replied-to message is not a forward.", del_in=LONG_TIMEOUT)
         return
 
     info_lines = ["<b>Forward Origin Info:</b>"]
