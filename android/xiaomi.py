@@ -73,12 +73,12 @@ async def codename_handler(bot: BOT, message: Message):
     if matches:
         header = f"<b>Found {len(matches)} matching devices:</b>"
         formatted_lines = [f"<b>{safe_escape(name)}</b> is <code>{safe_escape(codename)}</code>" for codename, name in matches.items()]
-        blockquote_content = "\n".join(sorted(formatted_lines))
+        blockquote_content = "\n\n".join(sorted(formatted_lines))
         res = f"{header}\n<blockquote>{blockquote_content}</blockquote>"
         
         if len(res) > 4096:
             res = f"<b>Found {len(matches)} matching devices (showing truncated list):</b>\n\n"
-            res += "\n".join(sorted(formatted_lines))
+            res += "\n\n".join(sorted(formatted_lines))
             res = res[:4000] + "\n\n<b>...and more results. Refine your search.</b>"
             
         await progress.edit(res, link_preview_options=LinkPreviewOptions(is_disabled=True))
@@ -110,7 +110,7 @@ async def miui_handler(bot: BOT, message: Message):
             elif len(possible_devices) > 1:
                 header = f"<b>Query is ambiguous. Found {len(possible_devices)} devices:</b>"
                 formatted_lines = [f"<b>{safe_escape(name)}</b> is <code>{safe_escape(codename)}</code>" for codename, name in possible_devices.items()]
-                blockquote_content = "\n".join(sorted(formatted_lines))
+                blockquote_content = "\n\n".join(sorted(formatted_lines))
                 
                 res = (
                     f"{header}\n<blockquote>{blockquote_content}</blockquote>\n"
