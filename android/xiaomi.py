@@ -90,8 +90,6 @@ async def codename_handler(bot: BOT, message: Message):
             res = full_res
             
         await progress.edit(res, link_preview_options=LinkPreviewOptions(is_disabled=True))
-            
-        await progress.edit(res, link_preview_options=LinkPreviewOptions(is_disabled=True))
     else:
         await progress.edit(f"No devices found matching '<code>{safe_escape(term)}</code>'.", del_in=LONG_TIMEOUT)
 
