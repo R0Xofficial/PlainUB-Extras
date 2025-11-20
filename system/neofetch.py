@@ -29,7 +29,8 @@ async def neofetch_handler(bot: BOT, message: Message):
     """
     CMD: NEOFETCH
     INFO: Runs the neofetch command and displays the output.
-    USAGE: .neofetch
+    USAGE:
+        .neofetch
     """
     
     progress_message = await message.reply("<code>Running neofetch...</code>")
