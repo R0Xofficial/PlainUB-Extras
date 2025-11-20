@@ -96,10 +96,10 @@ async def codename_handler(bot: BOT, message: Message):
     else:
         await progress.edit(f"<b>Error:</b> No devices found matching '<code>{safe_escape(search_term)}</code>'.", del_in=LONG_TIMEOUT)
 
-@bot.add_cmd(cmd="specs")
+@bot.add_cmd(cmd="xspecs")
 async def specs_handler(bot: BOT, message: Message):
     """
-    CMD: SPECS
+    CMD: XSPECS
     INFO: Shows the specifications of a Xiaomi device.
     USAGE: .specs [codename | marketing name]
     """
