@@ -69,7 +69,7 @@ async def codename_handler(bot: BOT, message: Message):
             matches[codename] = names
     
     if matches:
-        res = f"<b>🔍 Found {len(matches)} matching devices:</b>\n\n"
+        res = f"<b>Found {len(matches)} matching devices:</b>\n\n"
         formatted = [f"<code>{safe_escape(' / '.join(names))}</code> is <b>{safe_escape(codename)}</b>" for codename, names in matches.items()]
         res += "\n".join(sorted(formatted))
         if len(res) > 4096: res = res[:4000] + "\n\n<b>...and more results. Refine your search.</b>"
@@ -127,7 +127,7 @@ async def miui_handler(bot: BOT, message: Message):
             await progress.edit(f"<b>Error:</b> No firmware found for <code>{query}</code>.", del_in=LONG_TIMEOUT); return
             
         device_name = matches[0].get('name', query.capitalize()).split('(')[0].strip()
-        response_text = [f"<b>📱 Latest firmware for {html.escape(device_name)}:</b>"]
+        response_text = [f"<b>Latest firmware for {html.escape(device_name)}:</b>"]
         
         for fw in matches[:5]:
             line = (f"\n› <a href=\"{fw['link']}\"><b>{fw['version']}</b> ({fw['branch']})</a>\n"
