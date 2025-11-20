@@ -49,7 +49,7 @@ async def whatis_handler(bot: BOT, message: Message):
     if codename in DEVICE_DATA:
         marketing_names = DEVICE_DATA[codename]
         clean_marketing_names = filter_marketing_names(marketing_names, codename)
-        res = f"<b>Codename:</b> <code>{safe_escape(codename)}</code> is <b>{safe_escape(' / '.join(clean_marketing_names))}</b>"
+        res = f"<code>{safe_escape(codename)}</code> is <b>{safe_escape(' / '.join(clean_marketing_names))}</b>"
         await progress.edit(res)
     else:
         await progress.edit(f"<b>Error:</b> Codename <code>{safe_escape(codename)}</code> not found.", del_in=LONG_TIMEOUT)
@@ -59,7 +59,8 @@ async def codename_handler(bot: BOT, message: Message):
     """
     CMD: CODENAME
     INFO: Finds the codename of a Xiaomi device by its marketing name.
-    USAGE: .codename [marketing name]
+    USAGE:
+        .codename [marketing name]
     """
     if not message.input: await message.reply("Please provide a name.", del_in=MEDIUM_TIMEOUT); return
     progress = await message.reply("<code>Searching...</code>")
@@ -73,7 +74,7 @@ async def codename_handler(bot: BOT, message: Message):
             matches[codename] = names
     
     if matches:
-        res = f"<b>🔍 Found {len(matches)} matching devices:</b>\n\n"
+        res = f"<b>Found {len(matches)} matching devices:</b>\n\n"
         formatted = []
         for codename, names in matches.items():
             clean_names = filter_marketing_names(names, codename)
@@ -96,7 +97,7 @@ async def miui_handler(bot: BOT, message: Message):
     if not message.input: await message.reply("<b>Usage:</b> <code>.miui [codename | name]</code>", del_in=MEDIUM_TIMEOUT); return
 
     query = message.input.lower()
-    progress = await message.reply(f"<code>Searching for {query} firmware...</code>")
+    progress = await message.reply(f"<code>Searching for firmware...</code>")
     
     try:
         target_codename = query
@@ -133,7 +134,7 @@ async def miui_handler(bot: BOT, message: Message):
             await progress.edit(f"<b>Error:</b> No firmware found for <code>{query}</code>.", del_in=LONG_TIMEOUT); return
             
         device_name = matches[0].get('name', query.capitalize()).split('(')[0].strip()
-        response_text = [f"<b>📱 Latest firmware for {html.escape(device_name)}:</b>"]
+        response_text = [f"<b>Latest firmware for {html.escape(device_name)}:</b>"]
         
         for fw in matches[:5]:
             line = (f"\n› <a href=\"{fw['link']}\"><b>{fw['version']}</b> ({fw['branch']})</a>\n"
