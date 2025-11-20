@@ -1,28 +1,29 @@
 import httpx
 import html
-from bs4 import BeautifulSoup
+import xml.etree.ElementTree as ET
 from pyrogram.types import Message, LinkPreviewOptions
 
 from app import BOT, bot
-from app.modules.settings import TINY_TIMEOUT, SMALL_TIMEOUT, MEDIUM_TIMEOUT, LONG_TIMEOUT, VERY_LONG_TIMEOUT, LARGE_TIMEOUT
+from app.modules.settings import TINY_TIMEOUT, SMALL_TIMEOUT, MEDIUM_TIMEOUT, LONG_TIMEOUT, VERY_LONG_TIMEOUT, LONG_TIMEOUT
 
 HEADERS = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/93.0.4577.63 Safari/537.36"}
 client = httpx.AsyncClient(headers=HEADERS, http2=True, follow_redirects=True)
 
 async def get_samsung_ota_data(model: str, csc: str):
-    """Internal function to fetch data from Samsung's official OTA server."""
+    """Internal function to fetch data from Samsung's OTA server using built-in XML parser."""
     url = f'https://fota-cloud-dn.ospserver.net/firmware/{csc}/{model}/version.xml'
     response = await client.get(url, timeout=10)
     if response.status_code != 200:
         return None
     
-    soup = BeautifulSoup(response.content, 'lxml-xml')
-    latest = soup.find("latest")
-    if not latest or not latest.text.strip():
+    root = ET.fromstring(response.content)
+    latest = root.find("./version/latest")
+    
+    if latest is None or not latest.text or not latest.text.strip():
         return None
         
     pda, csc_ver, phone = (latest.text.strip().split('/') + [None, None])[:3]
-    os_ver = latest.get("o", "N/A")
+    os_ver = latest.attrib.get("o", "N/A")
     return {"pda": pda, "csc_ver": csc_ver, "phone": phone, "os": os_ver}
 
 @bot.add_cmd(cmd="checkfw")
@@ -30,7 +31,8 @@ async def checkfw_handler(bot: BOT, message: Message):
     """
     CMD: CHECKFW
     INFO: Shows the latest official firmware for a Samsung device.
-    USAGE: .checkfw [model] [csc]
+    USAGE:
+        .checkfw [model] [csc]
     """
     args = message.input.split()
     if len(args) != 2: await message.reply("<b>Usage:</b> <code>.checkfw [model] [csc]</code>", del_in=MEDIUM_TIMEOUT); return
@@ -57,7 +59,8 @@ async def getfw_handler(bot: BOT, message: Message):
     """
     CMD: GETFW
     INFO: Provides download links for a Samsung device's firmware.
-    USAGE: .getfw [model] [csc]
+    USAGE:
+        .getfw [model] [csc]
     """
     args = message.input.split()
     if len(args) != 2: await message.reply("<b>Usage:</b> <code>.getfw [model] [csc]</code>", del_in=MEDIUM_TIMEOUT); return
