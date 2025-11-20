@@ -26,6 +26,10 @@ async def load_device_data():
 def safe_escape(text: str) -> str:
     return html.escape(str(text))
 
+def filter_marketing_names(names: list, codename: str) -> list:
+    clean_names = [name for name in names if not (name.isupper() and len(name) > 4)]
+    return clean_names if clean_names else names
+
 @bot.add_cmd(cmd="whatis")
 async def whatis_handler(bot: BOT, message: Message):
     """
@@ -44,7 +48,8 @@ async def whatis_handler(bot: BOT, message: Message):
     
     if codename in DEVICE_DATA:
         marketing_names = DEVICE_DATA[codename]
-        res = f"<b>Codename:</b> <code>{safe_escape(codename)}</code> is <b>{safe_escape(' / '.join(marketing_names))}</b>"
+        clean_marketing_names = filter_marketing_names(marketing_names, codename)
+        res = f"<b>Codename:</b> <code>{safe_escape(codename)}</code> is <b>{safe_escape(' / '.join(clean_marketing_names))}</b>"
         await progress.edit(res)
     else:
         await progress.edit(f"<b>Error:</b> Codename <code>{safe_escape(codename)}</code> not found.", del_in=LONG_TIMEOUT)
@@ -54,8 +59,7 @@ async def codename_handler(bot: BOT, message: Message):
     """
     CMD: CODENAME
     INFO: Finds the codename of a Xiaomi device by its marketing name.
-    USAGE:
-        .codename [marketing name]
+    USAGE: .codename [marketing name]
     """
     if not message.input: await message.reply("Please provide a name.", del_in=MEDIUM_TIMEOUT); return
     progress = await message.reply("<code>Searching...</code>")
@@ -69,8 +73,12 @@ async def codename_handler(bot: BOT, message: Message):
             matches[codename] = names
     
     if matches:
-        res = f"<b>Found {len(matches)} matching devices:</b>\n\n"
-        formatted = [f"<code>{safe_escape(' / '.join(names))}</code> is <b>{safe_escape(codename)}</b>" for codename, names in matches.items()]
+        res = f"<b>🔍 Found {len(matches)} matching devices:</b>\n\n"
+        formatted = []
+        for codename, names in matches.items():
+            clean_names = filter_marketing_names(names, codename)
+            formatted.append(f"<code>{safe_escape(' / '.join(clean_names))}</code> is <b>{safe_escape(codename)}</b>")
+        
         res += "\n".join(sorted(formatted))
         if len(res) > 4096: res = res[:4000] + "\n\n<b>...and more results. Refine your search.</b>"
         await progress.edit(res, link_preview_options=LinkPreviewOptions(is_disabled=True))
@@ -88,7 +96,7 @@ async def miui_handler(bot: BOT, message: Message):
     if not message.input: await message.reply("<b>Usage:</b> <code>.miui [codename | name]</code>", del_in=MEDIUM_TIMEOUT); return
 
     query = message.input.lower()
-    progress = await message.reply(f"<code>Searching for firmware...</code>")
+    progress = await message.reply(f"<code>Searching for {query} firmware...</code>")
     
     try:
         target_codename = query
@@ -103,7 +111,7 @@ async def miui_handler(bot: BOT, message: Message):
                 target_codename = list(possible_devices.keys())[0]
             elif len(possible_devices) > 1:
                 res = f"<b>Query is ambiguous. Found {len(possible_devices)} devices:</b>\n\n"
-                formatted = [f"<code>{safe_escape(' / '.join(names))}</code> is <b>{safe_escape(codename)}</b>" for codename, names in possible_devices.items()]
+                formatted = [f"<code>{safe_escape(' / '.join(filter_marketing_names(names, codename)))}</code> is <b>{safe_escape(codename)}</b>" for codename, names in possible_devices.items()]
                 res += "\n".join(sorted(formatted))
                 res += "\n\nPlease try again with a more specific name or use the exact codename."
                 await progress.edit(res, link_preview_options=LinkPreviewOptions(is_disabled=True)); return
@@ -117,17 +125,15 @@ async def miui_handler(bot: BOT, message: Message):
             codename_field = fw.get("codename")
             if not codename_field: continue
             if isinstance(codename_field, list):
-                if target_codename in [c.lower() for c in codename_field]:
-                    matches.append(fw)
+                if target_codename in [c.lower() for c in codename_field]: matches.append(fw)
             elif isinstance(codename_field, str):
-                if target_codename == codename_field.lower():
-                    matches.append(fw)
+                if target_codename == codename_field.lower(): matches.append(fw)
         
         if not matches:
             await progress.edit(f"<b>Error:</b> No firmware found for <code>{query}</code>.", del_in=LONG_TIMEOUT); return
             
         device_name = matches[0].get('name', query.capitalize()).split('(')[0].strip()
-        response_text = [f"<b>Latest firmware for {html.escape(device_name)}:</b>"]
+        response_text = [f"<b>📱 Latest firmware for {html.escape(device_name)}:</b>"]
         
         for fw in matches[:5]:
             line = (f"\n› <a href=\"{fw['link']}\"><b>{fw['version']}</b> ({fw['branch']})</a>\n"
