@@ -45,7 +45,7 @@ async def checkfw_handler(bot: BOT, message: Message):
         if not data:
             await progress.edit(f"<b>Error:</b> No firmware found for <code>{model}/{csc}</code>.", del_in=LONG_TIMEOUT); return
         
-        res = [f"<b>📱 Latest Firmware for {model} ({csc})</b>\n", f"<b>PDA:</b> <code>{data['pda']}</code>", f"<b>CSC:</b> <code>{data['csc_ver']}</code>"]
+        res = [f"<b>Latest Firmware for {model} ({csc})</b>\n", f"<b>PDA:</b> <code>{data['pda']}</code>", f"<b>CSC:</b> <code>{data['csc_ver']}</code>"]
         if data['phone']: res.append(f"<b>Phone:</b> <code>{data['phone']}</code>")
         res.append(f"<b>Android:</b> <code>{data['os']}</code>")
         await progress.edit("\n".join(res))
@@ -72,7 +72,7 @@ async def getfw_handler(bot: BOT, message: Message):
         if not data:
             await progress.edit(f"<b>Error:</b> No firmware found for <code>{model}/{csc}</code> to generate links.", del_in=LONG_TIMEOUT); return
             
-        res = [f"<b>📱 Latest Firmware for {model} ({csc})</b>\n", f"<b>PDA:</b> <code>{data['pda']}</code>", f"<b>CSC:</b> <code>{data['csc_ver']}</code>"]
+        res = [f"<b>Latest Firmware for {model} ({csc})</b>\n", f"<b>PDA:</b> <code>{data['pda']}</code>", f"<b>CSC:</b> <code>{data['csc_ver']}</code>"]
         if data['phone']: res.append(f"<b>Phone:</b> <code>{data['phone']}</code>")
         res.append(f"<b>Android:</b> <code>{data['os']}</code>\n")
         res.append(f"<b>Download links for {model}:</b>")
