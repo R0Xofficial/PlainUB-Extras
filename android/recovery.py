@@ -1,5 +1,5 @@
 import html
-from pyrogram.types import Message, InlineKeyboardMarkup, InlineKeyboardButton, LinkPreviewOptions
+from pyrogram.types import Message, LinkPreviewOptions
 
 from app import BOT, bot
 from app.modules.settings import MEDIUM_TIMEOUT
@@ -22,16 +22,16 @@ async def orangefox_link_handler(bot: BOT, message: Message):
     
     response_text = (
         f"📱 <b>{recovery_name} downloads for <code>{html.escape(codename)}</code></b>\n\n"
-        "Click the button below to go to the official download page."
+        f"› <a href='{final_url}'>Official Download Page</a>"
     )
     
-    buttons = [[InlineKeyboardButton(f"Go to {recovery_name} website", url=final_url)]]
-    
-    await message.reply(
-        response_text,
-        reply_markup=InlineKeyboardMarkup(buttons),
-        link_preview_options=LinkPreviewOptions(is_disabled=True)
+    await bot.send_message(
+        chat_id=message.chat.id,
+        text=response_text,
+        link_preview_options=LinkPreviewOptions(is_disabled=True),
+        reply_to_message_id=message.id
     )
+    await message.delete()
 
 @bot.add_cmd(cmd="twrp")
 async def twrp_link_handler(bot: BOT, message: Message):
@@ -51,16 +51,16 @@ async def twrp_link_handler(bot: BOT, message: Message):
     
     response_text = (
         f"📱 <b>{recovery_name} downloads for <code>{html.escape(codename)}</code></b>\n\n"
-        "Click the button below to go to the official download page."
+        f"› <a href='{final_url}'>Official Download Page</a>"
     )
     
-    buttons = [[InlineKeyboardButton(f"Go to {recovery_name} website", url=final_url)]]
-    
-    await message.reply(
-        response_text,
-        reply_markup=InlineKeyboardMarkup(buttons),
-        link_preview_options=LinkPreviewOptions(is_disabled=True)
+    await bot.send_message(
+        chat_id=message.chat.id,
+        text=response_text,
+        link_preview_options=LinkPreviewOptions(is_disabled=True),
+        reply_to_message_id=message.id
     )
+    await message.delete()
 
 @bot.add_cmd(cmd=["pitchblack", "pb", "pbrp"])
 async def pitchblack_link_handler(bot: BOT, message: Message):
@@ -80,13 +80,13 @@ async def pitchblack_link_handler(bot: BOT, message: Message):
     
     response_text = (
         f"📱 <b>{recovery_name} downloads for <code>{html.escape(codename)}</code></b>\n\n"
-        "Click the button below to go to the official download page."
+        f"› <a href='{final_url}'>Official Download Page</a>"
     )
     
-    buttons = [[InlineKeyboardButton(f"Go to {recovery_name} website", url=final_url)]]
-    
-    await message.reply(
-        response_text,
-        reply_markup=InlineKeyboardMarkup(buttons),
-        link_preview_options=LinkPreviewOptions(is_disabled=True)
+    await bot.send_message(
+        chat_id=message.chat.id,
+        text=response_text,
+        link_preview_options=LinkPreviewOptions(is_disabled=True),
+        reply_to_message_id=message.id
     )
+    await message.delete()
