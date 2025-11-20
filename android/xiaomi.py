@@ -88,7 +88,7 @@ async def miui_handler(bot: BOT, message: Message):
     if not message.input: await message.reply("<b>Usage:</b> <code>.miui [codename | name]</code>", del_in=MEDIUM_TIMEOUT); return
 
     query = message.input.lower()
-    progress = await message.reply(f"<code>Searching for {query} firmware...</code>")
+    progress = await message.reply(f"<code>Searching for firmware...</code>")
     
     try:
         target_codename = query
