@@ -71,8 +71,8 @@ async def codename_handler(bot: BOT, message: Message):
     matches = {codename: name for codename, name in DEVICE_DATA.items() if term in name.lower()}
     
     if matches:
-        header = f"<b>🔍 Found {len(matches)} matching devices:</b>"
-        formatted_lines = [f"<code>{safe_escape(name)}</code> is <b>{safe_escape(codename)}</b>" for codename, name in matches.items()]
+        header = f"<b>Found {len(matches)} matching devices:</b>"
+        formatted_lines = [f"• <b>{safe_escape(name)}</b> is <code>{safe_escape(codename)}</code>" for codename, name in matches.items()]
         blockquote_content = "\n".join(sorted(formatted_lines))
         res = f"{header}\n<blockquote>{blockquote_content}</blockquote>"
         
@@ -109,7 +109,7 @@ async def miui_handler(bot: BOT, message: Message):
                 target_codename = list(possible_devices.keys())[0]
             elif len(possible_devices) > 1:
                 header = f"<b>Query is ambiguous. Found {len(possible_devices)} devices:</b>"
-                formatted_lines = [f"<code>{safe_escape(name)}</code> is <b>{safe_escape(codename)}</b>" for codename, name in possible_devices.items()]
+                formatted_lines = [f"• <b>{safe_escape(name)}</b> is <code>{safe_escape(codename)}</code>" for codename, name in possible_devices.items()]
                 blockquote_content = "\n".join(sorted(formatted_lines))
                 
                 res = (
