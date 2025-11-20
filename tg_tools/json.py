@@ -69,4 +69,4 @@ async def dev_handler(bot: BOT, message: Message):
 
     except Exception as e:
         error_text = f"<b>Error:</b> Could not process message.\n<code>{html.escape(str(e))}</code>"
-        await progress_message.edit(error_text, del_in=LARGE_TIMEOUT)
+        await progress_message.edit(error_text, del_in=LONG_TIMEOUT)
