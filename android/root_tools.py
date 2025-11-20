@@ -56,17 +56,26 @@ async def get_android_versions(bot, message: Message, owner: str, repo: str, sho
 
 @bot.add_cmd(cmd="magisk")
 async def magisk_handler(bot: BOT, message: Message):
-    """CMD: MAGISK - Gets latest Magisk stable & pre-release."""
+    """
+    CMD: MAGISK
+    INFO: Gets latest Magisk stable & pre-release.
+    """
     await get_android_versions(bot, message, owner="topjohnwu", repo="Magisk", show_both=True)
 
 
-@bot.add_cmd(cmd="kernelsunext")
+@bot.add_cmd(cmd=["kernelsunext", "ksun"])
 async def kernelsunext_handler(bot: BOT, message: Message):
-    """CMD: KERNELSUNEXT - Gets the latest KernelSU-Next release."""
+    """
+    CMD: KERNELSUNEXT / KSUN
+    INFO: Gets the latest KernelSU-Next release.
+    """
     await get_android_versions(bot, message, owner="KernelSU-Next", repo="KernelSU-Next", show_both=False)
 
 
-@bot.add_cmd(cmd="kernelsu")
+@bot.add_cmd(cmd=["kernelsu", "ksu"])
 async def kernelsu_handler(bot: BOT, message: Message):
-    """CMD: KERNELSU - Gets latest KernelSU stable & pre-release."""
+    """
+    CMD: KERNELSU / KSU
+    INFO: Gets latest KernelSU stable & pre-release.
+    """
     await get_android_versions(bot, message, owner="tiann", repo="KernelSU", show_both=True)
