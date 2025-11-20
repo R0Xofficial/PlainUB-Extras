@@ -77,10 +77,10 @@ async def getfw_handler(bot: BOT, message: Message):
         res.append(f"<b>Android:</b> <code>{data['os']}</code>\n")
         res.append(f"<b>Download links for {model}:</b>")
         
-        res.append(f"  › <a href='https://samfw.com/firmware/{model}/{csc}/'>SamFW (Recommended)</a>")
-        res.append(f"  › <a href='https://samfrew.com/model/{model}/region/{csc}/'>Samfrew</a>")
-        res.append(f"  › <a href='https://www.sammobile.com/samsung/firmware/{model}/{csc}/'>Sammobile</a>")
-        res.append(f"  › <a href='https://sfirmware.com/samsung-{model.lower()}/#tab=firmwares'>SFirmware</a>")
+        res.append(f" › <a href='https://samfw.com/firmware/{model}/{csc}/'>SamFW (Recommended)</a>")
+        res.append(f" › <a href='https://samfrew.com/model/{model}/region/{csc}/'>Samfrew</a>")
+        res.append(f" › <a href='https://www.sammobile.com/samsung/firmware/{model}/{csc}/'>Sammobile</a>")
+        res.append(f" › <a href='https://sfirmware.com/samsung-{model.lower()}/#tab=firmwares'>SFirmware</a>")
         
         await progress.edit("\n".join(res), link_preview_options=LinkPreviewOptions(is_disabled=True))
 
