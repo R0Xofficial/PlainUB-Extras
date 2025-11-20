@@ -18,7 +18,7 @@ HEADERS = {
 # Stworzymy jedną, trwałą sesję klienta, co jest bardziej wydajne
 client = httpx.AsyncClient(headers=HEADERS, http2=True, follow_redirects=True)
 
-@bot.add_cmd(cmd="checkfw")
+@bot.add_cmd(cmd="testcheckfw")
 async def checkfw_handler(bot: BOT, message: Message):
     """
     CMD: CHECKFW
@@ -62,6 +62,6 @@ async def checkfw_handler(bot: BOT, message: Message):
 # --- Skupmy się na razie na tym, aby checkfw zadziałało. Jeśli zadziała, to znaczy,
 # --- że jesteśmy na dobrej drodze i dodamy resztę w ten sam, niezawodny sposób.
 
-@bot.add_cmd(cmd=["sm", "specs"])
+@bot.add_cmd(cmd=["tsm", "tspecs"])
 async def placeholder_handler(bot: BOT, message: Message):
     await message.reply("This command is temporarily disabled for a rewrite. Please wait for the fix.", del_in=MEDIUM_TIMEOUT)
