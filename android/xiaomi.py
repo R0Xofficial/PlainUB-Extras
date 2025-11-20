@@ -119,13 +119,23 @@ async def miui_handler(bot: BOT, message: Message):
                 target_codename = list(possible_devices.keys())[0]
             elif len(possible_devices) > 1:
                 header = f"<b>Query is ambiguous. Found {len(possible_devices)} devices:</b>"
-                formatted_lines = [f"<b>{safe_escape(name)}</b> is <code>{safe_escape(codename)}</code>" for codename, name in possible_devices.items()]
+                formatted_lines = [f"<code>{safe_escape(name)}</code> is <b>{safe_escape(codename)}</b>" for codename, name in possible_devices.items()]
                 blockquote_content = "\n\n".join(sorted(formatted_lines))
+                footer = "\nPlease try again with a more specific name or use the exact codename."
+                full_res = f"{header}\n<blockquote expandable>{blockquote_content}</blockquote>{footer}"
                 
-                res = (
-                    f"{header}\n<blockquote expandable>{blockquote_content}</blockquote>\n"
-                    "Please try again with a more specific name or use the exact codename."
-                )
+                if len(full_res) > 4096:
+                    available_space = 4096 - len(header) - len(footer) - 50
+                    
+                    truncated_content = blockquote_content[:available_space]
+                    
+                    res = (
+                        f"{header}\n"
+                        f"<blockquote expandable>{truncated_content}\n...</blockquote>"
+                        f"{footer}"
+                    )
+                else:
+                    res = full_res
                 
                 await progress.edit(res, link_preview_options=LinkPreviewOptions(is_disabled=True))
                 return
