@@ -58,4 +58,4 @@ async def block_unblock_handler(bot: BOT, message: Message):
                 pass
 
     except Exception as e:
-        await message.reply(f"<b>Error:</b> <code>{html.escape(str(e))}</code>", del_in=LARGE_TIMEOUT)
+        await message.reply(f"<b>Error:</b> <code>{html.escape(str(e))}</code>", del_in=LONG_TIMEOUT)
