@@ -132,4 +132,4 @@ async def info_handler(bot: BOT, message: Message):
             )
 
     except Exception as e:
-        await progress_msg.edit(f"<b>Error:</b> Could not find the specified user.\n<code>{safe_escape(str(e))}</code>", del_in=LARGE_TIMEOUT)
+        await progress_msg.edit(f"<b>Error:</b> Could not find the specified user.\n<code>{safe_escape(str(e))}</code>", del_in=LONG_TIMEOUT)
