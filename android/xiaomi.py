@@ -101,7 +101,7 @@ async def specs_handler(bot: BOT, message: Message):
     """
     CMD: XSPECS
     INFO: Shows the specifications of a Xiaomi device.
-    USAGE: .specs [codename | marketing name]
+    USAGE: .xspecs [codename | marketing name]
     """
     if not message.input:
         await message.reply("Please provide a device codename or name.", del_in=MEDIUM_TIMEOUT); return
