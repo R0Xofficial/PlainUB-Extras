@@ -49,10 +49,10 @@ async def whatis_handler(bot: BOT, message: Message):
     
     if codename in DEVICE_DATA:
         marketing_name = DEVICE_DATA[codename]
-        res = f"<b>Codename:</b> <code>{safe_escape(codename)}</code> is <b>{safe_escape(marketing_name)}</b>"
+        res = f"<code>{safe_escape(codename)}</code> is <b>{safe_escape(marketing_name)}</b>"
         await progress.edit(res)
     else:
-        await progress.edit(f"<b>Error:</b> Codename <code>{safe_escape(codename)}</code> not found.", del_in=LONG_TIMEOUT)
+        await progress.edit(f"<code>{safe_escape(codename)}</code> not found.", del_in=LONG_TIMEOUT)
 
 @bot.add_cmd(cmd="codename")
 async def codename_handler(bot: BOT, message: Message):
@@ -77,14 +77,14 @@ async def codename_handler(bot: BOT, message: Message):
         if len(res) > 4096: res = res[:4000] + "\n\n<b>...and more results. Refine your search.</b>"
         await progress.edit(res, link_preview_options=LinkPreviewOptions(is_disabled=True))
     else:
-        await progress.edit(f"<b>Error:</b> No devices found matching '<code>{safe_escape(term)}</code>'.", del_in=LONG_TIMEOUT)
+        await progress.edit(f"No devices found matching '<code>{safe_escape(term)}</code>'.", del_in=LONG_TIMEOUT)
 
 @bot.add_cmd(cmd="miui")
 async def miui_handler(bot: BOT, message: Message):
     """
     CMD: MIUI
     INFO: Fetches the latest MIUI/HyperOS firmware for a given Xiaomi device.
-    USAGE:
+    USAGE: 
         .miui [codename | marketing name]
     """
     if not message.input: await message.reply("<b>Usage:</b> <code>.miui [codename | name]</code>", del_in=MEDIUM_TIMEOUT); return
@@ -94,7 +94,6 @@ async def miui_handler(bot: BOT, message: Message):
     
     try:
         target_codename = query
-        target_device_name = query.capitalize()
         
         if not DEVICE_DATA: await load_device_data()
         if DEVICE_DATA is not None and query not in DEVICE_DATA:
@@ -102,13 +101,17 @@ async def miui_handler(bot: BOT, message: Message):
             
             if len(possible_devices) == 1:
                 target_codename = list(possible_devices.keys())[0]
-                target_device_name = list(possible_devices.values())[0]
             elif len(possible_devices) > 1:
                 res = f"<b>Query is ambiguous. Found {len(possible_devices)} devices:</b>\n\n"
                 formatted = [f"<code>{safe_escape(name)}</code> is <b>{safe_escape(codename)}</b>" for codename, name in possible_devices.items()]
                 res += "\n".join(sorted(formatted))
                 res += "\n\nPlease try again with a more specific name or use the exact codename."
                 await progress.edit(res, link_preview_options=LinkPreviewOptions(is_disabled=True)); return
+        
+        if DEVICE_DATA is not None:
+            target_device_name = DEVICE_DATA.get(target_codename, query.capitalize())
+        else:
+            target_device_name = query.capitalize()
         
         response = await client.get(FIRMWARE_YAML_URL, timeout=15)
         response.raise_for_status()
@@ -124,7 +127,7 @@ async def miui_handler(bot: BOT, message: Message):
                 if target_codename == codename_field.lower(): matches.append(fw)
         
         if not matches:
-            await progress.edit(f"<b>Error:</b> No firmware found for <code>{query}</code>.", del_in=LONG_TIMEOUT); return
+            await progress.edit(f"No firmware found for <code>{query}</code>.", del_in=LONG_TIMEOUT); return
             
         response_text = [f"<b>Latest firmware for {html.escape(target_device_name)} (<code>{target_codename}</code>):</b>"]
         
