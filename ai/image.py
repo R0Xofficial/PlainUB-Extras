@@ -18,14 +18,13 @@ load_dotenv(dotenv_path=ENV_PATH)
 
 CF_ACCOUNT_ID = os.getenv("CF_ACCOUNT_ID")
 CF_API_TOKEN = os.getenv("CF_API_TOKEN")
+MODEL = os.getenv("IMAGE_AI")
 
 UBOT_DIR = os.path.dirname(os.path.dirname(MODULES_DIR)) 
 LOGO_PATH = os.path.join(UBOT_DIR, "assets", "light.png")
 
 TEMP_DIR = "temp_imagine/"
 os.makedirs(TEMP_DIR, exist_ok=True)
-ERROR_VISIBLE_DURATION = 8
-MODEL = "@cf/stabilityai/stable-diffusion-xl-base-1.0"
 
 def sync_add_watermark(image_path: str) -> str:
     """Opens an image from a file, adds a watermark, and saves it to a new file."""
