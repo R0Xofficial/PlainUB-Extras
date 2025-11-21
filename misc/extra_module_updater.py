@@ -31,10 +31,10 @@ def get_local_version_date() -> str:
     except Exception:
         return "Error Reading File"
 
-@BOT.add_cmd(cmd=["extupdate", "eupdate"], allow_sudo=False)
+@BOT.add_cmd(cmd=["extupdate", "eupdate", "eup"], allow_sudo=False)
 async def unified_update_handler(bot: BOT, message: Message):
     """
-    CMD: EXTUPDATE
+    CMD: EXTUPDATE / EUPDATE / EUP
     INFO: Checks for or pulls updates for external modules.
     FLAGS:
         -pull: Pulls the latest changes from the repository and restarts userbot.
