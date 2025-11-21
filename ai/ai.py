@@ -26,7 +26,7 @@ async def ask_handler(bot: BOT, message: Message):
         .ask [question]
         .ask (in reply to a message to use its text as context)
     """
-    if not MODEL or "" in MODEL:
+    if not MODEL or "" in TEXT_AI:
         return await message.reply("<b>Cloudflare Text Model AI not configured.</b>", del_in=LONG_TIMEOUT)
     
     if not CF_ACCOUNT_ID or not CF_API_TOKEN or "YOUR_KEY" in CF_API_TOKEN:
