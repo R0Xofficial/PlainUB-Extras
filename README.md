@@ -49,7 +49,7 @@ If you're deploying manually (without `EXTRA_MODULES_REPO`), you can also instal
 
 4. Restart your bot to load the modules.
 
-5. To **update the modules** from the external repository, simply use the following command in the chat:
+5. To **update modules** from the external repository, simply use the following command in the chat:
 
    ```
    .eupdate -pull
@@ -57,6 +57,15 @@ If you're deploying manually (without `EXTRA_MODULES_REPO`), you can also instal
    or
    ```
    .eup -pull
+   ```
+---
+
+## 🔁 Check Updates
+
+To check if you are using the latest PlainUB-Extras add-ons, simply use one of the commands below:
+
+   ```
+   eupdate
    ```
 
 ---
