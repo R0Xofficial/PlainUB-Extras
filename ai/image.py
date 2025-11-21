@@ -100,7 +100,7 @@ async def imagine_handler(bot: BOT, message: Message):
                 chat_id=message.chat.id,
                 # photo=watermarked_path,
                 photo=generated_path,
-                caption=f"<b>Prompt:</b> <code>{html.escape(prompt)}</code>",
+                caption=f"<b>Prompt:</b> <i>{html.escape(prompt)}</i>",
                 reply_parameters=ReplyParameters(message_id=message.id)
             )
             await progress_message.delete()
