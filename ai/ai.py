@@ -15,7 +15,7 @@ ENV_PATH = os.path.join(MODULES_DIR, "extra_config.env")
 load_dotenv(dotenv_path=ENV_PATH)
 CF_ACCOUNT_ID = os.getenv("CF_ACCOUNT_ID")
 CF_API_TOKEN = os.getenv("CF_API_TOKEN")
-MODEL = "@cf/meta/llama-3-8b-instruct"
+MODEL = os.getenv("TEXT_AI")
 
 @bot.add_cmd(cmd="ask")
 async def ask_handler(bot: BOT, message: Message):
@@ -57,10 +57,12 @@ async def ask_handler(bot: BOT, message: Message):
         
         if response_data.get("success"):
             ai_response = response_data["result"]["response"].strip()
+
+            model_short_name = MODEL.split("/")[-1] 
             
             final_output = (
                 f"<b>Prompt:</b> <i>{html.escape(display_prompt)}</i>\n"
-                f"<pre language=llama-3-8b-instruct>{html.escape(ai_response)}</pre>"
+                f"<pre language={model_short_name}>{html.escape(ai_response)}</pre>"
             )
             
             if message.replied:
