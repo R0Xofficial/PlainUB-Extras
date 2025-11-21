@@ -13,10 +13,14 @@ Repository **"PlainUB-Extras"** [Work in progress] is a collection of additional
    ```
 
 2. Deploy or restart your bot. The modules will be automatically loaded from the external rerepository.
-3. To **update modules** from the external repository (your fork), simply use the following command in the chat:
+3. To **update modules** from the external repository, simply use the following command in the chat:
 
    ```
-   .eupdate -pull / .eup -pull
+   .eupdate -pull
+   ```
+   or
+   ```
+   .eup -pull
    ```
 
 ---
@@ -45,10 +49,14 @@ If you're deploying manually (without `EXTRA_MODULES_REPO`), you can also instal
 
 4. Restart your bot to load the modules.
 
-5. To **update the modules** from the external repository (your fork), simply use the following command in the chat:
+5. To **update the modules** from the external repository, simply use the following command in the chat:
 
    ```
-   .eupdate -pull / .eup -pull
+   .eupdate -pull
+   ```
+   or
+   ```
+   .eup -pull
    ```
 
 ---
