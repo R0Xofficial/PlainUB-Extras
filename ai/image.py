@@ -65,7 +65,7 @@ async def imagine_handler(bot: BOT, message: Message):
         .image [text prompt]
         .gen [text prompt]
     """
-    if not MODEL or "" in MODEL:
+    if not MODEL or "" in IMAGE_AI:
         return await message.reply("<b>Cloudflare Image Model AI not configured.</b>", del_in=LONG_TIMEOUT)
     
     if not CF_ACCOUNT_ID or not CF_API_TOKEN or "YOUR_KEY" in CF_API_TOKEN:
