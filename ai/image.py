@@ -103,7 +103,7 @@ async def imagine_handler(bot: BOT, message: Message):
             await progress_message.delete()
         else:
             error_details = response.json()
-            raise Exception(f"API Error: {error_details}")
+            await progress_message.edit(f"API Error: {error_details}")
 
     except Exception as e:
         error_text = f"<b>Error:</b> Could not generate image.\n<code>{html.escape(str(e))}</code>"
