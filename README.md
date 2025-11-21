@@ -16,11 +16,11 @@ Repository **"PlainUB-Extras"** [Work in progress] is a collection of additional
 3. To **update modules** from the external repository, simply use the following command in the chat:
 
    ```
-   .eupdate -pull
+   eupdate -pull
    ```
    or
    ```
-   .eup -pull
+   eup -pull
    ```
 
 ---
@@ -52,11 +52,11 @@ If you're deploying manually (without `EXTRA_MODULES_REPO`), you can also instal
 5. To **update modules** from the external repository, simply use the following command in the chat:
 
    ```
-   .eupdate -pull
+   eupdate -pull
    ```
    or
    ```
-   .eup -pull
+   eup -pull
    ```
 ---
 
@@ -67,6 +67,12 @@ To check if you are using the latest PlainUB-Extras add-ons, simply use one of t
    ```
    eupdate
    ```
+   or
+   ```
+   eup
+   ```
+
+_eup command is the same what `eupdate` command_
 
 ---
 
