@@ -3,7 +3,7 @@ from pyrogram.types import Message, User
 from pyrogram.enums import ChatType, ChatMemberStatus
 
 from app import BOT, bot
-from app.modules.settings import MEDIUM_TIMEOUT
+from app.modules.settings import TINY_TIMEOUT, SMALL_TIMEOUT, MEDIUM_TIMEOUT, LONG_TIMEOUT, VERY_LONG_TIMEOUT, LARGE_TIMEOUT
 
 async def get_target_user(bot: BOT, message: Message) -> User | None:
     if message.replied:
