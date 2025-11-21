@@ -114,4 +114,4 @@ async def locktypes_handler(bot: BOT, message: Message):
         description = perm_name.replace("can_", "").replace("_", " ").title()
         response += f"• <code>{lock_name}</code> - {description}\n"
     response += "\nUse <code>all</code> to affect all types at once."
-    await message.reply(response)
+    await message.reply(response, del_in=VERY_LONG_TIMEOUT)
