@@ -74,7 +74,7 @@ async def ask_handler(bot: BOT, message: Message):
                 )
             
         else:
-            raise Exception(f"API Error: {response_data.get('errors') or 'Unknown error'}")
+            await progress_message.edit(f"API Error: {response_data.get('errors') or 'Unknown error'}", del_in=LONG_TIMEOUT)
 
     except requests.exceptions.Timeout:
          await progress_message.edit("<b>Error:</b> The request to the AI timed out.", del_in=LONG_TIMEOUT)
