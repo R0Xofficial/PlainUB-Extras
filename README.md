@@ -72,7 +72,7 @@ To check if you are using the latest PlainUB-Extras add-ons, simply use one of t
    eup
    ```
 
-_eup command is the same what `eupdate` command_
+_**eup** command is the same what `eupdate` command_
 
 ---
 
