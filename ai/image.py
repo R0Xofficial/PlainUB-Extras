@@ -25,6 +25,7 @@ LOGO_PATH = os.path.join(UBOT_DIR, "assets", "light.png")
 TEMP_DIR = "temp_imagine/"
 os.makedirs(TEMP_DIR, exist_ok=True)
 ERROR_VISIBLE_DURATION = 8
+MODEL = "@cf/stabilityai/stable-diffusion-xl-base-1.0"
 
 def sync_add_watermark(image_path: str) -> str:
     """Opens an image from a file, adds a watermark, and saves it to a new file."""
@@ -77,7 +78,7 @@ async def imagine_handler(bot: BOT, message: Message):
     generated_path, watermarked_path = "", ""
     temp_files = []
     try:
-        api_url = f"https://api.cloudflare.com/client/v4/accounts/{CF_ACCOUNT_ID}/ai/run/@cf/runwayml/stable-diffusion-v1-5-img2img"
+        api_url = f"https://api.cloudflare.com/client/v4/accounts/{CF_ACCOUNT_ID}/ai/run/{MODEL}"
         headers = {"Authorization": f"Bearer {CF_API_TOKEN}", "Content-Type": "application/json"}
         payload = {"prompt": prompt}
         
