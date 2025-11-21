@@ -59,7 +59,7 @@ async def ask_handler(bot: BOT, message: Message):
             
             final_output = (
                 f"<b>Prompt:</b> <i>{html.escape(display_prompt)}</i>\n"
-                f"<pre language=llama3>{html.escape(ai_response)}</pre>"
+                f"<pre language=llama-4-scout-17b-16e-instruct>{html.escape(ai_response)}</pre>"
             )
             
             if message.replied:
