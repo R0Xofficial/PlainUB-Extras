@@ -15,7 +15,7 @@ ENV_PATH = os.path.join(MODULES_DIR, "extra_config.env")
 load_dotenv(dotenv_path=ENV_PATH)
 CF_ACCOUNT_ID = os.getenv("CF_ACCOUNT_ID")
 CF_API_TOKEN = os.getenv("CF_API_TOKEN")
-MODEL = "llama-3-8b-instruct"
+MODEL = "@cf/meta/llama-3-8b-instruct"
 
 @bot.add_cmd(cmd="ask")
 async def ask_handler(bot: BOT, message: Message):
@@ -44,7 +44,7 @@ async def ask_handler(bot: BOT, message: Message):
 
     progress_message = await message.reply("<code>Thinking...</code>")
     try:
-        api_url = f"https://api.cloudflare.com/client/v4/accounts/{CF_ACCOUNT_ID}/ai/run/@cf/meta/{MODEL}"
+        api_url = f"https://api.cloudflare.com/client/v4/accounts/{CF_ACCOUNT_ID}/ai/run/{MODEL}"
         headers = {"Authorization": f"Bearer {CF_API_TOKEN}", "Content-Type": "application/json"}
         payload = {
             "messages": [{"role": "system", "content": "You are a helpful AI assistant."}, {"role": "user", "content": prompt}],
@@ -60,7 +60,7 @@ async def ask_handler(bot: BOT, message: Message):
             
             final_output = (
                 f"<b>Prompt:</b> <i>{html.escape(display_prompt)}</i>\n"
-                f"<pre language={MODEL}>{html.escape(ai_response)}</pre>"
+                f"<pre language=llama-3-8b-instruct>{html.escape(ai_response)}</pre>"
             )
             
             if message.replied:
