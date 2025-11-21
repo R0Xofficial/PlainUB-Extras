@@ -3,7 +3,7 @@ from pyrogram.types import Message, ChatPermissions
 from pyrogram.enums import ChatType
 
 from app import BOT, bot
-from app.modules.settings import TINY_TIMEOUT, SMALL_TIMEOUT, MEDIUM_TIMEOUT, LONG_TIMEOUT, VERY_LONG_TIMEOUT, LARGE_TIMEOUT
+from app.modules.settings import MEDIUM_TIMEOUT
 
 LOCK_TYPES = {
     "msg": "can_send_messages",
@@ -17,6 +17,10 @@ LOCK_TYPES = {
 }
 
 ALL_LOCKS = list(LOCK_TYPES.keys())
+
+UNLOCK_ALL_DEFAULTS = [
+    "msg", "media", "stickers", "polls", "links", "invite"
+]
 
 async def change_lock(bot: BOT, message: Message, lock: bool):
     if message.chat.type not in [ChatType.GROUP, ChatType.SUPERGROUP]:
@@ -36,7 +40,10 @@ async def change_lock(bot: BOT, message: Message, lock: bool):
     current_permissions = message.chat.permissions
     
     if lock_type.lower() == "all":
-        types_to_change = ALL_LOCKS
+        if lock:
+            types_to_change = ALL_LOCKS
+        else:
+            types_to_change = UNLOCK_ALL_DEFAULTS
     else:
         types_to_change = [t.strip() for t in lock_type.lower().split()]
 
@@ -58,7 +65,7 @@ async def change_lock(bot: BOT, message: Message, lock: bool):
             not_found_perms.append(t)
             
     if not changed_perms:
-        await message.reply(f"Invalid lock type(s): `{' '.join(not_found_perms)}`", del_in=LONG_TIMEOUT)
+        await message.reply(f"Invalid lock type(s): `{' '.join(not_found_perms)}`", del_in=MEDIUM_TIMEOUT)
         return
 
     new_permissions = ChatPermissions(**new_permissions_dict)
@@ -69,9 +76,9 @@ async def change_lock(bot: BOT, message: Message, lock: bool):
         response = f"<b>{action}:</b> `{' '.join(changed_perms)}`"
         if not_found_perms:
             response += f"\n<b>Not found:</b> `{' '.join(not_found_perms)}`"
-        await message.reply(response, del_in=LONG_TIMEOUT)
+        await message.reply(response, del_in=MEDIUM_TIMEOUT)
     except Exception as e:
-        await message.reply(f"<b>Error:</b> Could not change permissions. <code>{e}</code>", del_in=LONG_TIMEOUT)
+        await message.reply(f"<b>Error:</b> Could not change permissions. <code>{e}</code>")
 
 
 @bot.add_cmd(cmd="lock")
