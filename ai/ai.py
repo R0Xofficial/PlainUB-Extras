@@ -27,10 +27,10 @@ async def ask_handler(bot: BOT, message: Message):
         .ask (in reply to a message to use its text as context)
     """
     if not TEXT_AI or "" in TEXT_AI:
-        return await message.reply("<b>Cloudflare model AI not configured.</b>", del_in=LONG_TIMEOUT)
+        return await message.reply("<b>Cloudflare Text Model AI not configured.</b>", del_in=LONG_TIMEOUT)
     
     if not CF_ACCOUNT_ID or not CF_API_TOKEN or "YOUR_KEY" in CF_API_TOKEN:
-        return await message.reply("<b>Cloudflare API and Account ID not configured.</b>", del_in=LONG_TIMEOUT)
+        return await message.reply("<b>Cloudflare API or Account ID not configured.</b>", del_in=LONG_TIMEOUT)
 
     prompt = message.input
     display_prompt = prompt
