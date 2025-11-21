@@ -77,7 +77,7 @@ async def imagine_handler(bot: BOT, message: Message):
     generated_path, watermarked_path = "", ""
     temp_files = []
     try:
-        api_url = f"https://api.cloudflare.com/client/v4/accounts/{CF_ACCOUNT_ID}/ai/run/@cf/stabilityai/stable-diffusion-xl-base-1.0"
+        api_url = f"https://api.cloudflare.com/client/v4/accounts/{CF_ACCOUNT_ID}/ai/run/@cf/runwayml/stable-diffusion-v1-5-img2img"
         headers = {"Authorization": f"Bearer {CF_API_TOKEN}"}
         payload = {"prompt": prompt}
         
