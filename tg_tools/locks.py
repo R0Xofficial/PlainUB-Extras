@@ -3,7 +3,7 @@ from pyrogram.types import Message, ChatPermissions
 from pyrogram.enums import ChatType
 
 from app import BOT, bot
-from app.modules.settings import MEDIUM_TIMEOUT
+from app.modules.settings import TINY_TIMEOUT, SMALL_TIMEOUT, MEDIUM_TIMEOUT, LONG_TIMEOUT, VERY_LONG_TIMEOUT, LARGE_TIMEOUT
 
 LOCK_TYPES = {
     "msg": "can_send_messages",
@@ -78,7 +78,7 @@ async def change_lock(bot: BOT, message: Message, lock: bool):
             response += f"\n<b>Not found:</b> `{' '.join(not_found_perms)}`"
         await message.reply(response, del_in=MEDIUM_TIMEOUT)
     except Exception as e:
-        await message.reply(f"<b>Error:</b> Could not change permissions. <code>{e}</code>")
+        await message.reply(f"<b>Error:</b> Could not change permissions. <code>{e}</code>", del_in=LONG_TIMEOUT)
 
 
 @bot.add_cmd(cmd="lock")
