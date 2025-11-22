@@ -41,10 +41,10 @@ async def check_permissions_handler(bot: BOT, message: Message):
     try:
         member = await bot.get_chat_member(message.chat.id, target_user.id)
     except UserNotParticipant:
-        await message.reply(f"User {target_user.mention} is not a member of this chat.", del_in=MEDIUM_TIMEOUT)
+        await message.reply(f"User {target_user.mention} is not a member of this chat.")
         return
     except Exception as e:
-        await message.reply(f"An error occurred: `{e}`")
+        await message.reply(f"An error occurred: `{e}`", del_in=MEDIUM_TIMEOUT)
         return
 
     response_lines = [
