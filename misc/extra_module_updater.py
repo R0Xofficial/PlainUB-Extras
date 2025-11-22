@@ -59,7 +59,7 @@ async def unified_update_handler(bot: BOT, message: Message):
             f"<b>Upstream Repository Details</b>\n\n"
             f"<b>Owner:</b> <code>{REPO_OWNER}</code>\n"
             f"<b>Name:</b> <code>{REPO_NAME}</code>\n\n"
-            f"<b>Note:</b> <i>If you've forked the repository and the official repo data is still showing up here, it means you haven't changed the repository data in the '<code>settings.py</code>' file.\n\nChange <code>REPO_OWNER</code> and <code>REPO_NAME</code> to your own if you want the script to check for updates to your repo.</i>"
+            f"<b>Note:</b>\n<blockquote expandable><i>If you've forked the repository and the official repo data is still showing up here, it means you haven't changed the repository data in the '<code>settings.py</code>' file.\n\nChange <code>REPO_OWNER</code> and <code>REPO_NAME</code> to your own if you want the script to check for updates to your repo.</i></blockquote>"
         )
         return
 
