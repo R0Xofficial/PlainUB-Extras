@@ -67,7 +67,7 @@ async def unified_update_handler(bot: BOT, message: Message):
 
         response_text = (
             f"{status_text}\n\n"
-            f"<b>Upstream Repo:</b> <code>{REPO_OWNER}</code>/<code>{REPO_NAME}</code>\n\n""
+            f"<b>Upstream Repo:</b> <code>{REPO_OWNER}</code>/<code>{REPO_NAME}</code>\n\n"
             f"<b>Latest Version:</b>\n<code>{remote_date}</code>\n\n"
             f"<b>Your Version:</b>\n<code>{local_date}</code>"
         )
