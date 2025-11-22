@@ -38,6 +38,7 @@ async def unified_update_handler(bot: BOT, message: Message):
     INFO: Checks for or pulls updates for external modules.
     FLAGS:
         -pull: Pulls the latest changes from the repository and restarts userbot.
+        -repo: Shows information about the upstream repository.
     USAGE:
         .extupdate (Checks for available updates)
         .extupdate -pull (Pulls and applies updates)
