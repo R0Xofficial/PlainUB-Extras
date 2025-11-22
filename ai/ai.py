@@ -21,7 +21,7 @@ MODEL = os.getenv("TEXT_AI")
 async def ask_handler(bot: BOT, message: Message):
     """
     CMD: ASK
-    INFO: Asks a question to the Llama 3 AI model on Cloudflare.
+    INFO: Asks a question to the AI model from Cloudflare.
     USAGE:
         .ask [question]
         .ask (in reply to a message to use its text as context)
@@ -37,11 +37,11 @@ async def ask_handler(bot: BOT, message: Message):
     if message.replied and message.replied.text:
         replied_text = message.replied.text
         if prompt:
-            display_prompt = f"(In reply to text) {prompt}"
-            prompt = f"Based on the following text:\n---\n{replied_text}\n---\nAnswer this question: {prompt}"
+            display_prompt = f"{prompt}"
+            prompt = f"{replied_text}\n\n\n{prompt}"
         else:
-            display_prompt = "(Summarizing replied text)"
-            prompt = f"Summarize or analyze the following text:\n{replied_text}"
+            display_prompt = "-"
+            prompt = f"{replied_text}"
             
     if not prompt: return await message.reply("<b>Usage:</b> .ask [question]", del_in=MEDIUM_TIMEOUT)
 
