@@ -65,7 +65,7 @@ async def format_chat_info(chat: Chat, is_full: bool) -> tuple[str, str | None]:
         if chat.username:
             info_lines.append(f"\n<b>Permalink:</b> <a href='https://t.me/{chat.username}'>Click Here</a>")
 
-    photo_id = chat.photo.big.file_id if is_full and chat.photo else None
+    photo_id = chat.photo.big_file_id if is_full and chat.photo else None
     return "\n".join(info_lines), photo_id
 
 @bot.add_cmd(cmd=["cinfo", "chatinfo"])
