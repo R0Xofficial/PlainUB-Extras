@@ -61,10 +61,12 @@ async def pfp_handler(bot: BOT, message: Message):
                 caption_text = f"{target_entity.mention}'s profile photo."
             else:
                 caption_text = f"Profile photo of <b>{html.escape(target_entity.title)}</b>."
+
+            largest = photo.sizes[-1]
             
             await bot.send_photo(
                 chat_id=message.chat.id,
-                photo=photo.file_id,
+                photo=largest.file_id,
                 caption=caption_text,
                 reply_parameters=ReplyParameters(message_id=message.id)
             )
