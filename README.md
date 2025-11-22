@@ -76,7 +76,7 @@ _**eup** command is the same what `eupdate` command_
 
 📄 **Note:** _(for people who forked this repository)_.
 
-To check upstream repo use those command with -repo flag. If official repo data is showing up, it means you haven't changed the repository data in the 'settings.py' file.
+To check upstream repo use those command with `-repo` flag. If official repo data is showing up, it means you haven't changed the repository data in the 'settings.py' file.
 
 Change REPO_OWNER and REPO_NAME to your own if you want the script to check for updates to your repo.
 
