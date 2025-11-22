@@ -91,7 +91,7 @@ async def format_user_info(user: User, is_full: bool, message: Message) -> tuple
         except Exception: pass
         info_lines.append(f"\n<b>Permalink:</b> {user.mention('Click Here')}")
 
-    photo_id = full_chat_info.photo.big.file_id if is_full and full_chat_info.photo else None
+    photo_id = full_chat_info.photo.big_file_id if is_full and full_chat_info.photo else None
     return "\n".join(info_lines), photo_id
 
 @bot.add_cmd(cmd=["info", "whois"])
