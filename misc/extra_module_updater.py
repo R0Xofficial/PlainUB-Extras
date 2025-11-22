@@ -50,6 +50,15 @@ async def unified_update_handler(bot: BOT, message: Message):
             bot.raise_sigint()
         return
 
+    if "-repo" in message.flags:
+        await message.reply(
+            f"<b>Upstream Repository Details</b>\n"
+            f"<b>Owner:</b> <code>{REPO_OWNER}</code>\n"
+            f"<b>Name:</b> <code>{REPO_NAME}</code>\n\n"
+            f"<b>Note:</b> <i>If you've forked the repository and the official repo data is still showing up here, it means you haven't changed the repository data in the 'settings.py' file.\n\nChange REPO_OWNER and REPO_NAME to your own if you want the script to check for updates to your repo.</i>"
+        )
+        return
+
     progress_msg = await message.reply("<code>Checking for updates...</code>")
     try:
         remote_date = await asyncio.to_thread(fetch_latest_commit_date_sync)
@@ -68,8 +77,7 @@ async def unified_update_handler(bot: BOT, message: Message):
         response_text = (
             f"{status_text}\n\n"
             f"<b>Latest Version:</b>\n<code>{remote_date}</code>\n\n"
-            f"<b>Your Version:</b>\n<code>{local_date}</code>\n\n"
-            f"<b>Upstream Repo:</b>\n<code>{REPO_OWNER}</code>/<code>{REPO_NAME}</code>"
+            f"<b>Your Version:</b>\n<code>{local_date}</code>"
         )
         
         await progress_msg.edit(response_text)
