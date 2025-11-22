@@ -62,4 +62,4 @@ async def hash_file_handler(bot: BOT, message: Message):
         await progress_msg.edit(response)
 
     except Exception as e:
-        await progress_msg.edit(f"<b>Error:</b> An error occurred while processing the file.\n<code>{e}</code>", del_in=LARGE_TIMEOUT)
+        await progress_msg.edit(f"<b>Error:</b> An error occurred while processing the file.\n<code>{e}</code>", del_in=LONG_TIMEOUT)
