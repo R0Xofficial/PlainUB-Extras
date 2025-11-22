@@ -56,7 +56,7 @@ async def unified_update_handler(bot: BOT, message: Message):
 
     if "-repo" in message.flags:
         await message.reply(
-            f"<b>Upstream Repository Details</b>\n"
+            f"<b>Upstream Repository Details</b>\n\n"
             f"<b>Owner:</b> <code>{REPO_OWNER}</code>\n"
             f"<b>Name:</b> <code>{REPO_NAME}</code>\n\n"
             f"<b>Note:</b> <i>If you've forked the repository and the official repo data is still showing up here, it means you haven't changed the repository data in the '<code>settings.py</code>' file.\n\nChange <code>REPO_OWNER</code> and <code>REPO_NAME</code> to your own if you want the script to check for updates to your repo.</i>"
