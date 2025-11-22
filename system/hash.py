@@ -6,7 +6,7 @@ from pyrogram.types import Message
 from pyrogram.errors import MessageNotModified
 
 from app import BOT, bot
-from app.modules.settings import LARGE_TIMEOUT
+from app.modules.settings import TINY_TIMEOUT, SMALL_TIMEOUT, MEDIUM_TIMEOUT, LONG_TIMEOUT, VERY_LONG_TIMEOUT, LARGE_TIMEOUT
 
 CHUNK_SIZE = 65536 
 TEMP_DIR = "temp_downloads/"
@@ -20,7 +20,7 @@ async def hash_file_handler(bot: BOT, message: Message):
         .hash (reply to a file)
     """
     if not message.replied or not (media := message.replied.document or message.replied.video or message.replied.audio):
-        await message.reply("Please reply to a file to calculate its hashes.", del_in=LARGE_TIMEOUT)
+        await message.reply("Please reply to a file to calculate its hashes.", del_in=MEDIUM_TIMEOUT)
         return
 
     progress_msg = await message.reply(f"<code>Preparing to download '{getattr(media, 'file_name', 'media')}'...</code>")
@@ -80,7 +80,7 @@ async def hash_file_handler(bot: BOT, message: Message):
         await progress_msg.edit(response)
 
     except Exception as e:
-        await progress_msg.edit(f"<b>Error:</b> An error occurred.\n<code>{e}</code>", del_in=LARGE_TIMEOUT)
+        await progress_msg.edit(f"<b>Error:</b> An error occurred.\n<code>{e}</code>", del_in=LONG_TIMEOUT)
     
     finally:
         if os.path.exists(temp_file_path):
