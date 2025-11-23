@@ -1,5 +1,6 @@
 import asyncio
 import html
+from datetime import datetime, timezone
 from asyncio import TimeoutError
 from pyrogram import filters
 from pyrogram.types import Message, User
@@ -9,6 +10,21 @@ from app.modules.settings import TINY_TIMEOUT, SMALL_TIMEOUT, MEDIUM_TIMEOUT, LO
 
 QUOTLY_BOT_ID = 1031952739
 QUOTLY_TIMEOUT = 20
+
+async def find_response_in_history(bot: BOT, chat_id: int, after_message_id: int, timeout: int) -> Message | None:
+    start_time = datetime.now(timezone.utc)
+    while (datetime.now(timezone.utc) - start_time).total_seconds() < timeout:
+        try:
+            async for last_message in bot.get_chat_history(chat_id, limit=1):
+                if last_message.id > after_message_id and (
+                    not last_message.from_user or not last_message.from_user.is_self
+                ):
+                    return last_message
+        except Exception:
+            pass
+        await asyncio.sleep(1)
+    return None
+
 
 @bot.add_cmd(cmd=["q", "quote"])
 async def quote_sticker_handler(bot: BOT, message: Message):
@@ -27,12 +43,16 @@ async def quote_sticker_handler(bot: BOT, message: Message):
     if message.input and message.input.isdigit():
         count = min(int(message.input), 15)
 
-    progress_message = await message.reply(f"<code>Fetching {count} message(s)...</code>")
+    progress_message = await message.reply(f"<code>Processing {count} message(s)...</code>")
     
     start_id = message.replied.id
     message_ids = list(range(start_id, start_id + count))
 
     try:
+        last_message_id = 0
+        async for last_msg in bot.get_chat_history(QUOTLY_BOT_ID, limit=1):
+            last_message_id = last_msg.id
+
         await bot.forward_messages(
             chat_id=QUOTLY_BOT_ID,
             from_chat_id=message.chat.id,
@@ -41,11 +61,15 @@ async def quote_sticker_handler(bot: BOT, message: Message):
         
         await progress_message.edit("<code>Waiting for @QuotLyBot's response...</code>")
 
-        quotly_response = await bot.listen(
+        quotly_response = await find_response_in_history(
+            bot,
             chat_id=QUOTLY_BOT_ID,
-            filters=filters.user(QUOTLY_BOT_ID),
+            after_message_id=last_message_id,
             timeout=QUOTLY_TIMEOUT
         )
+
+        if not quotly_response:
+            raise TimeoutError()
 
         await quotly_response.copy(message.chat.id)
         await progress_message.delete()
