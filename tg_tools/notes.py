@@ -1,5 +1,5 @@
 import html
-from pyrogram.types import Message, ReplyParameters
+from pyrogram.types import Message, ReplyParameters, LinkPreviewOptions
 
 from app import BOT, Config, CustomDB, Message, bot
 
@@ -122,5 +122,5 @@ async def get_note_by_command(bot: BOT, message: Message):
             chat_id=message.chat.id,
             text=str(content),
             reply_parameters=reply_params,
-            disable_web_page_preview=True
+            link_preview_options=LinkPreviewOptions(is_disabled=True)
         )
