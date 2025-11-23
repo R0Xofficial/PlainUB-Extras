@@ -46,7 +46,13 @@ async def find_latest_file_in_history(bot: BOT, chat_id: int, after_message_id: 
 
 
 async def query_single_bot(bot: BOT, bot_id: int, user_to_check: User) -> tuple[str, Message | None]:
-    bot_info = await bot.get_users(bot_id)
+    try:
+        bot_info = await bot.get_users(bot_id)
+    except PeerIdInvalid:
+        return f"<b>• ID <code>{bot_id}</code>:</b> <i>Could not contact bot. (Have you started chat with him before?)</i>", None
+    except Exception as e:
+        return f"<b>• ID <code>{bot_id}</code>:</b> <i>An unknown error occurred while getting bot info: {e}</i>", None
+    
     try:
         sent_cmd = await bot.send_message(chat_id=bot_id, text=f"/fbanstat {user_to_check.id}")
         response = await sent_cmd.get_response(filters=filters.user(bot_id), timeout=20)
