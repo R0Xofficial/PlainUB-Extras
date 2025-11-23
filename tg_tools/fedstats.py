@@ -121,10 +121,17 @@ async def fed_stat_handler(bot: BOT, message: Message):
         f"{'\n'.join(result_texts)}"
     )
 
-    await progress.edit(
-        final_report,
-        link_preview_options=LinkPreviewOptions(is_disabled=True)
-    )
+    try:
+        await progress.edit(final_report, link_preview_options=LinkPreviewOptions(is_disabled=True))
+    except MessageTooLong:
+        await progress.edit("<code>Fedstat List is too long, sending as a file...</code>")
+        text_for_file = final_report.replace("<b>", "").replace("</b>", "").replace("<i>", "").replace("</i>", "").replace("<code>", "").replace("</code>", "").replace("<blockquote expandable>", "\n---\n").replace("</blockquote>", "\n---\n")
+
+        file_content = io.BytesIO(text_for_file.encode('utf-8'))
+        file_content.name = f"fedstat_{user_to_check.id}.txt"
+        
+        await message.reply_document(document=file_content, caption="Fedstat List was too long to be displayed.")
+        await progress.delete()
 
     for file in files_to_forward:
         await file.forward(message.chat.id)
