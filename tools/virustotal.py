@@ -86,8 +86,8 @@ async def scan_file(api_key: str, message: Message):
         headers = {"x-apikey": api_key}; url = f"{VT_API_URL}/files/{file_hash}"
         response = await asyncio.to_thread(requests.get, url, headers=headers)
         if response.status_code == 200: final_report = format_vt_report(response.json()["data"]["attributes"], "file", file_hash)
-        elif response.status_code == 404: final_report = "<b>Report:</b>\n<b>  - Status:</b> ⚪ Not in database."
-        else: final_report = f"<b>Report:</b>\n<b>  - Error:</b> API code {response.status_code}."
+        elif response.status_code == 404: final_report = "<b>VirusTotal Report:</b>\n<b>  - Status:</b> ⚪ Not in database."
+        else: final_report = f"<b>VirusTotal Report:</b>\n<b>  - Error:</b> API code {response.status_code}."
         await bot.send_message(message.chat.id, final_report, reply_parameters=ReplyParameters(message_id=message.replied.id), link_preview_options=LinkPreviewOptions(is_disabled=True))
         await progress.delete(); await message.delete()
     except Exception as e:
@@ -105,11 +105,11 @@ async def scan_url(api_key: str, message: Message):
         response = await asyncio.to_thread(requests.get, url, headers=headers)
         if response.status_code == 200: final_report = format_vt_report(response.json()["data"]["attributes"], "url", url_id, target_url)
         elif response.status_code == 404:
-            final_report = f"<b>Report for URL:</b>\n<code>{html.escape(target_url)}</code>\n<b>  - Status:</b> ⚪ Not in database. Submitting..."
+            final_report = f"<b>VirusTotal Report for URL:</b>\n<code>{html.escape(target_url)}</code>\n<b>  - Status:</b> ⚪ Not in database. Submitting..."
             post_url = f"{VT_API_URL}/urls"; post_data = {"url": target_url}
             await asyncio.to_thread(requests.post, post_url, data=post_data, headers=headers)
             final_report += "\n<i>  Check the report in a minute.</i>"
-        else: final_report = f"<b>Report:</b>\n<b>  - Error:</b> API code {response.status_code}."
+        else: final_report = f"<b>VirusTotal Report:</b>\n<b>  - Error:</b> API code {response.status_code}."
         await progress.edit(final_report, link_preview_options=LinkPreviewOptions(is_disabled=True))
         await message.delete() # Delete the original command
     except Exception as e:
@@ -123,8 +123,8 @@ async def scan_domain_or_ip(api_key: str, message: Message, scan_type: str):
         headers = {"x-apikey": api_key}; url = f"{VT_API_URL}/{endpoint}/{resource}"
         response = await asyncio.to_thread(requests.get, url, headers=headers)
         if response.status_code == 200: final_report = format_vt_report(response.json()["data"]["attributes"], scan_type, resource, resource)
-        elif response.status_code == 404: final_report = f"<b>Report:</b>\n<b>  - Status:</b> ⚪ {scan_type.capitalize()} not found."
-        else: final_report = f"<b>Report:</b>\n<b>  - Error:</b> API code {response.status_code}."
+        elif response.status_code == 404: final_report = f"<b>VirusTotal Report:</b>\n<b>  - Status:</b> ⚪ {scan_type.capitalize()} not found."
+        else: final_report = f"<b>VirusTotal Report:</b>\n<b>  - Error:</b> API code {response.status_code}."
         await progress.edit(final_report, link_preview_options=LinkPreviewOptions(is_disabled=True))
     except Exception as e:
         await progress.edit(f"<b>Error:</b> <code>{html.escape(str(e))}</code>", del_in=LONG_TIMEOUT)
