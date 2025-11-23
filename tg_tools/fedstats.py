@@ -9,14 +9,7 @@ from pyrogram.types import LinkPreviewOptions, Message, User
 
 from app import BOT, bot
 
-from app.modules.settings import TINY_TIMEOUT, SMALL_TIMEOUT, MEDIUM_TIMEOUT, LONG_TIMEOUT, VERY_LONG_TIMEOUT, LARGE_TIMEOUT
-
-FED_BOTS_TO_QUERY = [
-    609517172,  # Rose
-    1376954911,  # AstrakoBot
-    885745757,  # Sophie
-    2059887769, # Odin
-]
+from app.modules.settings import FED_BOTS_TO_QUERY, TINY_TIMEOUT, SMALL_TIMEOUT, MEDIUM_TIMEOUT, LONG_TIMEOUT, VERY_LONG_TIMEOUT, LARGE_TIMEOUT
 
 def safe_escape(text: str) -> str:
     escaped_text = html.escape(str(text))
