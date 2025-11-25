@@ -51,7 +51,7 @@ async def get_android_versions(bot, message: Message, owner: str, repo: str, sho
 
     except Exception as e:
         error_text = f"<b>An error occurred:</b>\n<code>{html.escape(str(e))}</code>"
-        await progress_message.edit(error_text, del_in=LARGE_TIMEOUT)
+        await progress_message.edit(error_text, del_in=LONG_TIMEOUT)
 
 
 @bot.add_cmd(cmd="magisk")
