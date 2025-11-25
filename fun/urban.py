@@ -62,8 +62,8 @@ async def urban_dictionary_handler(bot: BOT, message: Message):
 
         else:
             error_text = f"Could not find a definition for <code>{safe_escape(term_to_search)}</code>."
-            await progress_message.edit(error_text, del_in=LARGE_TIMEOUT)
+            await progress_message.edit(error_text, del_in=LONG_TIMEOUT)
 
     except Exception as e:
         error_text = f"<b>An error occurred:</b>\n<code>{safe_escape(str(e))}</code>"
-        await progress_message.edit(error_text, del_in=LARGE_TIMEOUT)
+        await progress_message.edit(error_text, del_in=LONG_TIMEOUT)
