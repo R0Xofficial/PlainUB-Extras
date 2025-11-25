@@ -4,7 +4,7 @@ import yaml
 from pyrogram.types import Message, LinkPreviewOptions
 
 from app import BOT, bot
-from app.modules.settings import MEDIUM_TIMEOUT, LONG_TIMEOUT
+from app.modules.settings import TINY_TIMEOUT, SMALL_TIMEOUT, MEDIUM_TIMEOUT, LONG_TIMEOUT, VERY_LONG_TIMEOUT, LARGE_TIMEOUT
 
 DEVICES_YAML_URL = "https://raw.githubusercontent.com/XiaomiFirmwareUpdater/miui-updates-tracker/master/data/devices.yml"
 FIRMWARE_YAML_URL = "https://raw.githubusercontent.com/XiaomiFirmwareUpdater/miui-updates-tracker/master/data/latest.yml"
