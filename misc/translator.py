@@ -83,4 +83,4 @@ async def translate_handler(bot: BOT, message: Message):
         else:
             error_text = f"<b>An error occurred:</b>\n<code>{safe_escape(str(e))}</code>"
             
-        await progress_message.edit(error_text, del_in=LARGE_TIMEOUT)
+        await progress_message.edit(error_text, del_in=LONG_TIMEOUT)
