@@ -69,4 +69,4 @@ async def weather_handler(bot: BOT, message: Message):
         error_msg = str(e)
         if "404" in error_msg:
             error_msg = f"Location '{location}' not found."
-        await progress_msg.edit(f"<b>Error:</b> <code>{html.escape(error_msg)}</code>", del_in=LARGE_TIMEOUT)
+        await progress_msg.edit(f"<b>Error:</b> <code>{html.escape(error_msg)}</code>", del_in=LONG_TIMEOUT)
