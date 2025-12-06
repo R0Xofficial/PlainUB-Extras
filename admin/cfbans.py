@@ -164,7 +164,7 @@ async def choose_fed_ban_proof(bot: BOT, message: Message):
     """
     await _choose_and_perform_fed_action(bot, message, with_proof=True, action="fban")
 
-@bot.add_cmd(cmd="uncfban")
+@bot.add_cmd(cmd="cunfban")
 async def choose_fed_unban(bot: BOT, message: Message):
     """
     CMD: CUNFBAN
