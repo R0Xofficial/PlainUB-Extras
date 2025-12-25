@@ -117,8 +117,9 @@ pkg install <package_name>
 ```
 Example:
 ```bash
-pkg install speedtest zbar -y
+pkg install zbar -y
 ```
+(yes, zbar is needed)
 
 ---
 
