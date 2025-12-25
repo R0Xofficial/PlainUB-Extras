@@ -11,4 +11,4 @@ qrcode
 pyzbar
 pyyaml
 speedtest-cli
-httpx
+httpx[http2]
