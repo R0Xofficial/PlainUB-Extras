@@ -3,6 +3,7 @@ import html
 import asyncio
 import requests
 from datetime import datetime
+from pyrogram.types import LinkPreviewOptions
 
 from ub_core.utils import run_shell_cmd
 from app import BOT, Message
