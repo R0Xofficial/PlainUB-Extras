@@ -71,18 +71,24 @@ async def unified_update_handler(bot: BOT, message: Message):
         if local_date == remote_date:
             # status_emoji = "✅"
             status_text = "<b>You are up to date!</b>"
+            warning_text = ""
         elif local_date in ["Not Found", "Empty", "Error Reading File"]:
             # status_emoji = "❓"
             status_text = f"<b>Could not determine local version.</b>\nReason: <code>{local_date}</code>"
+            warning_text = ""
         else:
             # status_emoji = "⚠️"
             status_text = f"<b>A new update is available!</b>\n<i>Run the command with the <code>-pull</code> flag to apply updates.</i>"
+            warning_text = f"<b>WARNING:</b> Update may require reinstalling the requirements. <a href='https://github.com/R0Xofficial/PlainUB-Extras/blob/main/UPDATE_INFO.md'>READ MORE</a>"
 
         response_text = (
             f"{status_text}\n\n"
             f"<b>Latest Version:</b>\n<code>{remote_date}</code>\n\n"
             f"<b>Your Version:</b>\n<code>{local_date}</code>"
         )
+
+        if warning_text:
+            response_text += f"\n\n{warning_text}"
         
         await progress_msg.edit(response_text)
 
