@@ -4,8 +4,7 @@ This document provides additional information for updating the custom modules in
 
 ## Overview
 
-These modules are installed in the `ubot/app/modules` directory of your userbot.  
-Whenever an update is released, there might be changes in dependencies that require reinstalling the requirements file.
+These modules are installed in the `ubot/app/modules` directory of your userbot. Whenever an update is released, there might be changes in dependencies that require reinstalling the requirements file.
 
 ## When to Reinstall Requirements
 
