@@ -10,3 +10,4 @@ python-dotenv
 qrcode
 pyzbar
 pyyaml
+speedtest-cli
