@@ -1,4 +1,4 @@
-# Custom Userbot Modules — Update Instructions
+# PlainUB-Extras — Update Info
 
 This document provides additional information for updating the custom modules in your userbot.
 
