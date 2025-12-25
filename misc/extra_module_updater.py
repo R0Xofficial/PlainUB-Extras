@@ -90,7 +90,7 @@ async def unified_update_handler(bot: BOT, message: Message):
         if warning_text:
             response_text += f"\n\n{warning_text}"
         
-        await progress_msg.edit(response_text)
+        await progress_msg.edit(response_text, link_preview_options=LinkPreviewOptions(is_disabled=True))
 
     except Exception as e:
         await progress_msg.edit(f"<b>Error:</b> <code>{html.escape(str(e))}</code>", del_in=LONG_TIMEOUT)
