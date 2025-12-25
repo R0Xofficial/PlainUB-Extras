@@ -79,7 +79,7 @@ async def unified_update_handler(bot: BOT, message: Message):
             warning_text = ""
         else:
             # status_emoji = "⚠️"
-            status_text = f"<b>A new update is available!</b>\n<i>Run the command with the <code>-pull</code> flag to apply updates.</i>"
+            status_text = f"<b>A new update is available!</b>"
             warning_text = f"<b>WARNING:</b> <blockquote><i>Update may require reinstalling the requirements. <a href='https://github.com/R0Xofficial/PlainUB-Extras/blob/main/UPDATE_INFO.md'>MORE</a></i></blockquote>"
 
         response_text = (
