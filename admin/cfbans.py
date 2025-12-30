@@ -111,12 +111,33 @@ async def _choose_and_perform_fed_action(bot: BOT, message: Message, with_proof:
     for fed in selected_feds:
         try:
             cmd_msg = await bot.send_message(fed["_id"], cmd_text, disable_preview=True)
-            response = await cmd_msg.get_response(filters=task_filter, timeout=8)
-            if not response: failed_feds.append(fed["name"])
-            elif "Would you like to update" in response.text: await response.click("Update reason")
+
+            try:
+                await cmd_msg.get_response(filters=task_filter, timeout=5)
+                await asyncio.sleep(1.0)
+            except asyncio.TimeoutError:
+                pass
+
+            replies = []
+            async for msg in bot.get_chat_history(chat_id=fed["_id"], limit=10):
+                if msg.reply_to_message_id == cmd_msg.id:
+                    replies.append(msg)
+
+            if not replies:
+                failed_feds.append(fed["name"])
+            else:
+                for resp in replies:
+                    if resp.text and "Would you like to update" in resp.text:
+                        try:
+                            await resp.click("Update reason")
+                            await asyncio.sleep(0.2)
+                        except Exception:
+                            pass
+
         except Exception as e:
             await bot.log_text(f"Error during {action} in {fed['name']}: {e}", type=f"C{action.upper()}_ERROR")
             failed_feds.append(fed["name"])
+        
         await asyncio.sleep(1)
     
     total_selected = len(selected_feds)
