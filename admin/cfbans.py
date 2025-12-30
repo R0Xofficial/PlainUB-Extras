@@ -113,8 +113,8 @@ async def _choose_and_perform_fed_action(bot: BOT, message: Message, with_proof:
             cmd_msg = await bot.send_message(fed["_id"], cmd_text, disable_preview=True)
 
             try:
-                await cmd_msg.get_response(filters=task_filter, timeout=5)
-                await asyncio.sleep(1.0)
+                await cmd_msg.get_response(filters=task_filter, timeout=8)
+                await asyncio.sleep(2)
             except asyncio.TimeoutError:
                 pass
 
