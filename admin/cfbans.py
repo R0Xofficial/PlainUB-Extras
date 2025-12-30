@@ -119,7 +119,7 @@ async def _choose_and_perform_fed_action(bot: BOT, message: Message, with_proof:
                 pass
 
             replies = []
-            async for msg in bot.get_chat_history(chat_id=fed["_id"], limit=10):
+            async for msg in bot.get_chat_history(chat_id=fed["_id"], limit=30):
                 if msg.reply_to_message_id == cmd_msg.id:
                     replies.append(msg)
 
