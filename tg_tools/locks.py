@@ -50,11 +50,15 @@ async def change_lock(bot: BOT, message: Message, lock: bool):
     changed_perms = []
     not_found_perms = []
 
-    new_permissions_dict = {
-        p: getattr(current_permissions, p) 
-        for p in dir(current_permissions) 
-        if not p.startswith('_')
-    }
+    new_permissions_dict = {}
+    for p in dir(current_permissions):
+        if p.startswith('_') or p == 'bind':
+            continue
+        
+        value = getattr(current_permissions, p)
+        
+        if not callable(value):
+            new_permissions_dict[p] = value
     
     for t in types_to_change:
         if t in LOCK_TYPES:
