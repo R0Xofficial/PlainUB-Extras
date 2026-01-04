@@ -117,7 +117,7 @@ pkg install <package_name>
 ```
 Example:
 ```bash
-pkg install zbar -y
+pkg install zbar neofetch -y
 ```
 (yes, zbar is needed)
 
