@@ -6,14 +6,22 @@ from app import BOT, bot
 from app.modules.settings import TINY_TIMEOUT, SMALL_TIMEOUT, MEDIUM_TIMEOUT, LONG_TIMEOUT, VERY_LONG_TIMEOUT, LARGE_TIMEOUT
 
 LOCK_TYPES = {
-    "msg": "can_send_messages",
-    "media": "can_send_media_messages",
-    "stickers": "can_send_other_messages",
-    "polls": "can_send_polls",
-    "links": "can_add_web_page_previews",
-    "invite": "can_invite_users",
-    "pin": "can_pin_messages",
-    "info": "can_change_info",
+    "msg": ["can_send_messages"],
+    "media": [
+        "can_send_media_messages",
+        "can_send_photos",
+        "can_send_videos",
+        "can_send_audios",
+        "can_send_documents",
+        "can_send_voice_notes",
+        "can_send_video_notes"
+    ],
+    "stickers": ["can_send_other_messages"],
+    "polls": ["can_send_polls"],
+    "links": ["can_add_web_page_previews"],
+    "invite": ["can_invite_users"],
+    "pin": ["can_pin_messages"],
+    "info": ["can_change_info"],
 }
 
 ALL_LOCKS = list(LOCK_TYPES.keys())
@@ -62,8 +70,11 @@ async def change_lock(bot: BOT, message: Message, lock: bool):
     
     for t in types_to_change:
         if t in LOCK_TYPES:
-            perm_attribute = LOCK_TYPES[t]
-            new_permissions_dict[perm_attribute] = not lock
+            perm_attributes = LOCK_TYPES[t]
+            
+            for attr in perm_attributes:
+                new_permissions_dict[attr] = not lock
+            
             changed_perms.append(t)
         else:
             not_found_perms.append(t)
